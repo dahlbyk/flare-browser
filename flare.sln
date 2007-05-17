@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "flare", "campfirenow\flare.csproj", "{06BE0DFD-6BCF-4BE2-8C45-1293D271C18D}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{03D012D2-1969-406A-93E7-59845CB4CDCB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{06BE0DFD-6BCF-4BE2-8C45-1293D271C18D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06BE0DFD-6BCF-4BE2-8C45-1293D271C18D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06BE0DFD-6BCF-4BE2-8C45-1293D271C18D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06BE0DFD-6BCF-4BE2-8C45-1293D271C18D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03D012D2-1969-406A-93E7-59845CB4CDCB}.Debug|Any CPU.ActiveCfg = Release
+		{03D012D2-1969-406A-93E7-59845CB4CDCB}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
