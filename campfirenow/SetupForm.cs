@@ -14,6 +14,7 @@ namespace campfirenow
         public string newUsername;
         public string newPassword;
         public string newAccountName;
+        public string newNickName;
 
         public SetupForm()
         {
@@ -62,6 +63,7 @@ namespace campfirenow
             key.SetValue("loginAsGuest", "0");
             key.SetValue("username", usernameBox.Text);
             key.SetValue("password", passwordBox.Text);
+            key.SetValue("nickname", nicknameBox.Text);
             key.SetValue("defaultroom", "notset");
             if (useSSL.Checked)
             {
@@ -71,10 +73,20 @@ namespace campfirenow
             {
                 key.SetValue("usessl", "0");
             }
+
+            if (nickNotifications.Checked)
+            {
+                key.SetValue("nicknotifications", "1");
+            }
+            else
+            {
+                key.SetValue("nicknotifications", "0");
+            }
                 //}
             newAccountName = accountName.Text;
             newUsername = usernameBox.Text;
             newPassword = passwordBox.Text;
+            newNickName = nicknameBox.Text;
 
             this.Close();
         }
@@ -110,6 +122,19 @@ namespace campfirenow
                 passwordBox.Text = key.GetValue("password").ToString();
                 try
                 {
+                    nicknameBox.Text = key.GetValue("nickname").ToString().ToLower();
+                }
+                catch
+                {
+                    int at_symbol = usernameBox.Text.IndexOf('@');
+                    if (at_symbol > 0)
+                    {
+                        nicknameBox.Text = usernameBox.Text.Substring(0, at_symbol);
+                    }
+                }
+
+                try
+                {
                     useSSL.Checked = (key.GetValue("usessl", "0").ToString() == "1");
                 }
                 catch
@@ -117,9 +142,19 @@ namespace campfirenow
                     useSSL.Checked = false;
                 }
 
+                try
+                {
+                    nickNotifications.Checked = (key.GetValue("nicknotifications", "0").ToString() == "1");
+                }
+                catch
+                {
+                    nickNotifications.Checked = true;
+                }
+
                 newAccountName = accountName.Text;
                 newUsername = usernameBox.Text;
                 newPassword = passwordBox.Text;
+                newNickName = nicknameBox.Text;
             }
         }
 

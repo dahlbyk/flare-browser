@@ -40,6 +40,9 @@ namespace campfirenow
             this.cancelBtn = new System.Windows.Forms.Button();
             this.useSSL = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.nicknameBox = new System.Windows.Forms.TextBox();
+            this.nickNotifications = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -108,7 +111,7 @@ namespace campfirenow
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 76);
+            this.label4.Location = new System.Drawing.Point(11, 79);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(57, 17);
             this.label4.TabIndex = 5;
@@ -118,7 +121,7 @@ namespace campfirenow
             // okBtn
             // 
             this.okBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.okBtn.Location = new System.Drawing.Point(12, 140);
+            this.okBtn.Location = new System.Drawing.Point(11, 226);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(75, 23);
             this.okBtn.TabIndex = 3;
@@ -130,7 +133,7 @@ namespace campfirenow
             // cancelBtn
             // 
             this.cancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cancelBtn.Location = new System.Drawing.Point(206, 140);
+            this.cancelBtn.Location = new System.Drawing.Point(206, 226);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
             this.cancelBtn.TabIndex = 4;
@@ -142,7 +145,7 @@ namespace campfirenow
             // useSSL
             // 
             this.useSSL.AutoSize = true;
-            this.useSSL.Location = new System.Drawing.Point(92, 111);
+            this.useSSL.Location = new System.Drawing.Point(92, 182);
             this.useSSL.Name = "useSSL";
             this.useSSL.Size = new System.Drawing.Size(153, 17);
             this.useSSL.TabIndex = 6;
@@ -154,18 +157,52 @@ namespace campfirenow
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(12, 111);
+            this.label5.Location = new System.Drawing.Point(12, 182);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(58, 17);
             this.label5.TabIndex = 7;
             this.label5.Text = "Use SSL?:";
             this.label5.UseCompatibleTextRendering = true;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(12, 114);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(58, 17);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Nickname:";
+            this.label6.UseCompatibleTextRendering = true;
+            // 
+            // nicknameBox
+            // 
+            this.nicknameBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nicknameBox.Location = new System.Drawing.Point(92, 114);
+            this.nicknameBox.Name = "nicknameBox";
+            this.nicknameBox.Size = new System.Drawing.Size(189, 20);
+            this.nicknameBox.TabIndex = 9;
+            // 
+            // nickNotifications
+            // 
+            this.nickNotifications.AutoSize = true;
+            this.nickNotifications.Checked = true;
+            this.nickNotifications.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.nickNotifications.Location = new System.Drawing.Point(128, 140);
+            this.nickNotifications.Name = "nickNotifications";
+            this.nickNotifications.Size = new System.Drawing.Size(141, 17);
+            this.nickNotifications.TabIndex = 10;
+            this.nickNotifications.Text = "Enable nick notifications";
+            this.nickNotifications.UseVisualStyleBackColor = true;
+            // 
             // SetupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(297, 175);
+            this.ClientSize = new System.Drawing.Size(328, 271);
+            this.Controls.Add(this.nickNotifications);
+            this.Controls.Add(this.nicknameBox);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.useSSL);
             this.Controls.Add(this.cancelBtn);
@@ -206,5 +243,8 @@ namespace campfirenow
         private System.Windows.Forms.Button cancelBtn;
         private System.Windows.Forms.CheckBox useSSL;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox nicknameBox;
+        private System.Windows.Forms.CheckBox nickNotifications;
     }
 }

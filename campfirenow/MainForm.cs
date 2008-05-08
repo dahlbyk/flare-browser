@@ -54,6 +54,8 @@ namespace campfirenow
         bool usessl = false;
         bool loginAsGuest = false;
         string protocol = "http://";
+        string nickname = "";
+        bool nicknotifications = true;
         
         // Forming the title
         int newMessagesTotal = 0;
@@ -108,6 +110,18 @@ namespace campfirenow
                 accountname = key.GetValue("accountname").ToString();
                 loginAsGuest = (key.GetValue("loginAsGuest").ToString() == "1");
                 username = key.GetValue("username").ToString();
+                try
+                {
+                    nickname = key.GetValue("nickname").ToString().ToLower();
+                }
+                catch
+                {
+                    int at_symbol = username.IndexOf('@');
+                    if (at_symbol > 0)
+                    {
+                        nickname = username.Substring(0, at_symbol);
+                    }
+                }
                 password = key.GetValue("password").ToString();
                 showMessageNotificationToolStripMenuItem.Checked = (key.GetValue("showMsgNotify", "1").ToString() == "1");
                 try
@@ -126,6 +140,15 @@ namespace campfirenow
                 catch
                 {
                     usessl = false;
+                }
+
+                try
+                {
+                    nicknotifications = (key.GetValue("nicknotifications").ToString() == "1");
+                }
+                catch
+                {
+                    nicknotifications = true;
                 }
 
                 isFirstLoad = true;
@@ -422,15 +445,18 @@ namespace campfirenow
                                     // Make sure it isn't from "you"
                                     if (!((MSHTML.IHTMLElement)nextElement.DomElement).className.Contains(" you") && (((MSHTML.IHTMLElement)nextElement.DomElement).className.Contains("text_message") || ((MSHTML.IHTMLElement)nextElement.DomElement).className.Contains("enter_message") || ((MSHTML.IHTMLElement)nextElement.DomElement).className.Contains("upload_message") || ((MSHTML.IHTMLElement)nextElement.DomElement).className.Contains("paste_message")))
                                     {
-                                        // SHOW THE NOTIFY
-                                        if (showMessageNotificationToolStripMenuItem.Checked)
+                                        if (!nicknotifications || lastMessage.TextMessage.ToLower().Contains(nickname))
                                         {
-                                            NotifyForm nf = new NotifyForm(this.Text, lastMessage.Name, lastMessage.TextMessage, this);
-                                            nf.Show();
-                                        }
+                                            // SHOW THE NOTIFY
+                                            if (showMessageNotificationToolStripMenuItem.Checked)
+                                            {
+                                                NotifyForm nf = new NotifyForm(this.Text, lastMessage.Name, lastMessage.TextMessage, this);
+                                                nf.Show();
+                                            }
 
-                                        // Increase the unread message count:
-                                        newMessagesTotal++;
+                                            // Increase the unread message count:
+                                            newMessagesTotal++;
+                                        }
                                     }
 
                                     nextElement = nextElement.NextSibling;
@@ -558,7 +584,7 @@ namespace campfirenow
         {
             SetupForm sf = new SetupForm();
             sf.ShowDialog();
-            if (sf.newAccountName != accountname || sf.newUsername != username || sf.newPassword != password)
+            if (sf.newAccountName != accountname || sf.newUsername != username || sf.newPassword != password || sf.newNickName != nickname)
             {
                 MainForm_Load(sender, e);
             }
