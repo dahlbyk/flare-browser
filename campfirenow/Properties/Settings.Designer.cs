@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace flare.Properties {
+namespace Flare.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

@@ -1,4 +1,4 @@
-namespace campfirenow
+namespace Flare
 {
     partial class NotifyForm
     {

@@ -7,7 +7,7 @@
     <ProjectGuid>{06BE0DFD-6BCF-4BE2-8C45-1293D271C18D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>flare</RootNamespace>
+    <RootNamespace>Flare</RootNamespace>
     <AssemblyName>flare</AssemblyName>
     <ManifestCertificateThumbprint>2805387637261EF3351D2E7EB305BBFD1D0265C9</ManifestCertificateThumbprint>
     <ManifestKeyFile>campfireWin_TemporaryKey.pfx</ManifestKeyFile>
@@ -70,10 +70,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account.cs" />
     <Compile Include="AutoUpdateConfig.cs" />
     <Compile Include="AutoUpdater.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FlareException.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,6 +132,7 @@
     <Compile Include="SetupForm.Designer.cs">
       <DependentUpon>SetupForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

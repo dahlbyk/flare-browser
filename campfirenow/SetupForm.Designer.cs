@@ -1,4 +1,4 @@
-namespace campfirenow
+namespace Flare
 {
     partial class SetupForm
     {
@@ -67,7 +67,6 @@ namespace campfirenow
             this.okBtn.Text = "OK";
             this.okBtn.UseVisualStyleBackColor = true;
             this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
-            this.okBtn.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SetupForm_KeyDown);
             // 
             // cancelBtn
             // 
@@ -80,7 +79,6 @@ namespace campfirenow
             this.cancelBtn.Text = "Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
             this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
-            this.cancelBtn.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SetupForm_KeyDown);
             // 
             // tabControl
             // 
@@ -290,7 +288,6 @@ namespace campfirenow
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.SetupForm_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SetupForm_KeyDown);
             this.tabControl.ResumeLayout(false);
             this.accountTab.ResumeLayout(false);
             this.optionsTab.ResumeLayout(false);

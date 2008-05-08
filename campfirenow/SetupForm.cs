@@ -7,86 +7,39 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-namespace campfirenow
+namespace Flare
 {
     public partial class SetupForm : Form
     {
-        public string newUsername;
-        public string newPassword;
-        public string newAccountName;
-        public string newNickName;
+        public String NewUsername;
+        public String NewPassword;
+        public String NewAccountName;
+        public String NewNickName;
+        private Account _account;
 
         public SetupForm()
         {
             InitializeComponent();
         }
 
-        /*
-        private void guestCheck_CheckedChanged(object sender, EventArgs e)
-        {
-                usernameBox.Enabled = !guestCheck.Checked;
-                passwordBox.Enabled = !guestCheck.Checked;
-        }
-        */
-
         private void okBtn_Click(object sender, EventArgs e)
         {
-            /*
-            if (guestCheck.Checked)
-            {
-                MessageBox.Show("Sorry, logging in as a guest is not yet supported.");
-                return;
-            }
-            */
+            _account.Name = accountName.Text;
+            _account.UseSsl = useSSL.Checked;
 
-            // Attempt to open the key
-            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Flare", true);
+            if (_account.User == null)
+                _account.User = new User();
+            _account.User.Username = usernameBox.Text;
+            _account.User.Password = passwordBox.Text;
+            _account.User.Nickname = nicknameBox.Text;
+            _account.User.NotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
 
-            // If the return value is null, the key doesn't exist
-            if (key == null)
-            {
-                // The key doesn't exist; create it / open it
-                key = Registry.CurrentUser.CreateSubKey("Software\\Flare");
-            }
+            _account.Save();
 
-            key.SetValue("accountname", accountName.Text);
-            /*
-            if (guestCheck.Checked)
-            {
-                key.SetValue("loginAsGuest", "1");
-                key.SetValue("username", "");
-                key.SetValue("password", "");
-            }
-            else
-            {
-            */
-            key.SetValue("loginAsGuest", "0");
-            key.SetValue("username", usernameBox.Text);
-            key.SetValue("password", passwordBox.Text);
-            key.SetValue("nickname", nicknameBox.Text);
-            key.SetValue("defaultroom", "notset");
-            if (useSSL.Checked)
-            {
-                key.SetValue("usessl", "1");
-            }
-            else
-            {
-                key.SetValue("usessl", "0");
-            }
-
-            if (nickNotifications.Checked)
-            {
-                key.SetValue("nicknotifications", "1");
-            }
-            else
-            {
-                key.SetValue("nicknotifications", "0");
-            }
-                //}
-            newAccountName = accountName.Text;
-            newUsername = usernameBox.Text;
-            newPassword = passwordBox.Text;
-            newNickName = nicknameBox.Text;
+            NewAccountName = accountName.Text;
+            NewUsername = usernameBox.Text;
+            NewPassword = passwordBox.Text;
+            NewNickName = nicknameBox.Text;
 
             this.Close();
         }
@@ -98,71 +51,21 @@ namespace campfirenow
 
         private void SetupForm_Load(object sender, EventArgs e)
         {
-            // Get the existing info from the database:
-            // Attempt to open the key
-            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Flare", true);
+            _account = Account.FromRegistry();
 
-            // If the return value is null, the key doesn't exist
-            if (key == null)
+            if (_account != null)
             {
-                // The key doesn't exist; create it / open it
-                key = Registry.CurrentUser.CreateSubKey("Software\\Flare");
-            }
+                accountName.Text = _account.Name;
+                usernameBox.Text = _account.User.Username;
+                passwordBox.Text = _account.User.Password;
+                nicknameBox.Text = _account.User.Nickname;
+                nickNotifications.Checked = _account.User.NotifyOnlyWhenNicknameIsFound;
+                useSSL.Checked = _account.UseSsl;
 
-            // Attempt to retrieve the value X; if null is returned, the value
-            // doesn't exist in the registry.
-            if (key.GetValue("accountname") == null)
-            {
-            }
-            else
-            {
-                accountName.Text = key.GetValue("accountname").ToString();
-                //guestCheck.Checked = (key.GetValue("loginAsGuest").ToString() == "1");
-                usernameBox.Text = key.GetValue("username").ToString();
-                passwordBox.Text = key.GetValue("password").ToString();
-                try
-                {
-                    nicknameBox.Text = key.GetValue("nickname").ToString().ToLower();
-                }
-                catch
-                {
-                    int at_symbol = usernameBox.Text.IndexOf('@');
-                    if (at_symbol > 0)
-                    {
-                        nicknameBox.Text = usernameBox.Text.Substring(0, at_symbol);
-                    }
-                }
-
-                try
-                {
-                    useSSL.Checked = (key.GetValue("usessl", "0").ToString() == "1");
-                }
-                catch
-                {
-                    useSSL.Checked = false;
-                }
-
-                try
-                {
-                    nickNotifications.Checked = (key.GetValue("nicknotifications", "0").ToString() == "1");
-                }
-                catch
-                {
-                    nickNotifications.Checked = true;
-                }
-
-                newAccountName = accountName.Text;
-                newUsername = usernameBox.Text;
-                newPassword = passwordBox.Text;
-                newNickName = nicknameBox.Text;
-            }
-        }
-
-        private void SetupForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-            {
-                this.Close();
+                NewAccountName = accountName.Text;
+                NewUsername = usernameBox.Text;
+                NewPassword = passwordBox.Text;
+                NewNickName = nicknameBox.Text;
             }
         }
     }
