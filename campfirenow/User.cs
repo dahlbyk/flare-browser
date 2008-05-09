@@ -8,10 +8,11 @@ namespace Flare
     /// <summary>
     /// The current user's login details and Flare preferences
     /// </summary>
-    class User
+    public class User
     {
         public String Username { get; set; }
         public String Password { get; set; }
+        public Int32 NotifyWindowDelay { get; set; }
         private String _nickname;
         public String Nickname
         {
@@ -46,6 +47,14 @@ namespace Flare
             user.Username = key.GetValue("username").ToString();
             user.Nickname = key.GetValue("nickname", String.Empty).ToString();
             user.Password = key.GetValue("password").ToString();
+            try
+            {
+                user.NotifyWindowDelay = Int32.Parse(key.GetValue("notifydelay", "1500").ToString());
+            }
+            catch (FormatException)
+            {
+                user.NotifyWindowDelay = 1500;
+            } 
             user.ShowMessageNotifications = (key.GetValue("showMsgNotify", "1").ToString() == "1");
             user.DefaultRoomName = key.GetValue("defaultroom", "notset").ToString();
             user.NotifyOnlyWhenNicknameIsFound = key.GetValue("nicknotifications", "0").ToString() == "1";
@@ -67,6 +76,7 @@ namespace Flare
             key.SetValue("username", Username);
             key.SetValue("password", Password);
             key.SetValue("nickname", Nickname);
+            key.SetValue("notifydelay", NotifyWindowDelay.ToString());
             key.SetValue("defaultroom", DefaultRoomName);
             key.SetValue("nicknotifications", NotifyOnlyWhenNicknameIsFound ? "1" : "0");
             key.Close();

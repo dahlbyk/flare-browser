@@ -11,10 +11,11 @@ namespace Flare
 {
     public partial class SetupForm : Form
     {
-        public String NewUsername;
-        public String NewPassword;
-        public String NewAccountName;
-        public String NewNickName;
+        public String NewUsername { get; set; }
+        public String NewPassword { get; set; }
+        public String NewAccountName { get; set; }
+        public String NewNickName { get; set; }
+        public Int32 NewNotifyWindowDelay { get; set; }
         private Account _account;
 
         public SetupForm()
@@ -24,6 +25,14 @@ namespace Flare
 
         private void okBtn_Click(object sender, EventArgs e)
         {
+            // Validation
+            Int32 notifyWindowDelay;
+            if (!Int32.TryParse(notificationWindowDelayTextBox.Text, out notifyWindowDelay))
+            {
+                MessageBox.Show(String.Format("The value you've entered for how long the notification window show display for ({0}), is invalid.\n\nPlease enter a whole number.", notificationWindowDelayTextBox.Text), "Unable to save new notification window settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             _account.Name = accountName.Text;
             _account.UseSsl = useSSL.Checked;
 
@@ -33,6 +42,7 @@ namespace Flare
             _account.User.Password = passwordBox.Text;
             _account.User.Nickname = nicknameBox.Text;
             _account.User.NotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
+            _account.User.NotifyWindowDelay = notifyWindowDelay;
 
             _account.Save();
 
@@ -40,6 +50,7 @@ namespace Flare
             NewUsername = usernameBox.Text;
             NewPassword = passwordBox.Text;
             NewNickName = nicknameBox.Text;
+            NewNotifyWindowDelay = notifyWindowDelay;
 
             this.Close();
         }
@@ -59,6 +70,7 @@ namespace Flare
                 usernameBox.Text = _account.User.Username;
                 passwordBox.Text = _account.User.Password;
                 nicknameBox.Text = _account.User.Nickname;
+                notificationWindowDelayTextBox.Text = _account.User.NotifyWindowDelay.ToString();
                 nickNotifications.Checked = _account.User.NotifyOnlyWhenNicknameIsFound;
                 useSSL.Checked = _account.UseSsl;
 

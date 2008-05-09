@@ -33,28 +33,33 @@ namespace Flare
             this.cancelBtn = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.accountTab = new System.Windows.Forms.TabPage();
-            this.optionsTab = new System.Windows.Forms.TabPage();
-            this.accountDetailsGroupBox = new System.Windows.Forms.GroupBox();
-            this.useSSL = new System.Windows.Forms.CheckBox();
-            this.accountName = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.accountNameLabel = new System.Windows.Forms.Label();
-            this.sslSupportLabel = new System.Windows.Forms.Label();
             this.userDetailsGroupBox = new System.Windows.Forms.GroupBox();
             this.passwordBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.usernameBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.accountDetailsGroupBox = new System.Windows.Forms.GroupBox();
+            this.sslSupportLabel = new System.Windows.Forms.Label();
+            this.accountNameLabel = new System.Windows.Forms.Label();
+            this.useSSL = new System.Windows.Forms.CheckBox();
+            this.accountName = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.optionsTab = new System.Windows.Forms.TabPage();
             this.nicknameGroupBox = new System.Windows.Forms.GroupBox();
             this.nickNotifications = new System.Windows.Forms.CheckBox();
             this.nicknameBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.notificationWindowGroupBox = new System.Windows.Forms.GroupBox();
+            this.notificationWindowDelayTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.accountTab.SuspendLayout();
-            this.optionsTab.SuspendLayout();
-            this.accountDetailsGroupBox.SuspendLayout();
             this.userDetailsGroupBox.SuspendLayout();
+            this.accountDetailsGroupBox.SuspendLayout();
+            this.optionsTab.SuspendLayout();
             this.nicknameGroupBox.SuspendLayout();
+            this.notificationWindowGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // okBtn
@@ -101,78 +106,6 @@ namespace Flare
             this.accountTab.TabIndex = 0;
             this.accountTab.Text = "Account";
             this.accountTab.UseVisualStyleBackColor = true;
-            // 
-            // optionsTab
-            // 
-            this.optionsTab.Controls.Add(this.nicknameGroupBox);
-            this.optionsTab.Location = new System.Drawing.Point(4, 22);
-            this.optionsTab.Name = "optionsTab";
-            this.optionsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.optionsTab.Size = new System.Drawing.Size(341, 182);
-            this.optionsTab.TabIndex = 1;
-            this.optionsTab.Text = "Notifications";
-            this.optionsTab.UseVisualStyleBackColor = true;
-            // 
-            // accountDetailsGroupBox
-            // 
-            this.accountDetailsGroupBox.Controls.Add(this.sslSupportLabel);
-            this.accountDetailsGroupBox.Controls.Add(this.accountNameLabel);
-            this.accountDetailsGroupBox.Controls.Add(this.useSSL);
-            this.accountDetailsGroupBox.Controls.Add(this.accountName);
-            this.accountDetailsGroupBox.Controls.Add(this.label2);
-            this.accountDetailsGroupBox.Location = new System.Drawing.Point(7, 7);
-            this.accountDetailsGroupBox.Name = "accountDetailsGroupBox";
-            this.accountDetailsGroupBox.Size = new System.Drawing.Size(328, 81);
-            this.accountDetailsGroupBox.TabIndex = 14;
-            this.accountDetailsGroupBox.TabStop = false;
-            this.accountDetailsGroupBox.Text = "Your account";
-            // 
-            // useSSL
-            // 
-            this.useSSL.Location = new System.Drawing.Point(93, 50);
-            this.useSSL.Name = "useSSL";
-            this.useSSL.Size = new System.Drawing.Size(174, 21);
-            this.useSSL.TabIndex = 17;
-            this.useSSL.Text = "This account uses SSL";
-            this.useSSL.UseVisualStyleBackColor = true;
-            // 
-            // accountName
-            // 
-            this.accountName.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
-            this.accountName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountName.Location = new System.Drawing.Point(93, 24);
-            this.accountName.Name = "accountName";
-            this.accountName.Size = new System.Drawing.Size(95, 20);
-            this.accountName.TabIndex = 14;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(188, 27);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(96, 17);
-            this.label2.TabIndex = 16;
-            this.label2.Text = ".campfirenow.com";
-            this.label2.UseCompatibleTextRendering = true;
-            // 
-            // accountNameLabel
-            // 
-            this.accountNameLabel.AutoSize = true;
-            this.accountNameLabel.Location = new System.Drawing.Point(7, 27);
-            this.accountNameLabel.Name = "accountNameLabel";
-            this.accountNameLabel.Size = new System.Drawing.Size(82, 13);
-            this.accountNameLabel.TabIndex = 18;
-            this.accountNameLabel.Text = "Account name: ";
-            // 
-            // sslSupportLabel
-            // 
-            this.sslSupportLabel.AutoSize = true;
-            this.sslSupportLabel.Location = new System.Drawing.Point(7, 53);
-            this.sslSupportLabel.Name = "sslSupportLabel";
-            this.sslSupportLabel.Size = new System.Drawing.Size(68, 13);
-            this.sslSupportLabel.TabIndex = 19;
-            this.sslSupportLabel.Text = "SSL support:";
             // 
             // userDetailsGroupBox
             // 
@@ -226,6 +159,79 @@ namespace Flare
             this.label3.Text = "Email:";
             this.label3.UseCompatibleTextRendering = true;
             // 
+            // accountDetailsGroupBox
+            // 
+            this.accountDetailsGroupBox.Controls.Add(this.sslSupportLabel);
+            this.accountDetailsGroupBox.Controls.Add(this.accountNameLabel);
+            this.accountDetailsGroupBox.Controls.Add(this.useSSL);
+            this.accountDetailsGroupBox.Controls.Add(this.accountName);
+            this.accountDetailsGroupBox.Controls.Add(this.label2);
+            this.accountDetailsGroupBox.Location = new System.Drawing.Point(7, 7);
+            this.accountDetailsGroupBox.Name = "accountDetailsGroupBox";
+            this.accountDetailsGroupBox.Size = new System.Drawing.Size(328, 81);
+            this.accountDetailsGroupBox.TabIndex = 14;
+            this.accountDetailsGroupBox.TabStop = false;
+            this.accountDetailsGroupBox.Text = "Your account";
+            // 
+            // sslSupportLabel
+            // 
+            this.sslSupportLabel.AutoSize = true;
+            this.sslSupportLabel.Location = new System.Drawing.Point(7, 53);
+            this.sslSupportLabel.Name = "sslSupportLabel";
+            this.sslSupportLabel.Size = new System.Drawing.Size(68, 13);
+            this.sslSupportLabel.TabIndex = 19;
+            this.sslSupportLabel.Text = "SSL support:";
+            // 
+            // accountNameLabel
+            // 
+            this.accountNameLabel.AutoSize = true;
+            this.accountNameLabel.Location = new System.Drawing.Point(7, 27);
+            this.accountNameLabel.Name = "accountNameLabel";
+            this.accountNameLabel.Size = new System.Drawing.Size(82, 13);
+            this.accountNameLabel.TabIndex = 18;
+            this.accountNameLabel.Text = "Account name: ";
+            // 
+            // useSSL
+            // 
+            this.useSSL.Location = new System.Drawing.Point(93, 50);
+            this.useSSL.Name = "useSSL";
+            this.useSSL.Size = new System.Drawing.Size(174, 21);
+            this.useSSL.TabIndex = 17;
+            this.useSSL.Text = "This account uses SSL";
+            this.useSSL.UseVisualStyleBackColor = true;
+            // 
+            // accountName
+            // 
+            this.accountName.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
+            this.accountName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.accountName.Location = new System.Drawing.Point(93, 24);
+            this.accountName.Name = "accountName";
+            this.accountName.Size = new System.Drawing.Size(95, 20);
+            this.accountName.TabIndex = 14;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(188, 27);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(96, 17);
+            this.label2.TabIndex = 16;
+            this.label2.Text = ".campfirenow.com";
+            this.label2.UseCompatibleTextRendering = true;
+            // 
+            // optionsTab
+            // 
+            this.optionsTab.Controls.Add(this.notificationWindowGroupBox);
+            this.optionsTab.Controls.Add(this.nicknameGroupBox);
+            this.optionsTab.Location = new System.Drawing.Point(4, 22);
+            this.optionsTab.Name = "optionsTab";
+            this.optionsTab.Padding = new System.Windows.Forms.Padding(3);
+            this.optionsTab.Size = new System.Drawing.Size(341, 182);
+            this.optionsTab.TabIndex = 1;
+            this.optionsTab.Text = "Notifications";
+            this.optionsTab.UseVisualStyleBackColor = true;
+            // 
             // nicknameGroupBox
             // 
             this.nicknameGroupBox.Controls.Add(this.nickNotifications);
@@ -268,6 +274,48 @@ namespace Flare
             this.label6.Text = "Nickname:";
             this.label6.UseCompatibleTextRendering = true;
             // 
+            // notificationWindowGroupBox
+            // 
+            this.notificationWindowGroupBox.Controls.Add(this.label5);
+            this.notificationWindowGroupBox.Controls.Add(this.notificationWindowDelayTextBox);
+            this.notificationWindowGroupBox.Controls.Add(this.label1);
+            this.notificationWindowGroupBox.Location = new System.Drawing.Point(7, 105);
+            this.notificationWindowGroupBox.Name = "notificationWindowGroupBox";
+            this.notificationWindowGroupBox.Size = new System.Drawing.Size(328, 71);
+            this.notificationWindowGroupBox.TabIndex = 1;
+            this.notificationWindowGroupBox.TabStop = false;
+            this.notificationWindowGroupBox.Text = "Notification window";
+            // 
+            // notificationWindowDelayTextBox
+            // 
+            this.notificationWindowDelayTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.notificationWindowDelayTextBox.Location = new System.Drawing.Point(86, 26);
+            this.notificationWindowDelayTextBox.Name = "notificationWindowDelayTextBox";
+            this.notificationWindowDelayTextBox.Size = new System.Drawing.Size(74, 20);
+            this.notificationWindowDelayTextBox.TabIndex = 12;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(7, 29);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(61, 17);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Display for:";
+            this.label1.UseCompatibleTextRendering = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(166, 29);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(66, 17);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "milliseconds";
+            this.label5.UseCompatibleTextRendering = true;
+            // 
             // SetupForm
             // 
             this.AcceptButton = this.okBtn;
@@ -290,13 +338,15 @@ namespace Flare
             this.Load += new System.EventHandler(this.SetupForm_Load);
             this.tabControl.ResumeLayout(false);
             this.accountTab.ResumeLayout(false);
-            this.optionsTab.ResumeLayout(false);
-            this.accountDetailsGroupBox.ResumeLayout(false);
-            this.accountDetailsGroupBox.PerformLayout();
             this.userDetailsGroupBox.ResumeLayout(false);
             this.userDetailsGroupBox.PerformLayout();
+            this.accountDetailsGroupBox.ResumeLayout(false);
+            this.accountDetailsGroupBox.PerformLayout();
+            this.optionsTab.ResumeLayout(false);
             this.nicknameGroupBox.ResumeLayout(false);
             this.nicknameGroupBox.PerformLayout();
+            this.notificationWindowGroupBox.ResumeLayout(false);
+            this.notificationWindowGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -323,5 +373,9 @@ namespace Flare
         private System.Windows.Forms.CheckBox nickNotifications;
         private System.Windows.Forms.TextBox nicknameBox;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.GroupBox notificationWindowGroupBox;
+        private System.Windows.Forms.TextBox notificationWindowDelayTextBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label5;
     }
 }

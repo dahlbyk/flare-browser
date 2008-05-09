@@ -5,7 +5,7 @@ using Microsoft.Win32;
 
 namespace Flare
 {
-    class Account 
+    public class Account 
     {
         public String Name { get; set; }
         public Boolean UseSsl { get; set; }

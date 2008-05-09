@@ -10,18 +10,17 @@ namespace Flare
 {
     public partial class NotifyForm : Form
     {
-        MainForm pMainFormRef;
+        MainForm _mainForm;
+        Boolean _opening = true;
 
-        bool opening = true;
-
-        public NotifyForm(string title, string person, string message, MainForm mainFormRef)
+        public NotifyForm(string title, string person, string message, MainForm mainForm)
         {
             InitializeComponent();
 
             TitleLabel.Text = title;
             PersonLabel.Text = person;
             MessageLabel.Text = message;
-            pMainFormRef = mainFormRef;
+            _mainForm = mainForm;
             this.Opacity = 0.0;
         }
 
@@ -35,13 +34,13 @@ namespace Flare
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if (opening)
+            if (_opening)
             {
                 this.Opacity += 0.05;
                 if (this.Opacity > 0.8)
                 {
-                    timer.Interval = 1500;
-                    opening = false;
+                    timer.Interval = _mainForm.Account.User.NotifyWindowDelay;
+                    _opening = false;
                 }
             }
             else
@@ -57,7 +56,7 @@ namespace Flare
 
         private void NotifyForm_MouseClick(object sender, MouseEventArgs e)
         {
-            pMainFormRef.ShowFormHideIcon();
+            _mainForm.ShowFormHideIcon();
             this.Close();
         }
     }

@@ -53,6 +53,11 @@ namespace Flare
         private Message         _lastMessage;
         private Boolean         _isInStartUpMode = false;
         private Account         _account;
+        public Account Account
+        {
+            get { return _account; }
+        }
+
 
         public MainForm(string[] args)
         {
@@ -451,7 +456,8 @@ namespace Flare
             if (sf.NewAccountName != _account.Name || 
                 sf.NewUsername != _account.User.Username || 
                 sf.NewPassword != _account.User.Password || 
-                sf.NewNickName != _account.User.Nickname)
+                sf.NewNickName != _account.User.Nickname ||
+                sf.NewNotifyWindowDelay != _account.User.NotifyWindowDelay)
             {
                 MainForm_Load(sender, e);
             }

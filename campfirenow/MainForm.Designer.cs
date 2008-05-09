@@ -237,6 +237,7 @@ namespace Flare
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(265, 79);
             this.panel1.TabIndex = 4;
+            this.panel1.Visible = false;
             // 
             // label1
             // 
