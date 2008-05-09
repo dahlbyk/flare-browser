@@ -70,6 +70,7 @@ namespace Flare
             this.webBrowser.ScriptErrorsSuppressed = true;
             this.webBrowser.Size = new System.Drawing.Size(984, 640);
             this.webBrowser.TabIndex = 0;
+            this.webBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser_NewWindow);
             this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             // 
             // timer
@@ -230,16 +231,17 @@ namespace Flare
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(229)))), ((int)(((byte)(229)))));
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(690, 523);
+            this.panel1.Location = new System.Drawing.Point(688, 532);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(220, 129);
+            this.panel1.Size = new System.Drawing.Size(265, 79);
             this.panel1.TabIndex = 4;
             // 
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(64, 43);
+            this.label1.Location = new System.Drawing.Point(91, 18);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 47);
             this.label1.TabIndex = 0;

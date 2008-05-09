@@ -587,6 +587,12 @@ namespace Flare
 
         }
 
+        private void webBrowser_NewWindow(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Process.Start(webBrowser.StatusText);
+        }
+
 
     }
 
