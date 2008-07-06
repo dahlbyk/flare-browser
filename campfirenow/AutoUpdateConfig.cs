@@ -53,7 +53,7 @@ namespace Conversive.AutoUpdater
 		{ get { return _AvailableVersion; } set { _AvailableVersion = value; } }
 
 		private string _AppFileURL;
-		public string AppFileURL 
+		public string AppFileUrl 
 		{ get { return _AppFileURL; } set { _AppFileURL = value; } }
 
 		private string _LatestChanges;
@@ -61,7 +61,7 @@ namespace Conversive.AutoUpdater
 		{ get { return _LatestChanges; } set { _LatestChanges = value; } }
 
 		private string _ChangeLogURL;
-		public string ChangeLogURL 
+		public string ChangeLogUrl 
 		{ get { return _ChangeLogURL; } set { _ChangeLogURL = value; } }
 
 		public delegate void LoadConfigError(string stMessage, Exception e);
@@ -70,56 +70,56 @@ namespace Conversive.AutoUpdater
 		/// <summary>
 		/// LoadConfig: Invoke this method when you are ready to populate this object
 		/// </summary>
-		public bool LoadConfig(string url, string user, string pass, string proxyURL, bool proxyEnabled)
+		public bool LoadConfig(string url, string user, string pass, string proxyUrl, bool proxyEnabled)
 		{
 			try 
 			{
 				//Load the xml config file
-				XmlDocument XmlDoc = new XmlDocument();
-				HttpWebResponse Response;
-				HttpWebRequest Request;
+				XmlDocument xmlDoc = new XmlDocument();
+				HttpWebResponse response;
+				HttpWebRequest request;
 				//Retrieve the File
 
-				Request = (HttpWebRequest)HttpWebRequest.Create(url);
+				request = (HttpWebRequest)HttpWebRequest.Create(url);
 				//Request.Headers.Add("Translate: f"); //Commented out 11/16/2004 Matt Palmerlee, this Header is more for DAV and causes a known security issue
 				if(user != null && user != "")
-					Request.Credentials = new NetworkCredential(user, pass);
+					request.Credentials = new NetworkCredential(user, pass);
 				else
-					Request.Credentials = CredentialCache.DefaultCredentials;
+					request.Credentials = CredentialCache.DefaultCredentials;
 
 				//Added 11/16/2004 For Proxy Clients, Thanks George for submitting these changes
 				if(proxyEnabled == true)
-					Request.Proxy = new WebProxy(proxyURL,true);
+					request.Proxy = new WebProxy(proxyUrl,true);
 
-				Response = (HttpWebResponse)Request.GetResponse();
+				response = (HttpWebResponse)request.GetResponse();
 
 				Stream respStream = null;
-				respStream = Response.GetResponseStream();
+				respStream = response.GetResponseStream();
 
 				//Load the XML from the stream
-				XmlDoc.Load(respStream);
+				xmlDoc.Load(respStream);
 
 				//Parse out the AvailableVersion
-				XmlNode AvailableVersionNode = XmlDoc.SelectSingleNode(@"//AvailableVersion");
-				this.AvailableVersion = AvailableVersionNode.InnerText;
+				XmlNode availableVersionNode = xmlDoc.SelectSingleNode(@"//AvailableVersion");
+				this.AvailableVersion = availableVersionNode.InnerText;
 
 				//Parse out the AppFileURL
-				XmlNode AppFileURLNode = XmlDoc.SelectSingleNode(@"//AppFileURL");
-				this.AppFileURL = AppFileURLNode.InnerText;
+				XmlNode appFileUrlNode = xmlDoc.SelectSingleNode(@"//AppFileURL");
+				this.AppFileUrl = appFileUrlNode.InnerText;
 
 				//Parse out the LatestChanges
-				XmlNode LatestChangesNode = XmlDoc.SelectSingleNode(@"//LatestChanges");
-				if(LatestChangesNode != null)
-					this.LatestChanges = LatestChangesNode.InnerText;
+				XmlNode latestChangesNode = xmlDoc.SelectSingleNode(@"//LatestChanges");
+				if(latestChangesNode != null)
+					this.LatestChanges = latestChangesNode.InnerText;
 				else
 					this.LatestChanges = "";
 
 				//Parse out the ChangLogURL
-				XmlNode ChangeLogURLNode = XmlDoc.SelectSingleNode(@"//ChangeLogURL");
-				if(ChangeLogURLNode != null)
-					this.ChangeLogURL = ChangeLogURLNode.InnerText;
+				XmlNode changeLogUrlNode = xmlDoc.SelectSingleNode(@"//ChangeLogURL");
+				if(changeLogUrlNode != null)
+					this.ChangeLogUrl = changeLogUrlNode.InnerText;
 				else
-					this.ChangeLogURL = "";
+					this.ChangeLogUrl = "";
 			
 			} 
 			catch (Exception e)

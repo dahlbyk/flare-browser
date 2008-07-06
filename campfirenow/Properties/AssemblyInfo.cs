@@ -1,16 +1,20 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System;
+
+[assembly: CLSCompliant(false)]
+
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Flare")]
-[assembly: AssemblyDescription("A burst of light used to communicate or illuminate. Flare lets you stay logged into a room in your Campfire account and notifies you of any new messages.")]
+[assembly: AssemblyDescription("Flare lets you stay logged into a room in your Campfire account and notifies you of any new messages.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Matt Brindley")]
 [assembly: AssemblyProduct("Flare")]
-[assembly: AssemblyCopyright("Copyright © Matt Brindley 2006")]
+[assembly: AssemblyCopyright("Copyright © Matt Brindley 2006-2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +33,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.4.94.0")]
-[assembly: AssemblyFileVersion("0.4.94.0")]
+[assembly: AssemblyVersion("0.3.90.0")]
+[assembly: AssemblyFileVersion("0.3.90.0")]

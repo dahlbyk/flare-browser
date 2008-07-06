@@ -72,7 +72,7 @@ namespace Conversive.AutoUpdater
 		[DefaultValue(@"http://myproxy.com:8080/")]
 		[Description("The Proxy server URL.(For example:http://myproxy.com:port)"), 
 		Category("AutoUpdater Configuration")]
-		public string ProxyURL 
+		public string ProxyUrl 
 		{ get { return _ProxyURL; } set { _ProxyURL = value; } }
 
 		private string _LoginUserName;
@@ -93,7 +93,7 @@ namespace Conversive.AutoUpdater
 		[DefaultValue(@"http://localhost/UpdateConfig.xml")]
 		[Description("The URL Path to the configuration file."), 
 		Category("AutoUpdater Configuration")]
-		public string ConfigURL 
+		public string ConfigUrl 
 		{ get { return _ConfigURL; } set { _ConfigURL = value; } }
 
 		private bool _AutoDownload;//If true, the app will automatically download the latest version, if false the app will use the DownloadForm to prompt the user, if AutoDownload is false and DownloadForm is null, it doesn't download
@@ -171,7 +171,7 @@ namespace Conversive.AutoUpdater
 		/// </summary>
 		public void LoadConfig()
 		{
-			Thread backgroundLoadConfigThread = new Thread(new ThreadStart(this.loadConfigThread));
+			Thread backgroundLoadConfigThread = new Thread(new ThreadStart(this.LoadConfigThread));
 			backgroundLoadConfigThread.IsBackground = true;
 			backgroundLoadConfigThread.Start();
 		}//TryUpdate()
@@ -179,16 +179,16 @@ namespace Conversive.AutoUpdater
 		/// <summary>
 		/// loadConfig: This method just loads the config file so the app can check the versions manually
 		/// </summary>
-		private void loadConfigThread()
+		private void LoadConfigThread()
 		{
 			AutoUpdateConfig config = new AutoUpdateConfig();
-			config.OnLoadConfigError += new Conversive.AutoUpdater.AutoUpdateConfig.LoadConfigError(config_OnLoadConfigError);
+			config.OnLoadConfigError += new Conversive.AutoUpdater.AutoUpdateConfig.LoadConfigError(ConfigOnLoadConfigError);
 			
 			//For using untrusted SSL Certificates
 			System.Net.ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
 
 			//Do the load of the config file
-			if(config.LoadConfig(this.ConfigURL, this.LoginUserName, this.LoginUserPass, this.ProxyURL, this.ProxyEnabled))
+			if(config.LoadConfig(this.ConfigUrl, this.LoginUserName, this.LoginUserPass, this.ProxyUrl, this.ProxyEnabled))
 			{
 				this._AutoUpdateConfig = config;
 				if(this.OnConfigFileDownloaded != null)
@@ -205,7 +205,7 @@ namespace Conversive.AutoUpdater
 		/// </summary>
 		public void TryUpdate()
 		{
-            Thread backgroundThread = new Thread(new ThreadStart(this.updateThread));
+            Thread backgroundThread = new Thread(new ThreadStart(this.UpdateThread));
 			backgroundThread.IsBackground = true;
 			backgroundThread.Start();
          }//TryUpdate()		
@@ -213,11 +213,11 @@ namespace Conversive.AutoUpdater
 		/// <summary>
 		/// updateThread: This is the Thread that runs for checking updates against the config file
 		/// </summary>
-		private void updateThread()
+		private void UpdateThread()
 		{
             string stUpdateName = "update";
 			if(this._AutoUpdateConfig == null)//if we haven't already downloaded the config file, do so now
-				this.loadConfigThread();
+				this.LoadConfigThread();
 			if(this._AutoUpdateConfig != null)//make sure we were able to download it
 			{
 				//Check the file for an update
@@ -232,12 +232,12 @@ namespace Conversive.AutoUpdater
 						string stPath = diDest.FullName + System.IO.Path.DirectorySeparatorChar + stUpdateName + ".zip";
 						//There is a new version available
                         
-						if(this.downloadFile(this._AutoUpdateConfig.AppFileURL, stPath))
+						if(this.DownloadFile(this._AutoUpdateConfig.AppFileUrl, stPath))
 						{
 							//MessageBox.Show("Downloaded New File");
 							string stDest = diDest.FullName + System.IO.Path.DirectorySeparatorChar + stUpdateName + System.IO.Path.DirectorySeparatorChar;
 							//Extract Zip File
-							this.unzip(stPath, stDest);
+							this.Unzip(stPath, stDest);
 							//Delete Zip File
 							File.Delete(stPath);
 							if(this.OnAutoUpdateComplete != null)
@@ -247,7 +247,7 @@ namespace Conversive.AutoUpdater
 							//Restart App if Necessary
 							//If true, the app will restart automatically, if false the app will use the RestartForm to prompt the user, if RestartForm is null, it doesn't restart
 							if(this.AutoRestart || (this.RestartForm != null && this.RestartForm.ShowDialog() == DialogResult.Yes))
-								this.restart();
+								this.Restart();
 							//else don't restart
 						}
 						//else
@@ -264,29 +264,29 @@ namespace Conversive.AutoUpdater
 		/// <summary>
 		/// downloadFile: Download a file from the specified url and copy it to the specified path
 		/// </summary>
-		private bool downloadFile(string url, string path)
+		private bool DownloadFile(string url, string path)
 		{
 			try
 			{
 				//create web request/response
-				HttpWebResponse Response;
-				HttpWebRequest Request;
+				HttpWebResponse response;
+				HttpWebRequest request;
 
-				Request = (HttpWebRequest)HttpWebRequest.Create(url);
+				request = (HttpWebRequest)HttpWebRequest.Create(url);
 				//Request.Headers.Add("Translate: f"); //Commented out 11/16/2004 Matt Palmerlee, this Header is more for DAV and causes a known security issue
 				if(this.LoginUserName != null && this.LoginUserName != "")
-					Request.Credentials = new NetworkCredential(this.LoginUserName, this.LoginUserPass);
+					request.Credentials = new NetworkCredential(this.LoginUserName, this.LoginUserPass);
 				else
-					Request.Credentials = CredentialCache.DefaultCredentials;
+					request.Credentials = CredentialCache.DefaultCredentials;
 
 				//Added 11/16/2004 For Proxy Clients, Thanks George for submitting these changes
 				if(this.ProxyEnabled == true)
-					Request.Proxy = new WebProxy(this.ProxyURL);
+					request.Proxy = new WebProxy(this.ProxyUrl);
 
-				Response = (HttpWebResponse)Request.GetResponse();
+				response = (HttpWebResponse)request.GetResponse();
 
 				Stream respStream = null;
-				respStream = Response.GetResponseStream();
+				respStream = response.GetResponseStream();
 
 				//Do the Download
 				byte[] buffer = new byte[4096];
@@ -308,7 +308,7 @@ namespace Conversive.AutoUpdater
 				//MessageBox.Show(stMessage);
 				if(File.Exists(path))
 					File.Delete(path);
-				this.sendAutoUpdateError(stMessage, e);
+				this.SendAutoUpdateError(stMessage, e);
 				return false;
 			}
 			return true;
@@ -317,7 +317,7 @@ namespace Conversive.AutoUpdater
 		/// <summary>
 		/// unzip: Open the zip file specified by stZipPath, into the stDestPath Directory
 		/// </summary>
-		private void unzip(string stZipPath, string stDestPath)
+		private void Unzip(string stZipPath, string stDestPath)
 		{
 			ZipInputStream s = new ZipInputStream(File.OpenRead(stZipPath));
 		
@@ -361,18 +361,18 @@ namespace Conversive.AutoUpdater
 		/// <summary>
 		/// restart: Restart the app, the AppStarter will be responsible for actually restarting the main application.
 		/// </summary>
-		private void restart()
+		private void Restart()
 		{
 			Environment.ExitCode = 2; //the surrounding AppStarter must look for this to restart the app.
 			Application.Exit();
 		}//restart()
 
-		private void config_OnLoadConfigError(string stMessage, Exception e)
+		private void ConfigOnLoadConfigError(string stMessage, Exception e)
 		{
-			this.sendAutoUpdateError(stMessage, e);
+			this.SendAutoUpdateError(stMessage, e);
 		}
 
-		private void sendAutoUpdateError(string stMessage, Exception e)
+		private void SendAutoUpdateError(string stMessage, Exception e)
 		{
 			if(this.OnAutoUpdateError != null)
 				this.OnAutoUpdateError(stMessage, e);

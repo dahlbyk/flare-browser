@@ -14,7 +14,8 @@ namespace Flare
         public String NewUsername { get; set; }
         public String NewPassword { get; set; }
         public String NewAccountName { get; set; }
-        public String NewNickName { get; set; }
+        public String NewNickname { get; set; }
+        public Boolean NewNotifyOnlyWhenNicknameIsFound { get; set; }
         public Int32 NewNotifyWindowDelay { get; set; }
         private Account _account;
 
@@ -49,7 +50,8 @@ namespace Flare
             NewAccountName = accountName.Text;
             NewUsername = usernameBox.Text;
             NewPassword = passwordBox.Text;
-            NewNickName = nicknameBox.Text;
+            NewNickname = nicknameBox.Text;
+            NewNotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
             NewNotifyWindowDelay = notifyWindowDelay;
 
             this.Close();
@@ -77,7 +79,8 @@ namespace Flare
                 NewAccountName = accountName.Text;
                 NewUsername = usernameBox.Text;
                 NewPassword = passwordBox.Text;
-                NewNickName = nicknameBox.Text;
+                NewNickname = nicknameBox.Text;
+                NewNotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
             }
         }
     }

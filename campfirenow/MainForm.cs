@@ -20,29 +20,29 @@ namespace Flare
 {
     public partial class MainForm : Form
     {
-        public const int FLASHW_STOP = 0;
-        public const int FLASHW_CAPTION = 0x00000001;
-        public const int FLASHW_TRAY = 0x00000002;
-        public const int FLASHW_ALL = (FLASHW_CAPTION | FLASHW_TRAY);
-        public const int FLASHW_TIMER = 0x00000004;
-        public const int FLASHW_TIMERNOFG = 0x0000000C;
+        public const int FlashwStop = 0;
+        public const int FlashwCaption = 0x00000001;
+        public const int FlashwTray = 0x00000002;
+        public const int FlashwAll = (FlashwCaption | FlashwTray);
+        public const int FlashwTimer = 0x00000004;
+        public const int FlashwTimernofg = 0x0000000C;
 
         [StructLayout(LayoutKind.Sequential)]
         public struct FLASHWINFO
         {
             [MarshalAs(UnmanagedType.U4)]
-            public int cbSize;
-            public IntPtr hwnd;
+            public int CbSize;
+            public IntPtr Hwnd;
             [MarshalAs(UnmanagedType.U4)]
-            public int dwFlags;
+            public int DWFlags;
             [MarshalAs(UnmanagedType.U4)]
-            public int uCount;
+            public int UCount;
             [MarshalAs(UnmanagedType.U4)]
-            public int dwTimeout;
+            public int DWTimeout;
         }
 
         [DllImport("user32.dll")]
-        public static extern bool FlashWindowEx([MarshalAs(UnmanagedType.Struct)]
+        public static extern bool FlashWindowEX([MarshalAs(UnmanagedType.Struct)]
     ref FLASHWINFO pfwi);
 
         // Forming the title
@@ -57,6 +57,7 @@ namespace Flare
         {
             get { return _account; }
         }
+        public String ProgressLabelText { get; set; }
 
 
         public MainForm(string[] args)
@@ -92,7 +93,7 @@ namespace Flare
                 if (!proxy.IsBypassed(_account.CampfireUri))
                 {
                     autoUpdater.ProxyEnabled = true;
-                    autoUpdater.ProxyURL = proxy.GetProxy(_account.CampfireUri).AbsoluteUri;
+                    autoUpdater.ProxyUrl = proxy.GetProxy(_account.CampfireUri).AbsoluteUri;
                 }
 
                 // Start opening the user's Campfire account
@@ -103,7 +104,7 @@ namespace Flare
             }
             catch (System.Exception err)
             {
-                MessageBox.Show("Flare has misunderstood a request from Campfire and needs to close. If you would like to help make this beta software better, post the error message below on the Flare support forum at mattbrindley.com/support.\n\nThanks for your patience.\n\nFlare Exception Details:\nProduct Version: " + Application.ProductVersion + "\n" + err.Message + "\n\n" + err.StackTrace);
+                FlareException.ShowFriendly(err);
             }
         }
 
@@ -168,8 +169,8 @@ namespace Flare
                          _isFirstLoad = false;
 
                          // Don't need to log in, update the title:
-                         updateTitle(false);
-                         updateRoomList();
+                         UpdateTitle(false);
+                         UpdateRoomList();
 
                          // Navigate to default room (if one is listed):
                          if (_account.User.DefaultRoomName.Contains("/room/") && webBrowser.Document.Body.InnerHtml.Contains(_account.User.DefaultRoomName))
@@ -181,82 +182,86 @@ namespace Flare
                  else
                  {
                      loadingCover.Visible = false;
-                     updateTitle(false);
-                     updateRoomList();
+                     UpdateTitle(false);
+                     UpdateRoomList();
                  }
 
                  timer.Enabled = true;
              }
              catch (System.Exception err)
              {
-                 MessageBox.Show("Sorry Flare has misunderstood a request from Campfire and needs to close. If you would like to help make this beta software better, post the error message below on the CampfireNow support forum at mattbrindley.com/support.\n\nThanks for your patience.\n\nFlare Exception Details:\n" + err.Message + "\n\n");
+                 FlareException.ShowFriendly(err);
              }
         }
 
-        private void updateRoomList()
+        private void UpdateRoomList()
         {
-            int roomCount = 0;
-
-            roomsToolStripMenuItem.DropDownItems.Clear();
-
-            foreach (MSHTML.HTMLAnchorElement link in ((MSHTML.IHTMLDocument2)webBrowser.Document.DomDocument).anchors)
+            try
             {
-                if (link.id.Contains("room_tab"))
-                {
-                    roomCount++;
+                int roomCount = 0;
 
-                    Keys dKey;
-                    switch (roomCount)
+                roomsToolStripMenuItem.DropDownItems.Clear();
+
+                foreach (MSHTML.HTMLAnchorElement link in ((MSHTML.IHTMLDocument2)webBrowser.Document.DomDocument).anchors)
+                {
+                    if (link.id.Contains("room_tab"))
                     {
-                        case 1:
-                            dKey = Keys.D1;
-                            break;
+                        roomCount++;
+
+                        Keys dKey;
+                        switch (roomCount)
+                        {
+                            case 1:
+                                dKey = Keys.D1;
+                                break;
                             case 2:
-                            dKey = Keys.D2;
-                            break;
+                                dKey = Keys.D2;
+                                break;
                             case 3:
-                            dKey = Keys.D3;
-                            break;
+                                dKey = Keys.D3;
+                                break;
                             case 4:
-                            dKey = Keys.D4;
-                            break;
+                                dKey = Keys.D4;
+                                break;
                             case 5:
-                            dKey = Keys.D5;
-                            break;
+                                dKey = Keys.D5;
+                                break;
                             case 6:
-                            dKey = Keys.D6;
-                            break;
+                                dKey = Keys.D6;
+                                break;
                             case 7:
-                            dKey = Keys.D7;
-                            break;
+                                dKey = Keys.D7;
+                                break;
                             case 8:
-                            dKey = Keys.D8;
-                            break;
+                                dKey = Keys.D8;
+                                break;
                             case 9:
-                            dKey = Keys.D9;
-                            break;
-                        default:
-                            dKey = Keys.Cancel;
-                            break;
+                                dKey = Keys.D9;
+                                break;
+                            default:
+                                dKey = Keys.Cancel;
+                                break;
+                        }
+
+                        ToolStripMenuItem newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+                        newToolStripMenuItem.Tag = link;
+                        newToolStripMenuItem.Name = "talkToolStripMenuItem";
+                        if (dKey != Keys.Cancel)
+                            newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | dKey)));
+                        newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+                        newToolStripMenuItem.Text = link.innerText;
+                        roomsToolStripMenuItem.DropDownItems.Add(newToolStripMenuItem);
+                        newToolStripMenuItem.Click += new System.EventHandler(newToolStripMenuItem_Click);
                     }
-                    
-                    ToolStripMenuItem newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-                    newToolStripMenuItem.Tag = link;
-                    newToolStripMenuItem.Name = "talkToolStripMenuItem";
-                    if (dKey != Keys.Cancel)
-                        newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | dKey)));
-                    newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-                    newToolStripMenuItem.Text = link.innerText;
-                    roomsToolStripMenuItem.DropDownItems.Add(newToolStripMenuItem);
-                    newToolStripMenuItem.Click += new System.EventHandler(newToolStripMenuItem_Click);
                 }
             }
+            catch {}
         }
 
-        private void updateTitle(bool checkForNewMessages)
+        private void UpdateTitle(bool checkForNewMessages)
         {
             if (checkForNewMessages)
-                checkForMessages();
+                CheckForMessages();
 
             int oldNewMsgTotal = _newMessagesTotal;
 
@@ -282,28 +287,28 @@ namespace Flare
             }
 
             if (_newMessagesTotal > 0)
-                this.Text = "(" + _newMessagesTotal + ") " + firstLetterToUpper(_account.Name) + " | " + firstLetterToUpper(_roomTitle);
+                this.Text = "(" + _newMessagesTotal + ") " + FirstLetterToUpper(_account.Name) + " | " + FirstLetterToUpper(_roomTitle);
             else
-                this.Text = firstLetterToUpper(_account.Name) + " | " + firstLetterToUpper(_roomTitle);
+                this.Text = FirstLetterToUpper(_account.Name) + " | " + FirstLetterToUpper(_roomTitle);
 
             
             if (_newMessagesTotal > oldNewMsgTotal && this.Focused == false && webBrowser.Focused == false)
             {
                 FLASHWINFO f = new FLASHWINFO();
-                f.cbSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(FLASHWINFO));
-                f.hwnd = this.Handle;
+                f.CbSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(FLASHWINFO));
+                f.Hwnd = this.Handle;
 
-                f.dwFlags = FLASHW_ALL;
-                f.uCount = 2; // Flash 10 times.
-                f.dwTimeout = 0; // Use default cursor blink rate.
-                FlashWindowEx(ref f);
+                f.DWFlags = FlashwAll;
+                f.UCount = 2; // Flash 10 times.
+                f.DWTimeout = 0; // Use default cursor blink rate.
+                FlashWindowEX(ref f);
 
             }
             
 
         }
 
-        private void checkForMessages()
+        private void CheckForMessages()
         {
             try
             {
@@ -313,7 +318,7 @@ namespace Flare
                     // Don't do this if the form is focused.
                     if (!this.Focused && !webBrowser.Focused)
                     {
-                        if (_lastMessage == null || _lastMessage.ElementID.Length == 0)
+                        if (_lastMessage == null || _lastMessage.ElementId.Length == 0)
                             try
                             {
                                 foreach (HtmlElement table in webBrowser.Document.Body.All)
@@ -329,7 +334,7 @@ namespace Flare
                         else
                         {
                             // Find the last message's new element (it will change each time the html does:
-                            HtmlElement nextElement = webBrowser.Document.All[_lastMessage.ElementID].NextSibling;
+                            HtmlElement nextElement = webBrowser.Document.All[_lastMessage.ElementId].NextSibling;
                             while (nextElement.DomElement != null)
                             {
                                 string name = "";
@@ -373,12 +378,12 @@ namespace Flare
                     {
                         _newMessagesTotal = 0;
 
-                        if (_lastMessage != null && _lastMessage.ElementID.Length > 0)
+                        if (_lastMessage != null && _lastMessage.ElementId.Length > 0)
                         {
-                            HtmlElement nextElement = webBrowser.Document.All[_lastMessage.ElementID].NextSibling;
+                            HtmlElement nextElement = webBrowser.Document.All[_lastMessage.ElementId].NextSibling;
                             while (nextElement.DomElement != null)
                             {
-                                _lastMessage = new Message("", "", webBrowser.Document.All[_lastMessage.ElementID].NextSibling.Id);
+                                _lastMessage = new Message("", "", webBrowser.Document.All[_lastMessage.ElementId].NextSibling.Id);
                                 nextElement = nextElement.NextSibling;
                             }
                         }
@@ -416,24 +421,24 @@ namespace Flare
 
         }
 
-        private string firstLetterToUpper(string inStr)
+        private string FirstLetterToUpper(string inStr)
         {
             return inStr[0].ToString().ToUpper() + inStr.ToLower().Substring(1);
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            updateTitle(true);
+            UpdateTitle(true);
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Run closing routine:
-            exitingRoutine();
+            ExitingRoutine();
             Application.Exit();
         }
 
-        private void exitingRoutine()
+        private void ExitingRoutine()
         {
             if (webBrowser.Url.AbsoluteUri.Contains("/room/"))
             {
@@ -455,8 +460,9 @@ namespace Flare
             // if anything was changed, reload the page
             if (sf.NewAccountName != _account.Name || 
                 sf.NewUsername != _account.User.Username || 
-                sf.NewPassword != _account.User.Password || 
-                sf.NewNickName != _account.User.Nickname ||
+                sf.NewPassword != _account.User.Password ||
+                sf.NewNickname != _account.User.Nickname ||
+                sf.NewNotifyOnlyWhenNicknameIsFound != _account.User.NotifyOnlyWhenNicknameIsFound ||
                 sf.NewNotifyWindowDelay != _account.User.NotifyWindowDelay)
             {
                 MainForm_Load(sender, e);
@@ -466,7 +472,7 @@ namespace Flare
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Run closing routine:
-            exitingRoutine();
+            ExitingRoutine();
             Application.Exit();
         }
 
@@ -551,7 +557,7 @@ namespace Flare
         private void CloseBtn_Click(object sender, EventArgs e)
         {
             // Run closing routine:
-            exitingRoutine();
+            ExitingRoutine();
             Application.Exit();
         }
 
@@ -562,10 +568,10 @@ namespace Flare
 
         private void onlineSupportForumsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("http://mattbrindley.com/support/?CategoryID=2");
+            Process.Start("http://code.google.com/p/flare-browser/issues/list");
         }
 
-        private void autoUpdater_OnAutoUpdateComplete()
+        private void AutoUpdaterOnAutoUpdateComplete()
         {
             MessageBox.Show("Flare has been updated and needs to very quickly restart itself.\n\nPress OK to restart Flare.");
         }
@@ -573,9 +579,7 @@ namespace Flare
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-            foreach (string file in files)
-                MessageBox.Show(file);
+            _account.User.UploadFileToCurrentRoom(_account.CampfireUri + "/upload.cgi/room/36735/uploads/new", files[0], webBrowser.Document.Cookie, uploadLabel);
         }
 
         private void MainForm_DragEnter(object sender, DragEventArgs e)
@@ -599,20 +603,23 @@ namespace Flare
             Process.Start(webBrowser.StatusText);
         }
 
+        private void autoUpdater_OnAutoUpdateComplete()
+        {
 
+        }
     }
 
     public class Message
     {
-        public string Name;
-        public string TextMessage;
-        public string ElementID;
+        public String Name { get; set; }
+        public String TextMessage { get; set; }
+        public String ElementId { get; set; }
 
-        public Message(string name, string message, string elementID)
+        public Message(string name, string message, string elementId)
         {
             Name = name;
             TextMessage = message;
-            ElementID = elementID;
+            ElementId = elementId;
         }
     }
 }

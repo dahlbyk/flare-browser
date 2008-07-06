@@ -273,6 +273,18 @@
   <metadata name="waitingTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>426, 17</value>
   </metadata>
+  <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAUpJREFUOE9j/P//
+        PwNFAGQALlx8LP1kwaHUI/jU4NRcdDTtYsepuv+tJ6r/Z+yIPY/LEAwDSo5nsBUdSbvdfqrm//Jr8/4v
+        vTLnf+2B4v9xa0JvRi4LYEM3CMOAwsOpu/P2J31vPlb5f/GVWf8XXp7xv+1w7f+IJf7fg+d57SBoAExB
+        6pbo//MvTfs/58KU/6lrYv8HzfG0wOYNnGEQvzbs/6zzk//PODfhf8AsD6Be7IGN0wCgf/9PPdP3f/Lp
+        7v9ek5xINwDo3/8TT3X97zvZ/t+5y4Z0A3ymuv7vOd76v/NY03/bJjPSDXDrtf/ffrTxf+vhuv9mVYak
+        G2Dfavm/6VDt/4aDVf8NirRJN8Cy1vh/3YHK/zX7y/5rZ6uRboBxqe7/qr0l/yv2Fv1XS1Ui3QDdPI3/
+        mpmq/1VTFP8rJciRbgC+HIgsBwC7EKtb+wIWMAAAAABJRU5ErkJggg==
+</value>
+  </data>
   <metadata name="autoUpdater.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>313, 17</value>
   </metadata>

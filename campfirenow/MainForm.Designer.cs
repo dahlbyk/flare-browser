@@ -51,13 +51,15 @@ namespace Flare
             this.CloseBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.waitingTimer = new System.Windows.Forms.Timer(this.components);
             this.loadingCover = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.uploadPanel = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.uploadLabel = new System.Windows.Forms.Label();
             this.autoUpdater = new Conversive.AutoUpdater.AutoUpdater();
             this.menuStrip1.SuspendLayout();
             this.notifyContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadingCover)).BeginInit();
-            this.panel1.SuspendLayout();
+            this.uploadPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // webBrowser
@@ -228,38 +230,49 @@ namespace Flare
             this.loadingCover.TabIndex = 3;
             this.loadingCover.TabStop = false;
             // 
-            // panel1
+            // uploadPanel
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(229)))), ((int)(((byte)(229)))));
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(688, 532);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(265, 79);
-            this.panel1.TabIndex = 4;
-            this.panel1.Visible = false;
+            this.uploadPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(229)))), ((int)(((byte)(229)))));
+            this.uploadPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.uploadPanel.Controls.Add(this.pictureBox1);
+            this.uploadPanel.Controls.Add(this.uploadLabel);
+            this.uploadPanel.Location = new System.Drawing.Point(689, 588);
+            this.uploadPanel.Name = "uploadPanel";
+            this.uploadPanel.Size = new System.Drawing.Size(168, 58);
+            this.uploadPanel.TabIndex = 4;
+            this.uploadPanel.Visible = false;
             // 
-            // label1
+            // pictureBox1
             // 
-            this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(91, 18);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 47);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "To upload a file, drop it here.";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(15, 16);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(31, 29);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox1.TabIndex = 1;
+            this.pictureBox1.TabStop = false;
+            // 
+            // uploadLabel
+            // 
+            this.uploadLabel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uploadLabel.Location = new System.Drawing.Point(52, 7);
+            this.uploadLabel.Name = "uploadLabel";
+            this.uploadLabel.Size = new System.Drawing.Size(100, 47);
+            this.uploadLabel.TabIndex = 0;
+            this.uploadLabel.Text = "To upload a file, drop it here.";
+            this.uploadLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // autoUpdater
             // 
             this.autoUpdater.AutoDownload = false;
             this.autoUpdater.AutoRestart = true;
-            this.autoUpdater.ConfigURL = "http://mattbrindley.com/campfirewin/updates.xml";
+            this.autoUpdater.ConfigUrl = "http://mattbrindley.com/campfirewin/updates.xml";
             this.autoUpdater.DownloadForm = null;
             this.autoUpdater.LoginUserName = null;
             this.autoUpdater.LoginUserPass = null;
-            this.autoUpdater.ProxyURL = null;
+            this.autoUpdater.ProxyUrl = null;
             this.autoUpdater.RestartForm = null;
-            this.autoUpdater.OnAutoUpdateComplete += new Conversive.AutoUpdater.AutoUpdater.AutoUpdateComplete(this.autoUpdater_OnAutoUpdateComplete);
+            this.autoUpdater.OnAutoUpdateComplete += new Conversive.AutoUpdater.AutoUpdater.AutoUpdateComplete(this.AutoUpdaterOnAutoUpdateComplete);
             // 
             // MainForm
             // 
@@ -267,7 +280,7 @@ namespace Flare
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 664);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.uploadPanel);
             this.Controls.Add(this.loadingCover);
             this.Controls.Add(this.webBrowser);
             this.Controls.Add(this.menuStrip1);
@@ -287,7 +300,8 @@ namespace Flare
             this.menuStrip1.PerformLayout();
             this.notifyContextMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.loadingCover)).EndInit();
-            this.panel1.ResumeLayout(false);
+            this.uploadPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -317,8 +331,9 @@ namespace Flare
         private System.Windows.Forms.ToolStripMenuItem onlineSupportForumsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.PictureBox loadingCover;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel uploadPanel;
+        private System.Windows.Forms.Label uploadLabel;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

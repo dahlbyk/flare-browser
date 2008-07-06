@@ -14,13 +14,16 @@
     <GenerateManifests>false</GenerateManifests>
     <SignManifests>false</SignManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <ApplicationIcon>CHAT_32.ICO</ApplicationIcon>
+    <ApplicationIcon>Flare48.ico</ApplicationIcon>
     <TargetZone>LocalIntranet</TargetZone>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <SignAssembly>false</SignAssembly>
     <PublishUrl>http://www.mattbrindley.com/campfirewin/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -58,9 +61,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+    <Reference Include="AutoUpdater, Version=0.0.9.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Downloads\SharpZipLib_0854_Bin\net-20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\AutoUpdater.dll</HintPath>
+    </Reference>
+    <Reference Include="CSharpZipLib, Version=0.5.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CSharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -116,7 +123,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="campfireWin_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -164,9 +170,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CHAT_32.ICO" />
+    <Content Include="AutoUpdateStarter.exe" />
     <Content Include="404.htm" />
     <BaseApplicationManifest Include="Properties\app.manifest" />
+    <None Include="AutoUpdateStarter.config" />
     <None Include="Resources\indicator2.gif" />
     <None Include="Resources\newMsg.ico" />
     <None Include="Resources\noNewMsgs.ICO" />
