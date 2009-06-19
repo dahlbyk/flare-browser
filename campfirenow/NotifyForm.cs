@@ -1,17 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Flare
 {
     public partial class NotifyForm : Form
     {
-        MainForm _mainForm;
-        Boolean _opening = true;
+        private MainForm _mainForm;
+        private Boolean _opening = true;
 
         public NotifyForm(string title, string person, string message, MainForm mainForm)
         {
@@ -21,14 +16,14 @@ namespace Flare
             PersonLabel.Text = person;
             MessageLabel.Text = message;
             _mainForm = mainForm;
-            this.Opacity = 0.0;
+            Opacity = 0.0;
         }
 
         private void NotifyForm_Load(object sender, EventArgs e)
         {
             // Position it:
-            this.Left = Screen.PrimaryScreen.WorkingArea.Width - this.Width;
-            this.Top = Screen.PrimaryScreen.WorkingArea.Height - this.Height;
+            Left = Screen.PrimaryScreen.WorkingArea.Width - Width;
+            Top = Screen.PrimaryScreen.WorkingArea.Height - Height;
             timer.Enabled = true;
         }
 
@@ -36,8 +31,8 @@ namespace Flare
         {
             if (_opening)
             {
-                this.Opacity += 0.05;
-                if (this.Opacity > 0.8)
+                Opacity += 0.05;
+                if (Opacity > 0.8)
                 {
                     timer.Interval = _mainForm.Account.User.NotifyWindowDelay;
                     _opening = false;
@@ -46,10 +41,10 @@ namespace Flare
             else
             {
                 timer.Interval = 50;
-                this.Opacity -= 0.05;
-                if (this.Opacity <= 0.5)
+                Opacity -= 0.05;
+                if (Opacity <= 0.5)
                 {
-                    this.Close();
+                    Close();
                 }
             }
         }
@@ -57,7 +52,7 @@ namespace Flare
         private void NotifyForm_MouseClick(object sender, MouseEventArgs e)
         {
             _mainForm.ShowFormHideIcon();
-            this.Close();
+            Close();
         }
     }
 }

@@ -34,360 +34,368 @@
  */
 
 using System;
-using System.IO;
-using System.Windows.Forms;
-using System.Threading;
 using System.ComponentModel;
+using System.IO;
 using System.Net;
-
-using ICSharpCode.SharpZipLib.BZip2;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Windows.Forms;
 using ICSharpCode.SharpZipLib.Zip;
-using ICSharpCode.SharpZipLib.Zip.Compression;
-using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
 namespace Conversive.AutoUpdater
 {
-	/// <summary>
-	/// Summary description for Class1.
-	/// </summary>
-	public class AutoUpdater: Component
-	{
-		public AutoUpdater()
-		{
-			//
-			// If it was easy, anybody could do it!
-			//
-		}
+    /// <summary>
+    /// Summary description for Class1.
+    /// </summary>
+    public class AutoUpdater : Component
+    {
+        //Added 11/16/2004 For Proxy Clients, Thanks George for submitting these changes
 
-		//Added 11/16/2004 For Proxy Clients, Thanks George for submitting these changes
-		private bool _ProxyEnabled;
-		[DefaultValue(false)]
-		[Description("Set to True if you want to use http proxy."), 
-		Category("AutoUpdater Configuration")]
-		public bool ProxyEnabled 
-		{ get { return _ProxyEnabled; } set { _ProxyEnabled = value; } }
+        #region Delegates
 
-		//Added 11/16/2004 For Proxy Clients, Thanks George for submitting these changes
-		private string _ProxyURL;
-		[DefaultValue(@"http://myproxy.com:8080/")]
-		[Description("The Proxy server URL.(For example:http://myproxy.com:port)"), 
-		Category("AutoUpdater Configuration")]
-		public string ProxyUrl 
-		{ get { return _ProxyURL; } set { _ProxyURL = value; } }
+        public delegate void AutoUpdateComplete();
 
-		private string _LoginUserName;
-		[DefaultValue(@"")]
-		[Description("The UserName to authenticate with."), 
-		Category("AutoUpdater Configuration")]
-		public string LoginUserName 
-		{ get { return _LoginUserName; } set { _LoginUserName = value; } }
+        public delegate void AutoUpdateError(string stMessage, Exception e);
 
-		private string _LoginUserPass;
-		[DefaultValue(@"")]
-		[Description("The Password to authenticate with."), 
-		Category("AutoUpdater Configuration")]
-		public string LoginUserPass 
-		{ get { return _LoginUserPass; } set { _LoginUserPass = value; } }
+        public delegate void ConfigFileDownloaded(bool bNewVersionAvailable);
 
-		private string _ConfigURL;
-		[DefaultValue(@"http://localhost/UpdateConfig.xml")]
-		[Description("The URL Path to the configuration file."), 
-		Category("AutoUpdater Configuration")]
-		public string ConfigUrl 
-		{ get { return _ConfigURL; } set { _ConfigURL = value; } }
+        #endregion
 
-		private bool _AutoDownload;//If true, the app will automatically download the latest version, if false the app will use the DownloadForm to prompt the user, if AutoDownload is false and DownloadForm is null, it doesn't download
-		[DefaultValue(true)]
-		[Description("Set to True if you want the app to restart automatically, set to False if you want to use the DownloadForm to prompt the user, if AutoDownload is false and DownloadForm is null, the app will not download the latest version."), 
-		Category("AutoUpdater Configuration")]
-		public bool AutoDownload 
-		{ get { return _AutoDownload; } set { _AutoDownload = value; } }
+        //If true, the app will automatically download the latest version, if false the app will use the DownloadForm to prompt the user, if AutoDownload is false and DownloadForm is null, it doesn't download
 
-		private Form _DownloadForm;
-		public Form DownloadForm 
-		{ get { return _DownloadForm; } set { _DownloadForm = value; } }
+        //If true, the app will restart automatically, if false the app will use the RestartForm to prompt the user, if AutoRestart is false and RestartForm is null, it doesn't restart
 
-		private bool _AutoRestart;//If true, the app will restart automatically, if false the app will use the RestartForm to prompt the user, if AutoRestart is false and RestartForm is null, it doesn't restart
-		[DefaultValue(false)]
-		[Description("Set to True if you want the app to restart automatically, set to False if you want to use the RestartForm to prompt the user, if AutoRestart is false and RestartForm is null, the app will not restart."), 
-		Category("AutoUpdater Configuration")]
-		public bool AutoRestart 
-		{ get { return _AutoRestart; } set { _AutoRestart = value; } }
+        private AutoUpdateConfig autoUpdateConfig;
 
-		private Form _RestartForm;
-		public Form RestartForm 
-		{ get { return _RestartForm; } set { _RestartForm = value; } }
+        //Added 11/16/2004 For Proxy Clients, Thanks George for submitting these changes
 
-		[BrowsableAttribute(false)]
-		public string LatestConfigChanges
-		{ 
-			get 
-			{ 
-				string stRet = null;
-				//Protect against NPE's
-				if(this._AutoUpdateConfig != null)
-					stRet = _AutoUpdateConfig.LatestChanges;
-				return stRet; 
-			} 
-		}
+        public AutoUpdater()
+        {
+            //
+            // If it was easy, anybody could do it!
+            //
+        }
 
-		[BrowsableAttribute(false)]
-		public Version CurrentAppVersion
-		{ get { return System.Reflection.Assembly.GetEntryAssembly().GetName().Version; } }
+        [DefaultValue(false)]
+        [Description("Set to True if you want to use http proxy."),
+         Category("AutoUpdater Configuration")]
+        public bool ProxyEnabled { get; set; }
 
-		[BrowsableAttribute(false)]
-		public Version LatestConfigVersion
-		{ 
-			get 
-			{ 
-				Version versionRet = null;
-				//Protect against NPE's
-				if(this._AutoUpdateConfig != null)
-					versionRet = new Version(this._AutoUpdateConfig.AvailableVersion);
-				return versionRet; 
-			} 
-		}
+        [DefaultValue(@"http://myproxy.com:8080/")]
+        [Description("The Proxy server URL.(For example:http://myproxy.com:port)"),
+         Category("AutoUpdater Configuration")]
+        public string ProxyUrl { get; set; }
 
-		[BrowsableAttribute(false)]
-		public bool NewVersionAvailable
-		{ get { return this.LatestConfigVersion > this.CurrentAppVersion; } }
+        [DefaultValue(@"")]
+        [Description("The UserName to authenticate with."),
+         Category("AutoUpdater Configuration")]
+        public string LoginUserName { get; set; }
 
-		private AutoUpdateConfig _AutoUpdateConfig;
-		[BrowsableAttribute(false)]
-		public AutoUpdateConfig AutoUpdateConfig
-		{ get { return _AutoUpdateConfig; } }
+        [DefaultValue(@"")]
+        [Description("The Password to authenticate with."),
+         Category("AutoUpdater Configuration")]
+        public string LoginUserPass { get; set; }
 
-		public delegate void ConfigFileDownloaded(bool bNewVersionAvailable);
-		public event ConfigFileDownloaded OnConfigFileDownloaded;
+        [DefaultValue(@"http://localhost/UpdateConfig.xml")]
+        [Description("The URL Path to the configuration file."),
+         Category("AutoUpdater Configuration")]
+        public string ConfigUrl { get; set; }
 
-		public delegate void AutoUpdateComplete();
-		public event AutoUpdateComplete OnAutoUpdateComplete;
+        [DefaultValue(true)]
+        [Description(
+            "Set to True if you want the app to restart automatically, set to False if you want to use the DownloadForm to prompt the user, if AutoDownload is false and DownloadForm is null, the app will not download the latest version."
+            ),
+         Category("AutoUpdater Configuration")]
+        public bool AutoDownload { get; set; }
 
-		public delegate void AutoUpdateError(string stMessage, Exception e);
-		public event AutoUpdateError OnAutoUpdateError;
+        public Form DownloadForm { get; set; }
 
-		/// <summary>
-		/// TryUpdate: Invoke this method if you just want to load the config without autoupdating
-		/// </summary>
-		public void LoadConfig()
-		{
-			Thread backgroundLoadConfigThread = new Thread(new ThreadStart(this.LoadConfigThread));
-			backgroundLoadConfigThread.IsBackground = true;
-			backgroundLoadConfigThread.Start();
-		}//TryUpdate()
+        [DefaultValue(false)]
+        [Description(
+            "Set to True if you want the app to restart automatically, set to False if you want to use the RestartForm to prompt the user, if AutoRestart is false and RestartForm is null, the app will not restart."
+            ),
+         Category("AutoUpdater Configuration")]
+        public bool AutoRestart { get; set; }
 
-		/// <summary>
-		/// loadConfig: This method just loads the config file so the app can check the versions manually
-		/// </summary>
-		private void LoadConfigThread()
-		{
-			AutoUpdateConfig config = new AutoUpdateConfig();
-			config.OnLoadConfigError += new Conversive.AutoUpdater.AutoUpdateConfig.LoadConfigError(ConfigOnLoadConfigError);
-			
-			//For using untrusted SSL Certificates
-			System.Net.ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
+        public Form RestartForm { get; set; }
 
-			//Do the load of the config file
-			if(config.LoadConfig(this.ConfigUrl, this.LoginUserName, this.LoginUserPass, this.ProxyUrl, this.ProxyEnabled))
-			{
-				this._AutoUpdateConfig = config;
-				if(this.OnConfigFileDownloaded != null)
-				{
-					this.OnConfigFileDownloaded(this.NewVersionAvailable);
-				}
-			}
-			//else
-			//	MessageBox.Show("Problem loading config file, from: " + this.ConfigURL);
-		}
+        [Browsable(false)]
+        public string LatestConfigChanges
+        {
+            get
+            {
+                string stRet = null;
+                //Protect against NPE's
+                if (autoUpdateConfig != null)
+                    stRet = autoUpdateConfig.LatestChanges;
+                return stRet;
+            }
+        }
 
-		/// <summary>
-		/// TryUpdate: Invoke this method when you are ready to run the update checking thread
-		/// </summary>
-		public void TryUpdate()
-		{
-            Thread backgroundThread = new Thread(new ThreadStart(this.UpdateThread));
-			backgroundThread.IsBackground = true;
-			backgroundThread.Start();
-         }//TryUpdate()		
+        [Browsable(false)]
+        public Version CurrentAppVersion
+        {
+            get { return Assembly.GetEntryAssembly().GetName().Version; }
+        }
 
-		/// <summary>
-		/// updateThread: This is the Thread that runs for checking updates against the config file
-		/// </summary>
-		private void UpdateThread()
-		{
-            string stUpdateName = "update";
-			if(this._AutoUpdateConfig == null)//if we haven't already downloaded the config file, do so now
-				this.LoadConfigThread();
-			if(this._AutoUpdateConfig != null)//make sure we were able to download it
-			{
-				//Check the file for an update
-				if(this.LatestConfigVersion > this.CurrentAppVersion)
-				{
-					//Download file if the user requests or AutoDownload is True
-					//if(this.AutoDownload || (this.DownloadForm != null && this.DownloadForm.ShowDialog() == DialogResult.Yes))
-					if (true)
+        [Browsable(false)]
+        public Version LatestConfigVersion
+        {
+            get
+            {
+                Version versionRet = null;
+                //Protect against NPE's
+                if (autoUpdateConfig != null)
+                    versionRet = new Version(autoUpdateConfig.AvailableVersion);
+                return versionRet;
+            }
+        }
+
+        [Browsable(false)]
+        public bool NewVersionAvailable
+        {
+            get { return LatestConfigVersion > CurrentAppVersion; }
+        }
+
+        [Browsable(false)]
+        public AutoUpdateConfig AutoUpdateConfig
+        {
+            get { return autoUpdateConfig; }
+        }
+
+        public event ConfigFileDownloaded OnConfigFileDownloaded;
+
+        public event AutoUpdateComplete OnAutoUpdateComplete;
+
+        public event AutoUpdateError OnAutoUpdateError;
+
+        /// <summary>
+        /// TryUpdate: Invoke this method if you just want to load the config without autoupdating
+        /// </summary>
+        public void LoadConfig()
+        {
+            var backgroundLoadConfigThread = new Thread(new ThreadStart(LoadConfigThread));
+            backgroundLoadConfigThread.IsBackground = true;
+            backgroundLoadConfigThread.Start();
+        } //TryUpdate()
+
+        /// <summary>
+        /// loadConfig: This method just loads the config file so the app can check the versions manually
+        /// </summary>
+        private void LoadConfigThread()
+        {
+            var config = new AutoUpdateConfig();
+            config.OnLoadConfigError += ConfigOnLoadConfigError;
+
+            //For using untrusted SSL Certificates
+            ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
+
+            //Do the load of the config file
+            if (config.LoadConfig(ConfigUrl, LoginUserName, LoginUserPass, ProxyUrl, ProxyEnabled))
+            {
+                autoUpdateConfig = config;
+                if (OnConfigFileDownloaded != null)
+                {
+                    OnConfigFileDownloaded(NewVersionAvailable);
+                }
+            }
+            //else
+            //	MessageBox.Show("Problem loading config file, from: " + this.ConfigURL);
+        }
+
+        /// <summary>
+        /// TryUpdate: Invoke this method when you are ready to run the update checking thread
+        /// </summary>
+        public void TryUpdate()
+        {
+            var backgroundThread = new Thread(UpdateThread) {IsBackground = true};
+            backgroundThread.Start();
+        } //TryUpdate()		
+
+        /// <summary>
+        /// updateThread: This is the Thread that runs for checking updates against the config file
+        /// </summary>
+        private void UpdateThread()
+        {
+            const string stUpdateName = "update";
+            if (autoUpdateConfig == null) //if we haven't already downloaded the config file, do so now
+                LoadConfigThread();
+            if (autoUpdateConfig != null) //make sure we were able to download it
+            {
+                //Check the file for an update
+                if (LatestConfigVersion > CurrentAppVersion)
+                {
+                    //Download file if the user requests or AutoDownload is True
+                    //if(this.AutoDownload || (this.DownloadForm != null && this.DownloadForm.ShowDialog() == DialogResult.Yes))
+                    if (true)
                     {
-						//MessageBox.Show("New Version Available, New Version: " + vConfig.ToString() + "\r\nDownloading File from: " + config.AppFileURL);
-						DirectoryInfo diDest = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location));
-						string stPath = diDest.FullName + System.IO.Path.DirectorySeparatorChar + stUpdateName + ".zip";
-						//There is a new version available
-                        
-						if(this.DownloadFile(this._AutoUpdateConfig.AppFileUrl, stPath))
-						{
-							//MessageBox.Show("Downloaded New File");
-							string stDest = diDest.FullName + System.IO.Path.DirectorySeparatorChar + stUpdateName + System.IO.Path.DirectorySeparatorChar;
-							//Extract Zip File
-							this.Unzip(stPath, stDest);
-							//Delete Zip File
-							File.Delete(stPath);
-							if(this.OnAutoUpdateComplete != null)
-							{
-								this.OnAutoUpdateComplete();
-							}
-							//Restart App if Necessary
-							//If true, the app will restart automatically, if false the app will use the RestartForm to prompt the user, if RestartForm is null, it doesn't restart
-							if(this.AutoRestart || (this.RestartForm != null && this.RestartForm.ShowDialog() == DialogResult.Yes))
-								this.Restart();
-							//else don't restart
-						}
-						//else
-						//	MessageBox.Show("Didn't Download File");
-					}
-					
-				}
-				//else
-				//	MessageBox.Show("No New Version Available, Web Version: " + vConfig.ToString() + ", Current Version: " +  vCurrent.ToString());
-			}
+                        //MessageBox.Show("New Version Available, New Version: " + vConfig.ToString() + "\r\nDownloading File from: " + config.AppFileURL);
+                        var diDest = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+                        string stPath = diDest.FullName + Path.DirectorySeparatorChar + stUpdateName + ".zip";
+                        //There is a new version available
 
-		}//updateThread()
+                        if (DownloadFile(autoUpdateConfig.AppFileUrl, stPath))
+                        {
+                            //MessageBox.Show("Downloaded New File");
+                            string stDest = diDest.FullName + Path.DirectorySeparatorChar + stUpdateName +
+                                            Path.DirectorySeparatorChar;
+                            //Extract Zip File
+                            Unzip(stPath, stDest);
+                            //Delete Zip File
+                            File.Delete(stPath);
+                            if (OnAutoUpdateComplete != null)
+                            {
+                                OnAutoUpdateComplete();
+                            }
+                            //Restart App if Necessary
+                            //If true, the app will restart automatically, if false the app will use the RestartForm to prompt the user, if RestartForm is null, it doesn't restart
+                            if (AutoRestart || (RestartForm != null && RestartForm.ShowDialog() == DialogResult.Yes))
+                                Restart();
+                            //else don't restart
+                        }
+                        //else
+                        //	MessageBox.Show("Didn't Download File");
+                    }
+                }
+                //else
+                //	MessageBox.Show("No New Version Available, Web Version: " + vConfig.ToString() + ", Current Version: " +  vCurrent.ToString());
+            }
+        } //updateThread()
 
-		/// <summary>
-		/// downloadFile: Download a file from the specified url and copy it to the specified path
-		/// </summary>
-		private bool DownloadFile(string url, string path)
-		{
-			try
-			{
-				//create web request/response
-				HttpWebResponse response;
-				HttpWebRequest request;
+        /// <summary>
+        /// downloadFile: Download a file from the specified url and copy it to the specified path
+        /// </summary>
+        private bool DownloadFile(string url, string path)
+        {
+            try
+            {
+                //create web request/response
+                HttpWebResponse response;
+                HttpWebRequest request;
 
-				request = (HttpWebRequest)HttpWebRequest.Create(url);
-				//Request.Headers.Add("Translate: f"); //Commented out 11/16/2004 Matt Palmerlee, this Header is more for DAV and causes a known security issue
-				if(this.LoginUserName != null && this.LoginUserName != "")
-					request.Credentials = new NetworkCredential(this.LoginUserName, this.LoginUserPass);
-				else
-					request.Credentials = CredentialCache.DefaultCredentials;
+                request = (HttpWebRequest) HttpWebRequest.Create(url);
+                //Request.Headers.Add("Translate: f"); //Commented out 11/16/2004 Matt Palmerlee, this Header is more for DAV and causes a known security issue
+                if (LoginUserName != null && LoginUserName != "")
+                    request.Credentials = new NetworkCredential(LoginUserName, LoginUserPass);
+                else
+                    request.Credentials = CredentialCache.DefaultCredentials;
 
-				//Added 11/16/2004 For Proxy Clients, Thanks George for submitting these changes
-				if(this.ProxyEnabled == true)
-					request.Proxy = new WebProxy(this.ProxyUrl);
+                //Added 11/16/2004 For Proxy Clients, Thanks George for submitting these changes
+                if (ProxyEnabled == true)
+                    request.Proxy = new WebProxy(ProxyUrl);
 
-				response = (HttpWebResponse)request.GetResponse();
+                response = (HttpWebResponse) request.GetResponse();
 
-				Stream respStream = null;
-				respStream = response.GetResponseStream();
+                Stream respStream = null;
+                respStream = response.GetResponseStream();
 
-				//Do the Download
-				byte[] buffer = new byte[4096];
-				int length;
+                //Do the Download
+                var buffer = new byte[4096];
+                int length;
 
-				FileStream fs = File.Open(path, FileMode.Create, FileAccess.Write);
-			
-				length = respStream.Read(buffer, 0, 4096);
-				while(length > 0)
-				{
-					fs.Write(buffer, 0, length);
-					length = respStream.Read(buffer, 0, 4096);
-				}
-				fs.Close();	
-			}
-			catch(Exception e)
-			{
-				string stMessage = "Problem downloading and copying file from: " + url + " to: " + path;
-				//MessageBox.Show(stMessage);
-				if(File.Exists(path))
-					File.Delete(path);
-				this.SendAutoUpdateError(stMessage, e);
-				return false;
-			}
-			return true;
-		}//downloadFile(string url, string path)
+                FileStream fs = File.Open(path, FileMode.Create, FileAccess.Write);
 
-		/// <summary>
-		/// unzip: Open the zip file specified by stZipPath, into the stDestPath Directory
-		/// </summary>
-		private void Unzip(string stZipPath, string stDestPath)
-		{
-			ZipInputStream s = new ZipInputStream(File.OpenRead(stZipPath));
-		
-			ZipEntry theEntry;
-			while ((theEntry = s.GetNextEntry()) != null) 
-			{
-			
-				string fileName = stDestPath + Path.GetDirectoryName(theEntry.Name) + Path.GetFileName(theEntry.Name);
-			
-				//create directory for file (if necessary)
-				Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-				if (!theEntry.IsDirectory) 
-				{
-					FileStream streamWriter = File.Create(fileName);
-				
-					int size = 2048;
-					byte[] data = new byte[2048];
-					try
-					{
-						while (true) 
-						{
-							size = s.Read(data, 0, data.Length);
-							if (size > 0) 
-							{
-								streamWriter.Write(data, 0, size);
-							} 
-							else 
-							{
-								break;
-							}
-						}
-					}
-					catch{}
-				
-					streamWriter.Close();
-				}
-			}
-			s.Close();
-		}//unzip(string stZipPath, string stDestPath)
+                length = respStream.Read(buffer, 0, 4096);
+                while (length > 0)
+                {
+                    fs.Write(buffer, 0, length);
+                    length = respStream.Read(buffer, 0, 4096);
+                }
+                fs.Close();
+            }
+            catch (Exception e)
+            {
+                string stMessage = "Problem downloading and copying file from: " + url + " to: " + path;
+                //MessageBox.Show(stMessage);
+                if (File.Exists(path))
+                    File.Delete(path);
+                SendAutoUpdateError(stMessage, e);
+                return false;
+            }
+            return true;
+        } //downloadFile(string url, string path)
 
-		/// <summary>
-		/// restart: Restart the app, the AppStarter will be responsible for actually restarting the main application.
-		/// </summary>
-		private void Restart()
-		{
-			Environment.ExitCode = 2; //the surrounding AppStarter must look for this to restart the app.
-			Application.Exit();
-		}//restart()
+        /// <summary>
+        /// unzip: Open the zip file specified by stZipPath, into the stDestPath Directory
+        /// </summary>
+        private void Unzip(string stZipPath, string stDestPath)
+        {
+            var s = new ZipInputStream(File.OpenRead(stZipPath));
 
-		private void ConfigOnLoadConfigError(string stMessage, Exception e)
-		{
-			this.SendAutoUpdateError(stMessage, e);
-		}
+            ZipEntry theEntry;
+            while ((theEntry = s.GetNextEntry()) != null)
+            {
+                string fileName = stDestPath + Path.GetDirectoryName(theEntry.Name) + Path.GetFileName(theEntry.Name);
 
-		private void SendAutoUpdateError(string stMessage, Exception e)
-		{
-			if(this.OnAutoUpdateError != null)
-				this.OnAutoUpdateError(stMessage, e);
-		}
-	}//class AutoUpdater
+                //create directory for file (if necessary)
+                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+                if (!theEntry.IsDirectory)
+                {
+                    FileStream streamWriter = File.Create(fileName);
 
-	public class TrustAllCertificatePolicy : System.Net.ICertificatePolicy
-	{
-		public TrustAllCertificatePolicy()
-		{}
+                    int size = 2048;
+                    var data = new byte[2048];
+                    try
+                    {
+                        while (true)
+                        {
+                            size = s.Read(data, 0, data.Length);
+                            if (size > 0)
+                            {
+                                streamWriter.Write(data, 0, size);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
 
-		public bool CheckValidationResult(ServicePoint sp,
-			System.Security.Cryptography.X509Certificates.X509Certificate cert,WebRequest req, int problem)
-		{
-			return true;
-		}
-	}//class TrustAllCertificatePolicy
-}//namespace Conversive.AutoUpdater
+                    streamWriter.Close();
+                }
+            }
+            s.Close();
+        } //unzip(string stZipPath, string stDestPath)
+
+        /// <summary>
+        /// restart: Restart the app, the AppStarter will be responsible for actually restarting the main application.
+        /// </summary>
+        private void Restart()
+        {
+            Environment.ExitCode = 2; //the surrounding AppStarter must look for this to restart the app.
+            Application.Exit();
+        } //restart()
+
+        private void ConfigOnLoadConfigError(string stMessage, Exception e)
+        {
+            SendAutoUpdateError(stMessage, e);
+        }
+
+        private void SendAutoUpdateError(string stMessage, Exception e)
+        {
+            if (OnAutoUpdateError != null)
+                OnAutoUpdateError(stMessage, e);
+        }
+    } //class AutoUpdater
+
+    public class TrustAllCertificatePolicy : ICertificatePolicy
+    {
+        public TrustAllCertificatePolicy()
+        {
+        }
+
+        #region ICertificatePolicy Members
+
+        public bool CheckValidationResult(ServicePoint sp,
+                                          X509Certificate cert, WebRequest req, int problem)
+        {
+            return true;
+        }
+
+        #endregion
+    } //class TrustAllCertificatePolicy
+} //namespace Conversive.AutoUpdater

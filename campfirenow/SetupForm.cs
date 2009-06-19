@@ -1,22 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using Microsoft.Win32;
 
 namespace Flare
 {
     public partial class SetupForm : Form
     {
-        public String NewUsername { get; set; }
-        public String NewPassword { get; set; }
-        public String NewAccountName { get; set; }
-        public String NewNickname { get; set; }
-        public Boolean NewNotifyOnlyWhenNicknameIsFound { get; set; }
-        public Int32 NewNotifyWindowDelay { get; set; }
         private Account _account;
 
         public SetupForm()
@@ -24,13 +12,24 @@ namespace Flare
             InitializeComponent();
         }
 
+        public String NewUsername { get; set; }
+        public String NewPassword { get; set; }
+        public String NewAccountName { get; set; }
+        public String NewNickname { get; set; }
+        public Boolean NewNotifyOnlyWhenNicknameIsFound { get; set; }
+        public Int32 NewNotifyWindowDelay { get; set; }
+
         private void okBtn_Click(object sender, EventArgs e)
         {
             // Validation
             Int32 notifyWindowDelay;
             if (!Int32.TryParse(notificationWindowDelayTextBox.Text, out notifyWindowDelay))
             {
-                MessageBox.Show(String.Format("The value you've entered for how long the notification window show display for ({0}), is invalid.\n\nPlease enter a whole number.", notificationWindowDelayTextBox.Text), "Unable to save new notification window settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    String.Format(
+                        "The value you've entered for how long the notification window show display for ({0}), is invalid.\n\nPlease enter a whole number.",
+                        notificationWindowDelayTextBox.Text), "Unable to save new notification window settings",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -54,12 +53,12 @@ namespace Flare
             NewNotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
             NewNotifyWindowDelay = notifyWindowDelay;
 
-            this.Close();
+            Close();
         }
 
         private void cancelBtn_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void SetupForm_Load(object sender, EventArgs e)

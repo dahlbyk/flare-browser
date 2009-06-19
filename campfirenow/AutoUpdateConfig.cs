@@ -34,107 +34,91 @@
  */
 
 using System;
-using System.Xml;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Diagnostics;
-using System.Windows.Forms;
+using System.Xml;
 
 namespace Conversive.AutoUpdater
 {
-	/// <summary>
-	/// Summary description for AutoUpdateConfig.
-	/// </summary>
-	public class AutoUpdateConfig
-	{
+    /// <summary>
+    /// Summary description for AutoUpdateConfig.
+    /// </summary>
+    public class AutoUpdateConfig
+    {
+        #region Delegates
 
-		private string _AvailableVersion;
-		public string AvailableVersion 
-		{ get { return _AvailableVersion; } set { _AvailableVersion = value; } }
+        public delegate void LoadConfigError(string stMessage, Exception e);
 
-		private string _AppFileURL;
-		public string AppFileUrl 
-		{ get { return _AppFileURL; } set { _AppFileURL = value; } }
+        #endregion
 
-		private string _LatestChanges;
-		public string LatestChanges 
-		{ get { return _LatestChanges; } set { _LatestChanges = value; } }
+        public string AvailableVersion { get; set; }
 
-		private string _ChangeLogURL;
-		public string ChangeLogUrl 
-		{ get { return _ChangeLogURL; } set { _ChangeLogURL = value; } }
+        public string AppFileUrl { get; set; }
 
-		public delegate void LoadConfigError(string stMessage, Exception e);
-		public event LoadConfigError OnLoadConfigError;
+        public string LatestChanges { get; set; }
 
-		/// <summary>
-		/// LoadConfig: Invoke this method when you are ready to populate this object
-		/// </summary>
-		public bool LoadConfig(string url, string user, string pass, string proxyUrl, bool proxyEnabled)
-		{
-			try 
-			{
-				//Load the xml config file
-				XmlDocument xmlDoc = new XmlDocument();
-				HttpWebResponse response;
-				HttpWebRequest request;
-				//Retrieve the File
+        public string ChangeLogUrl { get; set; }
 
-				request = (HttpWebRequest)HttpWebRequest.Create(url);
-				//Request.Headers.Add("Translate: f"); //Commented out 11/16/2004 Matt Palmerlee, this Header is more for DAV and causes a known security issue
-				if(user != null && user != "")
-					request.Credentials = new NetworkCredential(user, pass);
-				else
-					request.Credentials = CredentialCache.DefaultCredentials;
+        public event LoadConfigError OnLoadConfigError;
 
-				//Added 11/16/2004 For Proxy Clients, Thanks George for submitting these changes
-				if(proxyEnabled == true)
-					request.Proxy = new WebProxy(proxyUrl,true);
+        /// <summary>
+        /// LoadConfig: Invoke this method when you are ready to populate this object
+        /// </summary>
+        public bool LoadConfig(string url, string user, string pass, string proxyUrl, bool proxyEnabled)
+        {
+            try
+            {
+                //Load the xml config file
+                var xmlDoc = new XmlDocument();
+                //Retrieve the File
 
-				response = (HttpWebResponse)request.GetResponse();
+                var request = (HttpWebRequest) WebRequest.Create(url);
+                //Request.Headers.Add("Translate: f"); //Commented out 11/16/2004 Matt Palmerlee, this Header is more for DAV and causes a known security issue
+                request.Credentials = !string.IsNullOrEmpty(user) ? new NetworkCredential(user, pass) : CredentialCache.DefaultCredentials;
 
-				Stream respStream = null;
-				respStream = response.GetResponseStream();
+                //Added 11/16/2004 For Proxy Clients, Thanks George for submitting these changes
+                if (proxyEnabled)
+                    request.Proxy = new WebProxy(proxyUrl, true);
 
-				//Load the XML from the stream
-				xmlDoc.Load(respStream);
+                var response = (HttpWebResponse) request.GetResponse();
 
-				//Parse out the AvailableVersion
-				XmlNode availableVersionNode = xmlDoc.SelectSingleNode(@"//AvailableVersion");
-				this.AvailableVersion = availableVersionNode.InnerText;
+                Stream respStream;
+                respStream = response.GetResponseStream();
 
-				//Parse out the AppFileURL
-				XmlNode appFileUrlNode = xmlDoc.SelectSingleNode(@"//AppFileURL");
-				this.AppFileUrl = appFileUrlNode.InnerText;
+                //Load the XML from the stream
+                xmlDoc.Load(respStream);
 
-				//Parse out the LatestChanges
-				XmlNode latestChangesNode = xmlDoc.SelectSingleNode(@"//LatestChanges");
-				if(latestChangesNode != null)
-					this.LatestChanges = latestChangesNode.InnerText;
-				else
-					this.LatestChanges = "";
+                //Parse out the AvailableVersion
+                XmlNode availableVersionNode = xmlDoc.SelectSingleNode(@"//AvailableVersion");
+                AvailableVersion = availableVersionNode.InnerText;
 
-				//Parse out the ChangLogURL
-				XmlNode changeLogUrlNode = xmlDoc.SelectSingleNode(@"//ChangeLogURL");
-				if(changeLogUrlNode != null)
-					this.ChangeLogUrl = changeLogUrlNode.InnerText;
-				else
-					this.ChangeLogUrl = "";
-			
-			} 
-			catch (Exception e)
-			{
-				string stMessage = "Failed to read the config file at: " + url + "\r\nMake sure that the config file is present and has a valid format.";
-				Debug.WriteLine(stMessage); 
-				//MessageBox.Show(stMessage); 
-				if(this.OnLoadConfigError != null)
-					this.OnLoadConfigError(stMessage, e);
+                //Parse out the AppFileURL
+                XmlNode appFileUrlNode = xmlDoc.SelectSingleNode(@"//AppFileURL");
+                AppFileUrl = appFileUrlNode.InnerText;
 
-				return false;
-			}
-			return true;
-		}//LoadConfig(string url, string user, string pass)
+                //Parse out the LatestChanges
+                XmlNode latestChangesNode = xmlDoc.SelectSingleNode(@"//LatestChanges");
+                if (latestChangesNode != null)
+                    LatestChanges = latestChangesNode.InnerText;
+                else
+                    LatestChanges = "";
 
+                //Parse out the ChangLogURL
+                XmlNode changeLogUrlNode = xmlDoc.SelectSingleNode(@"//ChangeLogURL");
+                ChangeLogUrl = changeLogUrlNode != null ? changeLogUrlNode.InnerText : "";
+            }
+            catch (Exception e)
+            {
+                string stMessage = "Failed to read the config file at: " + url +
+                                   "\r\nMake sure that the config file is present and has a valid format.";
+                Debug.WriteLine(stMessage);
+                if (OnLoadConfigError != null)
+                    OnLoadConfigError(stMessage, e);
 
-	}//class AutoUpdateConfig
-}//namespace Conversive.AutoUpdater
+                return false;
+            }
+            return true;
+        } //LoadConfig(string url, string user, string pass)
+    } //class AutoUpdateConfig
+} //namespace Conversive.AutoUpdater
