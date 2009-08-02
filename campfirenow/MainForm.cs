@@ -316,7 +316,7 @@ namespace Flare
             try
             {
                 // Don't check for messages if we're in the lobby:
-                if (webBrowser.Document != null && webBrowser.Document.Url != null &&
+                if (webBrowser.Document != null && webBrowser.Document.Url != null && webBrowser.Document.Body != null &&
                     webBrowser.Document.Url.AbsoluteUri.Contains("/room/"))
                 {
                     // Don't do this if the form is focused.
@@ -347,8 +347,14 @@ namespace Flare
                         else
                         {
                             // Find the last message's new element (it will change each time the html does:
-                            HtmlElement nextElement = webBrowser.Document.All[lastMessage.ElementId].NextSibling;
-                            while (nextElement.DomElement != null)
+                            HtmlElement lastElement = webBrowser.Document.All[lastMessage.ElementId];
+                            
+                            // Make sure our last element still exists
+                            if (lastElement == null)
+                                return;
+
+                            HtmlElement nextElement = lastElement.NextSibling;
+                            while (nextElement != null)
                             {
                                 string name = "";
                                 string message = "";
@@ -400,7 +406,7 @@ namespace Flare
                         if (lastMessage != null && lastMessage.ElementId.Length > 0)
                         {
                             HtmlElement nextElement = webBrowser.Document.All[lastMessage.ElementId].NextSibling;
-                            while (nextElement.DomElement != null)
+                            while (nextElement != null)
                             {
                                 lastMessage = new Message("", "",
                                                            webBrowser.Document.All[lastMessage.ElementId].NextSibling.
