@@ -466,7 +466,7 @@ namespace Flare
 
         private void ExitingRoutine()
         {
-            if (webBrowser.Url.AbsoluteUri.Contains("/room/"))
+            if (webBrowser != null && webBrowser.Url != null && webBrowser.Url.AbsoluteUri.Contains("/room/"))
             {
                 account.User.DefaultRoomName =
                     webBrowser.Url.AbsoluteUri.Substring(webBrowser.Url.AbsoluteUri.IndexOf("/room/"));
