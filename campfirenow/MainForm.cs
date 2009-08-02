@@ -95,6 +95,7 @@ namespace Flare
         {
             try
             {
+                var browser = (WebBrowser) sender;
                 if (isInStartUpMode)
                 {
                     isInStartUpMode = false;
@@ -106,23 +107,23 @@ namespace Flare
 
                 // Make sure we've not left campfire site:
                 if (
-                    webBrowser.Url.AbsoluteUri.Contains(
+                    browser.Url.AbsoluteUri.Contains(
                         Uri.EscapeUriString(Application.StartupPath.Replace("\\", "/")) + "/waiting.htm"))
                 {
                     waitingTimer.Enabled = true;
                     return;
                 }
-                if (webBrowser.Document != null)
-                    if (webBrowser.Document.Url != null)
-                        if (webBrowser.Document.Title == "Navigation Canceled" ||
-                            webBrowser.Document.Url.AbsoluteUri.Contains("res://"))
+                if (browser.Document != null)
+                    if (browser.Document.Url != null)
+                        if (browser.Document.Title == "Navigation Canceled" ||
+                            browser.Document.Url.AbsoluteUri.Contains("res://"))
                         {
                             loadingCover.Visible = false;
-                            webBrowser.Navigate("file:///" + Application.StartupPath.Replace("\\", "/") + "/404.htm");
+                            browser.Navigate("file:///" + Application.StartupPath.Replace("\\", "/") + "/404.htm");
                             return;
                         }
                 if (
-                    webBrowser.Url.AbsoluteUri.Contains(
+                    browser.Url.AbsoluteUri.Contains(
                         Uri.EscapeUriString(Application.StartupPath.Replace("\\", "/")) + "/404.htm"))
                 {
                     // Wait for user
@@ -135,32 +136,32 @@ namespace Flare
                 if (isFirstLoad)
                 {
                     //Are we on the login page?
-                    if (webBrowser.Url.AbsoluteUri.Contains(".campfirenow.com/login"))
+                    if (browser.Url.AbsoluteUri.Contains(".campfirenow.com/login"))
                     {
                         // make sure there's no error messages:
-                        if (webBrowser.Document != null)
+                        if (browser.Document != null)
                         {
-                            if (webBrowser.Document.Body != null)
-                                if (webBrowser.Document.Body.InnerHtml.Contains("id=errorMessage"))
+                            if (browser.Document.Body != null)
+                                if (browser.Document.Body.InnerHtml.Contains("id=errorMessage"))
                                 {
                                     DialogResult result =
                                         MessageBox.Show(
-                                            string.Format("{0}\n\nWould you like to try to recover your password?", webBrowser.Document.GetElementById("errorMessage").InnerText), "Invalid Login",
+                                            string.Format("{0}\n\nWould you like to try to recover your password?", browser.Document.GetElementById("errorMessage").InnerText), "Invalid Login",
                                             MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                                     if (result == DialogResult.Yes)
                                     {
-                                        webBrowser.Navigate(account.CampfireForgotPasswordUri);
+                                        browser.Navigate(account.CampfireForgotPasswordUri);
                                         isFirstLoad = false;
                                     }
                                     return;
                                 }
 
                             // Fill in login info for the user
-                            ((MSHTML.HTMLInputElement) (webBrowser.Document.GetElementById("email_address").DomElement)).
+                            ((MSHTML.HTMLInputElement) (browser.Document.GetElementById("email_address").DomElement)).
                                 value = account.User.Username;
-                            ((MSHTML.HTMLInputElement) (webBrowser.Document.GetElementById("password").DomElement)).value =
+                            ((MSHTML.HTMLInputElement) (browser.Document.GetElementById("password").DomElement)).value =
                                 account.User.Password;
-                            ((MSHTML.HTMLInputElement) (webBrowser.Document.GetElementsByTagName("input")[3].DomElement)).
+                            ((MSHTML.HTMLInputElement) (browser.Document.GetElementsByTagName("input")[3].DomElement)).
                                 click();
                         }
                     }
@@ -169,21 +170,23 @@ namespace Flare
                         isFirstLoad = false;
 
                         // Don't need to log in, update the title:
-                        UpdateTitle(false);
+                        PreparePageHtml(browser);
+                        UpdateTitle(false, browser);
                         UpdateRoomList();
 
                         // Navigate to default room (if one is listed):
                         if (account.User.DefaultRoomName.Contains("/room/") &&
-                            webBrowser.Document.Body.InnerHtml.Contains(account.User.DefaultRoomName))
-                            webBrowser.Navigate(account.CampfireDefaultRoomUri);
+                            browser.Document.Body.InnerHtml.Contains(account.User.DefaultRoomName))
+                            AddTabForRoom(account.CampfireDefaultRoomUri);
                         else
                             loadingCover.Visible = false;
                     }
                 }
                 else
                 {
+                    PreparePageHtml(browser);
                     loadingCover.Visible = false;
-                    UpdateTitle(false);
+                    UpdateTitle(false, browser);
                     UpdateRoomList();
                 }
 
@@ -193,6 +196,38 @@ namespace Flare
             {
                 FlareException.ShowFriendly(err);
             }
+        }
+
+        private void AddTabForRoom(Uri roomUri)
+        {
+            // 
+            // tab page
+            // 
+            var newTabPage = new TabPage();
+            newTabPage.Location = new Point(4, 22);
+            newTabPage.Name = "lobbyTabPage";
+            newTabPage.Size = new Size(976, 614);
+            newTabPage.TabIndex = 0;
+            newTabPage.Text = "Entering room...      ";
+            newTabPage.UseVisualStyleBackColor = true;
+            // 
+            // web browser
+            // 
+            var newWebBrowser = new WebBrowser();
+            newWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            newWebBrowser.IsWebBrowserContextMenuEnabled = false;
+            newWebBrowser.Location = new System.Drawing.Point(0, 0);
+            newWebBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            newWebBrowser.Name = "webBrowser";
+            newWebBrowser.ScriptErrorsSuppressed = true;
+            newWebBrowser.Size = new System.Drawing.Size(976, 614);
+            newWebBrowser.TabIndex = 1;
+            newWebBrowser.DocumentCompleted += webBrowser_DocumentCompleted;
+
+            tabControl.TabPages.Add(newTabPage);
+            newTabPage.Controls.Add(newWebBrowser);
+
+            newWebBrowser.Navigate(roomUri);
         }
 
         private void UpdateRoomList()
@@ -262,18 +297,30 @@ namespace Flare
             }
         }
 
-        private void UpdateTitle(bool checkForNewMessages)
+        private void PreparePageHtml(WebBrowser browser)
+        {
+            // Make sure the Campfire header (tab bar) is hidden
+            if (webBrowser.Document != null)
+            {
+                if (browser.Document.GetElementById("header") != null)
+                    browser.Document.GetElementById("header").Style = "display: none;";
+                if (browser.Document.GetElementById("sidebar") != null)
+                    browser.Document.GetElementById("sidebar").Style = "top: 5px;";
+            }
+        }
+
+        private void UpdateTitle(bool checkForNewMessages, WebBrowser browser)
         {
             if (checkForNewMessages)
                 CheckForMessages();
 
             int oldNewMsgTotal = newMessagesTotal;
 
-            if (webBrowser.DocumentTitle.ToLower() == "chat rooms")
+            if (browser.DocumentTitle.ToLower() == "chat rooms")
                 roomTitle = "lobby";
             else
             {
-                roomTitle = webBrowser.DocumentTitle.Replace("Campfire: ", "");
+                roomTitle = browser.DocumentTitle.Replace("Campfire: ", "");
                 if (roomTitle[0] == '(')
                 {
                     try
@@ -290,11 +337,18 @@ namespace Flare
             }
 
             if (newMessagesTotal > 0)
-                Text = "(" + newMessagesTotal + ") " + FirstLetterToUpper(account.Name) + " | " +
-                       FirstLetterToUpper(roomTitle);
+            {
+                browser.Parent.Font = new Font(browser.Parent.Font.FontFamily, browser.Parent.Font.SizeInPoints, FontStyle.Bold);
+                browser.Parent.Text = " (" + newMessagesTotal + ") " + FirstLetterToUpper(account.Name) + " | " +
+                                      FirstLetterToUpper(roomTitle) + " ";
+            }
             else
-                Text = FirstLetterToUpper(account.Name) + " | " + FirstLetterToUpper(roomTitle);
-
+            {
+                browser.Parent.Font = new Font(browser.Parent.Font.FontFamily, browser.Parent.Font.SizeInPoints, FontStyle.Regular);
+                browser.Parent.Text = string.Format(" {0} ",
+                                                    FirstLetterToUpper(account.Name) + " | " +
+                                                    FirstLetterToUpper(roomTitle));
+            }
 
             if (newMessagesTotal > oldNewMsgTotal && Focused == false && webBrowser.Focused == false)
             {
@@ -454,7 +508,7 @@ namespace Flare
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            UpdateTitle(true);
+            UpdateTitle(true, webBrowser);
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)

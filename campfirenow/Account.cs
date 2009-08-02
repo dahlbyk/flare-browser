@@ -44,14 +44,13 @@ namespace Flare
                 // The key doesn't exist; create it / open it
                 key = Registry.CurrentUser.CreateSubKey("Software\\Flare");
 
-            // Attempt to retrieve the value X; if null is returned, the value
-            // doesn't exist in the registry.
-            if (key.GetValue("accountname") == null)
-                return null;
-
             var account = new Account();
 
-            account.Name = key.GetValue("accountname").ToString();
+            account.Name = key.GetValue("accountname", string.Empty).ToString();
+
+            if (string.IsNullOrEmpty(account.Name))
+                return null;
+
             account.UseSsl = (key.GetValue("usessl", "0").ToString() == "1");
 
             key.Close();

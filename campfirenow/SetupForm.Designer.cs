@@ -147,6 +147,7 @@ namespace Flare
             this.usernameBox.Name = "usernameBox";
             this.usernameBox.Size = new System.Drawing.Size(191, 20);
             this.usernameBox.TabIndex = 13;
+            this.usernameBox.TextChanged += new System.EventHandler(this.usernameBox_TextChanged);
             // 
             // label3
             // 
@@ -303,6 +304,7 @@ namespace Flare
             this.nicknameBox.Name = "nicknameBox";
             this.nicknameBox.Size = new System.Drawing.Size(189, 20);
             this.nicknameBox.TabIndex = 12;
+            this.nicknameBox.TextChanged += new System.EventHandler(this.nicknameBox_TextChanged);
             // 
             // label6
             // 

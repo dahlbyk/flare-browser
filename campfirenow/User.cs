@@ -57,10 +57,10 @@ namespace Flare
 
             var user = new User();
 
-            user.LoginAsGuest = (key.GetValue("loginAsGuest").ToString() == "1");
-            user.Username = key.GetValue("username").ToString();
-            user.Nickname = key.GetValue("nickname", String.Empty).ToString();
-            user.Password = key.GetValue("password").ToString();
+            user.LoginAsGuest = (key.GetValue("loginAsGuest", "0").ToString() == "1");
+            user.Username = key.GetValue("username", string.Empty).ToString();
+            user.Nickname = key.GetValue("nickname", string.Empty).ToString();
+            user.Password = key.GetValue("password", string.Empty).ToString();
             try
             {
                 user.NotifyWindowDelay = Int32.Parse(key.GetValue("notifydelay", "1500").ToString());
@@ -86,7 +86,7 @@ namespace Flare
             key.SetValue("password", Password);
             key.SetValue("nickname", Nickname);
             key.SetValue("notifydelay", NotifyWindowDelay.ToString());
-            key.SetValue("defaultroom", DefaultRoomName);
+            key.SetValue("defaultroom", DefaultRoomName ?? string.Empty);
             key.SetValue("nicknotifications", NotifyOnlyWhenNicknameIsFound ? "1" : "0");
             key.Close();
         }
