@@ -294,7 +294,7 @@ namespace Flare
             this.nickNotifications.Name = "nickNotifications";
             this.nickNotifications.Size = new System.Drawing.Size(189, 33);
             this.nickNotifications.TabIndex = 13;
-            this.nickNotifications.Text = "Alert me ONLY when someone uses my Nickname";
+            this.nickNotifications.Text = "Only alert me when someone uses my nickname";
             this.nickNotifications.UseVisualStyleBackColor = true;
             // 
             // nicknameBox

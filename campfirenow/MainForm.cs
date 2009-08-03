@@ -25,7 +25,6 @@ namespace Flare
 
         private Boolean isFirstLoad;
         private Boolean isInStartUpMode;
-        private Int32 newMessagesTotal;
         private String roomTitle = String.Empty;
 
         public MainForm(string[] args)
@@ -332,6 +331,7 @@ namespace Flare
             if (checkForNewMessages)
                 CheckForMessages(browser);
 
+            int newMessagesTotal = (int) (browser.Parent.Tag ?? 0);
             int oldNewMsgTotal = newMessagesTotal;
 
             if (browser.DocumentTitle.ToLower() == "chat rooms")
@@ -362,14 +362,14 @@ namespace Flare
                 }
             }
 
+            roomTitle = roomTitle.Trim();
+
             if (newMessagesTotal > 0)
             {
-                browser.Parent.Font = new Font(browser.Parent.Font.FontFamily, browser.Parent.Font.SizeInPoints, FontStyle.Bold);
-                browser.Parent.Text = " (" + newMessagesTotal + ") " + FirstLetterToUpper(roomTitle) + (roomTitle.Trim().EndsWith("room") ? " " : "room ");
+                browser.Parent.Text = " (" + newMessagesTotal + ") " + FirstLetterToUpper(roomTitle) + (roomTitle.Trim().EndsWith("room") ? " " : " room ");
             }
             else
             {
-                browser.Parent.Font = new Font(browser.Parent.Font.FontFamily, browser.Parent.Font.SizeInPoints, FontStyle.Regular);
                 browser.Parent.Text = string.Format(" {0} {1}", FirstLetterToUpper(roomTitle), roomTitle.Trim().EndsWith("room") ? string.Empty : "room ");
             }
 
@@ -471,8 +471,8 @@ namespace Flare
                                             nf.Show();
                                         }
 
-                                        // Increase the unread message count:
-                                        newMessagesTotal++;
+                                        // Increase the unread message count for this tab
+                                        browser.Parent.Tag = (int)(browser.Parent.Tag ?? 0) + 1;
                                     }
                                 }
 
@@ -482,9 +482,9 @@ namespace Flare
                     }
                     else
                     {
-                        newMessagesTotal = 0;
+                        browser.Parent.Tag = 0;
 
-                        if (lastMessage != null && lastMessage.ElementId.Length > 0)
+                        if (lastMessage != null && lastMessage.ElementId != null && lastMessage.ElementId.Length > 0)
                         {
                             HtmlElement nextElement = browser.Document.All[lastMessage.ElementId].NextSibling;
                             while (nextElement != null)
@@ -514,6 +514,7 @@ namespace Flare
                         }
                     }
                 }
+                browser.Tag = lastMessage;
             }
             catch
             {
@@ -522,6 +523,7 @@ namespace Flare
 
             // Update the notify icon:
             var resources = new ResourceManager(typeof(Resources));
+            int newMessagesTotal = (int)(browser.Parent.Tag ?? 0);
             if (newMessagesTotal == 0)
                 notifyIcon.Icon = ((Icon)(resources.GetObject("noNewMsgs")));
             else

@@ -250,10 +250,11 @@ namespace Flare
             // loadingCover
             // 
             this.loadingCover.BackColor = System.Drawing.Color.White;
+            this.loadingCover.Dock = System.Windows.Forms.DockStyle.Fill;
             this.loadingCover.Image = global::Flare.Properties.Resources.indicator2;
-            this.loadingCover.Location = new System.Drawing.Point(0, 529);
+            this.loadingCover.Location = new System.Drawing.Point(0, 24);
             this.loadingCover.Name = "loadingCover";
-            this.loadingCover.Size = new System.Drawing.Size(984, 135);
+            this.loadingCover.Size = new System.Drawing.Size(984, 640);
             this.loadingCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.loadingCover.TabIndex = 3;
             this.loadingCover.TabStop = false;
@@ -357,10 +358,10 @@ namespace Flare
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 664);
+            this.Controls.Add(this.loadingCover);
             this.Controls.Add(this.tabPageCloseBtn);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.uploadPanel);
-            this.Controls.Add(this.loadingCover);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
