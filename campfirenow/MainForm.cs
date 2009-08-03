@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Net;
 using System.Resources;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Flare.Properties;
 using Microsoft.Win32;
@@ -24,7 +25,6 @@ namespace Flare
 
         private Boolean isFirstLoad;
         private Boolean isInStartUpMode;
-        private Message lastMessage;
         private Int32 newMessagesTotal;
         private String roomTitle = String.Empty;
 
@@ -54,14 +54,14 @@ namespace Flare
                 if (account == null)
                 {
                     // Show the modal dialog to fill these details
-                    var sf = new SetupForm();
-                    sf.ShowDialog();
+                    var setupForm = new SetupForm();
+                    setupForm.ShowDialog();
 
                     // Try again to retreive the details from the registry
                     account = Account.FromRegistry();
                 }
 
-                // If the account is still null, we have a problem
+                // If the account is still null, the user cancelled the dialog, the expected behaviour here is to quit
                 if (account == null)
                     Application.Exit();
                 else
@@ -77,6 +77,8 @@ namespace Flare
                         autoUpdater.ProxyEnabled = true;
                         autoUpdater.ProxyUrl = proxy.GetProxy(account.CampfireUri).AbsoluteUri;
                     }
+
+                    Text = string.Format("{0} - Flare", account.Name);
 
                     // Start opening the user's Campfire account
                     webBrowser.Navigate(account.CampfireUri);
@@ -95,7 +97,8 @@ namespace Flare
         {
             try
             {
-                var browser = (WebBrowser) sender;
+                var browser = (WebBrowser)sender;
+
                 if (isInStartUpMode)
                 {
                     isInStartUpMode = false;
@@ -131,7 +134,7 @@ namespace Flare
                 }
 
                 // clear the lastMessage var:
-                lastMessage = null;
+                browser.Tag = null;
 
                 if (isFirstLoad)
                 {
@@ -157,11 +160,11 @@ namespace Flare
                                 }
 
                             // Fill in login info for the user
-                            ((MSHTML.HTMLInputElement) (browser.Document.GetElementById("email_address").DomElement)).
+                            ((MSHTML.HTMLInputElement)(browser.Document.GetElementById("email_address").DomElement)).
                                 value = account.User.Username;
-                            ((MSHTML.HTMLInputElement) (browser.Document.GetElementById("password").DomElement)).value =
+                            ((MSHTML.HTMLInputElement)(browser.Document.GetElementById("password").DomElement)).value =
                                 account.User.Password;
-                            ((MSHTML.HTMLInputElement) (browser.Document.GetElementsByTagName("input")[3].DomElement)).
+                            ((MSHTML.HTMLInputElement)(browser.Document.GetElementsByTagName("input")[3].DomElement)).
                                 click();
                         }
                     }
@@ -175,11 +178,13 @@ namespace Flare
                         UpdateRoomList();
 
                         // Navigate to default room (if one is listed):
-                        if (account.User.DefaultRoomName.Contains("/room/") &&
-                            browser.Document.Body.InnerHtml.Contains(account.User.DefaultRoomName))
-                            AddTabForRoom(account.CampfireDefaultRoomUri);
-                        else
-                            loadingCover.Visible = false;
+                        foreach (string roomName in account.User.RoomNames)
+                        {
+                            // final sanity check
+                            if (roomName.Contains("/room/"))
+                                AddTabForRoom(account.GetCampfireRoomUri(roomName));
+                        }
+                        loadingCover.Visible = false;
                     }
                 }
                 else
@@ -198,7 +203,17 @@ namespace Flare
             }
         }
 
+        private void AddTabForNonRoom(Uri nonRoomUri)
+        {
+            AddTabForUri(nonRoomUri, "Loading...");
+        }
+
         private void AddTabForRoom(Uri roomUri)
+        {
+            AddTabForUri(roomUri, "Entering room...");
+        }
+
+        private void AddTabForUri(Uri uri, string loadingText)
         {
             // 
             // tab page
@@ -208,7 +223,7 @@ namespace Flare
             newTabPage.Name = "lobbyTabPage";
             newTabPage.Size = new Size(976, 614);
             newTabPage.TabIndex = 0;
-            newTabPage.Text = "Entering room...      ";
+            newTabPage.Text = loadingText;
             newTabPage.UseVisualStyleBackColor = true;
             // 
             // web browser
@@ -222,12 +237,15 @@ namespace Flare
             newWebBrowser.ScriptErrorsSuppressed = true;
             newWebBrowser.Size = new System.Drawing.Size(976, 614);
             newWebBrowser.TabIndex = 1;
+            newWebBrowser.NewWindow += WebBrowserNewWindow;
             newWebBrowser.DocumentCompleted += webBrowser_DocumentCompleted;
 
             tabControl.TabPages.Add(newTabPage);
             newTabPage.Controls.Add(newWebBrowser);
 
-            newWebBrowser.Navigate(roomUri);
+            newWebBrowser.Navigate(uri);
+
+            tabControl.SelectedTab = newTabPage;
         }
 
         private void UpdateRoomList()
@@ -239,7 +257,7 @@ namespace Flare
                 roomsToolStripMenuItem.DropDownItems.Clear();
 
                 foreach (
-                    MSHTML.HTMLAnchorElement link in ((MSHTML.IHTMLDocument2) webBrowser.Document.DomDocument).anchors)
+                    MSHTML.HTMLAnchorElement link in ((MSHTML.IHTMLDocument2)webBrowser.Document.DomDocument).anchors)
                 {
                     if (link.id.Contains("room_tab"))
                     {
@@ -284,7 +302,7 @@ namespace Flare
                         newToolStripMenuItem.Tag = link;
                         newToolStripMenuItem.Name = "talkToolStripMenuItem";
                         if (dKey != Keys.Cancel)
-                            newToolStripMenuItem.ShortcutKeys = ((Keys) ((Keys.Control | dKey)));
+                            newToolStripMenuItem.ShortcutKeys = ((Keys)((Keys.Control | dKey)));
                         newToolStripMenuItem.Size = new Size(152, 22);
                         newToolStripMenuItem.Text = link.innerText;
                         roomsToolStripMenuItem.DropDownItems.Add(newToolStripMenuItem);
@@ -312,12 +330,20 @@ namespace Flare
         private void UpdateTitle(bool checkForNewMessages, WebBrowser browser)
         {
             if (checkForNewMessages)
-                CheckForMessages();
+                CheckForMessages(browser);
 
             int oldNewMsgTotal = newMessagesTotal;
 
             if (browser.DocumentTitle.ToLower() == "chat rooms")
-                roomTitle = "lobby";
+            {
+                browser.Parent.Text = " Lobby ";
+                return;
+            }
+            else if (browser.Url.AbsoluteUri.Contains("/files+transcripts") || browser.Url.AbsoluteUri.Contains("/account/"))
+            {
+                browser.Parent.Text = string.Format(" {0} ", browser.DocumentTitle.Replace("Campfire: ", ""));
+                return;
+            }
             else
             {
                 roomTitle = browser.DocumentTitle.Replace("Campfire: ", "");
@@ -339,22 +365,19 @@ namespace Flare
             if (newMessagesTotal > 0)
             {
                 browser.Parent.Font = new Font(browser.Parent.Font.FontFamily, browser.Parent.Font.SizeInPoints, FontStyle.Bold);
-                browser.Parent.Text = " (" + newMessagesTotal + ") " + FirstLetterToUpper(account.Name) + " | " +
-                                      FirstLetterToUpper(roomTitle) + " ";
+                browser.Parent.Text = " (" + newMessagesTotal + ") " + FirstLetterToUpper(roomTitle) + (roomTitle.Trim().EndsWith("room") ? " " : "room ");
             }
             else
             {
                 browser.Parent.Font = new Font(browser.Parent.Font.FontFamily, browser.Parent.Font.SizeInPoints, FontStyle.Regular);
-                browser.Parent.Text = string.Format(" {0} ",
-                                                    FirstLetterToUpper(account.Name) + " | " +
-                                                    FirstLetterToUpper(roomTitle));
+                browser.Parent.Text = string.Format(" {0} {1}", FirstLetterToUpper(roomTitle), roomTitle.Trim().EndsWith("room") ? string.Empty : "room ");
             }
 
             if (newMessagesTotal > oldNewMsgTotal && Focused == false && webBrowser.Focused == false)
             {
                 var f = new FLASHWINFO
                             {
-                                CbSize = Marshal.SizeOf(typeof (FLASHWINFO)),
+                                CbSize = Marshal.SizeOf(typeof(FLASHWINFO)),
                                 Hwnd = Handle,
                                 DWFlags = FlashwAll,
                                 UCount = 2,
@@ -365,32 +388,36 @@ namespace Flare
             }
         }
 
-        private void CheckForMessages()
+        private void CheckForMessages(WebBrowser browser)
         {
             try
             {
+                Message lastMessage = null;
+                if (browser.Tag != null)
+                    lastMessage = (Message)browser.Tag;
+
                 // Don't check for messages if we're in the lobby:
-                if (webBrowser.Document != null && webBrowser.Document.Url != null && webBrowser.Document.Body != null &&
-                    webBrowser.Document.Url.AbsoluteUri.Contains("/room/"))
+                if (browser.Document != null && browser.Document.Url != null && browser.Document.Body != null &&
+                    browser.Document.Url.AbsoluteUri.Contains("/room/"))
                 {
                     // Don't do this if the form is focused.
-                    if (!Focused && !webBrowser.Focused)
+                    if (!Focused && !browser.Focused)
                     {
                         if (lastMessage == null || lastMessage.ElementId.Length == 0)
                             try
                             {
-                                foreach (HtmlElement table in webBrowser.Document.Body.All)
+                                foreach (HtmlElement table in browser.Document.Body.All)
                                     if (table.TagName.ToLower().Contains("table"))
                                         foreach (HtmlElement ele in table.All)
-                                            if (((MSHTML.IHTMLElement) ele.DomElement).className != null &&
+                                            if (((MSHTML.IHTMLElement)ele.DomElement).className != null &&
                                                 ele.TagName.ToLower().Contains("tr") &&
-                                                (((MSHTML.IHTMLElement) ele.DomElement).className.Contains(
+                                                (((MSHTML.IHTMLElement)ele.DomElement).className.Contains(
                                                      "text_message") ||
-                                                 ((MSHTML.IHTMLElement) ele.DomElement).className.Contains(
+                                                 ((MSHTML.IHTMLElement)ele.DomElement).className.Contains(
                                                      "enter_message") ||
-                                                 ((MSHTML.IHTMLElement) ele.DomElement).className.Contains(
+                                                 ((MSHTML.IHTMLElement)ele.DomElement).className.Contains(
                                                      "upload_message") ||
-                                                 ((MSHTML.IHTMLElement) ele.DomElement).className.Contains(
+                                                 ((MSHTML.IHTMLElement)ele.DomElement).className.Contains(
                                                      "paste_message")))
                                                 lastMessage = new Message(ele.InnerText, ele.InnerText, ele.Id);
                             }
@@ -401,8 +428,8 @@ namespace Flare
                         else
                         {
                             // Find the last message's new element (it will change each time the html does:
-                            HtmlElement lastElement = webBrowser.Document.All[lastMessage.ElementId];
-                            
+                            HtmlElement lastElement = browser.Document.All[lastMessage.ElementId];
+
                             // Make sure our last element still exists
                             if (lastElement == null)
                                 return;
@@ -415,11 +442,11 @@ namespace Flare
 
                                 foreach (HtmlElement td in nextElement.All)
                                 {
-                                    if (td.DomElement == null || ((MSHTML.IHTMLElement) td.DomElement).className == null)
+                                    if (td.DomElement == null || ((MSHTML.IHTMLElement)td.DomElement).className == null)
                                         continue;
-                                    else if (((MSHTML.IHTMLElement) td.DomElement).className.Contains("person"))
+                                    else if (((MSHTML.IHTMLElement)td.DomElement).className.Contains("person"))
                                         name = td.InnerText;
-                                    else if (((MSHTML.IHTMLElement) td.DomElement).className.Contains("body"))
+                                    else if (((MSHTML.IHTMLElement)td.DomElement).className.Contains("body"))
                                         message = td.InnerText;
                                 }
 
@@ -427,11 +454,11 @@ namespace Flare
                                 lastMessage = new Message(name, message, nextElement.Id);
 
                                 // Make sure it isn't from "you"
-                                if (!((MSHTML.IHTMLElement) nextElement.DomElement).className.Contains(" you") &&
-                                    (((MSHTML.IHTMLElement) nextElement.DomElement).className.Contains("text_message") ||
-                                     ((MSHTML.IHTMLElement) nextElement.DomElement).className.Contains("enter_message") ||
-                                     ((MSHTML.IHTMLElement) nextElement.DomElement).className.Contains("upload_message") ||
-                                     ((MSHTML.IHTMLElement) nextElement.DomElement).className.Contains("paste_message")))
+                                if (!((MSHTML.IHTMLElement)nextElement.DomElement).className.Contains(" you") &&
+                                    (((MSHTML.IHTMLElement)nextElement.DomElement).className.Contains("text_message") ||
+                                     ((MSHTML.IHTMLElement)nextElement.DomElement).className.Contains("enter_message") ||
+                                     ((MSHTML.IHTMLElement)nextElement.DomElement).className.Contains("upload_message") ||
+                                     ((MSHTML.IHTMLElement)nextElement.DomElement).className.Contains("paste_message")))
                                 {
                                     if (!account.User.NotifyOnlyWhenNicknameIsFound ||
                                         lastMessage.TextMessage.ToLower().Contains(account.User.Nickname))
@@ -459,11 +486,11 @@ namespace Flare
 
                         if (lastMessage != null && lastMessage.ElementId.Length > 0)
                         {
-                            HtmlElement nextElement = webBrowser.Document.All[lastMessage.ElementId].NextSibling;
+                            HtmlElement nextElement = browser.Document.All[lastMessage.ElementId].NextSibling;
                             while (nextElement != null)
                             {
                                 lastMessage = new Message("", "",
-                                                           webBrowser.Document.All[lastMessage.ElementId].NextSibling.
+                                                           browser.Document.All[lastMessage.ElementId].NextSibling.
                                                                Id);
                                 nextElement = nextElement.NextSibling;
                             }
@@ -472,12 +499,12 @@ namespace Flare
                         {
                             try
                             {
-                                foreach (HtmlElement table in webBrowser.Document.Body.All)
+                                foreach (HtmlElement table in browser.Document.Body.All)
                                     if (table.TagName.ToLower().Contains("table"))
                                         foreach (HtmlElement ele in table.All)
-                                            if (((MSHTML.IHTMLElement) ele.DomElement).className != null &&
+                                            if (((MSHTML.IHTMLElement)ele.DomElement).className != null &&
                                                 ele.TagName.ToLower().Contains("tr") &&
-                                                ((MSHTML.IHTMLElement) ele.DomElement).className.Contains("text_message"))
+                                                ((MSHTML.IHTMLElement)ele.DomElement).className.Contains("text_message"))
                                                 lastMessage = new Message(ele.InnerText, ele.InnerText, ele.Id);
                             }
                             catch
@@ -494,11 +521,11 @@ namespace Flare
             }
 
             // Update the notify icon:
-            var resources = new ResourceManager(typeof (Resources));
+            var resources = new ResourceManager(typeof(Resources));
             if (newMessagesTotal == 0)
-                notifyIcon.Icon = ((Icon) (resources.GetObject("noNewMsgs")));
+                notifyIcon.Icon = ((Icon)(resources.GetObject("noNewMsgs")));
             else
-                notifyIcon.Icon = ((Icon) (resources.GetObject("newMsg")));
+                notifyIcon.Icon = ((Icon)(resources.GetObject("newMsg")));
         }
 
         private static string FirstLetterToUpper(string inStr)
@@ -508,44 +535,62 @@ namespace Flare
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            UpdateTitle(true, webBrowser);
+            foreach (TabPage tabPage in tabControl.TabPages)
+            {
+                var browser = (WebBrowser)tabPage.Controls[0];
+                if (browser.Document != null && browser.Document.Url != null &&
+                    browser.Document.Url.AbsoluteUri.Contains("/room/"))
+                {
+                    UpdateTitle(true, browser);
+                }
+            }
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Run closing routine:
-            ExitingRoutine();
+            SaveOpenRooms();
             Application.Exit();
         }
 
-        private void ExitingRoutine()
+        private void SaveOpenRooms()
         {
-            if (webBrowser != null && webBrowser.Url != null && webBrowser.Url.AbsoluteUri.Contains("/room/"))
+            account.User.RoomNames = new List<string>();
+            foreach (TabPage tabPage in tabControl.TabPages)
             {
-                account.User.DefaultRoomName =
-                    webBrowser.Url.AbsoluteUri.Substring(webBrowser.Url.AbsoluteUri.IndexOf("/room/"));
-                account.Save();
+                var browser = (WebBrowser)tabPage.Controls[0];
+                if (browser.Document != null && browser.Document.Url != null &&
+                    browser.Document.Url.AbsoluteUri.Contains("/room/"))
+                {
+                    account.User.RoomNames.Add(Regex.Match(browser.Document.Url.AbsoluteUri, ".*(/room/.*)").Groups[1].Value);
+                }
             }
+            account.Save();
         }
 
         private static void NewToolStripMenuItemClick(object sender, EventArgs e)
         {
-            ((MSHTML.HTMLAnchorElement) ((ToolStripMenuItem) sender).Tag).click();
+            ((MSHTML.HTMLAnchorElement)((ToolStripMenuItem)sender).Tag).click();
         }
 
         private void changeSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sf = new SetupForm();
-            sf.ShowDialog();
+            var setupForm = new SetupForm();
+            setupForm.ShowDialog();
 
             // if anything was changed, reload the page
-            if (sf.NewAccountName != account.Name ||
-                sf.NewUsername != account.User.Username ||
-                sf.NewPassword != account.User.Password ||
-                sf.NewNickname != account.User.Nickname ||
-                sf.NewNotifyOnlyWhenNicknameIsFound != account.User.NotifyOnlyWhenNicknameIsFound ||
-                sf.NewNotifyWindowDelay != account.User.NotifyWindowDelay)
+            if (setupForm.NewAccountName != account.Name ||
+                setupForm.NewUsername != account.User.Username ||
+                setupForm.NewPassword != account.User.Password ||
+                setupForm.NewNickname != account.User.Nickname ||
+                setupForm.NewNotifyOnlyWhenNicknameIsFound != account.User.NotifyOnlyWhenNicknameIsFound ||
+                setupForm.NewNotifyWindowDelay != account.User.NotifyWindowDelay)
             {
+                for (int i = 1; i < tabControl.TabPages.Count; i++)
+                {
+                    tabControl.TabPages.RemoveAt(i);
+                    i--;
+                }
                 MainForm_Load(sender, e);
             }
         }
@@ -553,7 +598,7 @@ namespace Flare
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Run closing routine:
-            ExitingRoutine();
+            SaveOpenRooms();
             Application.Exit();
         }
 
@@ -639,7 +684,7 @@ namespace Flare
         private void CloseBtn_Click(object sender, EventArgs e)
         {
             // Run closing routine:
-            ExitingRoutine();
+            SaveOpenRooms();
             Application.Exit();
         }
 
@@ -661,7 +706,7 @@ namespace Flare
 
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
-            var files = (string[]) e.Data.GetData(DataFormats.FileDrop);
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
             account.User.UploadFileToCurrentRoom(account.CampfireUri + "/upload.cgi/room/36735/uploads/new", files[0],
                                                   webBrowser.Document.Cookie, uploadLabel);
         }
@@ -679,10 +724,10 @@ namespace Flare
         {
         }
 
-        private void webBrowser_NewWindow(object sender, CancelEventArgs e)
+        private void WebBrowserNewWindow(object sender, CancelEventArgs e)
         {
             e.Cancel = true;
-            Process.Start(webBrowser.StatusText);
+            Process.Start(((WebBrowser)sender).StatusText);
         }
 
         #region Nested type: FLASHWINFO
@@ -690,14 +735,64 @@ namespace Flare
         [StructLayout(LayoutKind.Sequential)]
         public struct FLASHWINFO
         {
-            [MarshalAs(UnmanagedType.U4)] public int CbSize;
+            [MarshalAs(UnmanagedType.U4)]
+            public int CbSize;
             public IntPtr Hwnd;
-            [MarshalAs(UnmanagedType.U4)] public int DWFlags;
-            [MarshalAs(UnmanagedType.U4)] public int UCount;
-            [MarshalAs(UnmanagedType.U4)] public int DWTimeout;
+            [MarshalAs(UnmanagedType.U4)]
+            public int DWFlags;
+            [MarshalAs(UnmanagedType.U4)]
+            public int UCount;
+            [MarshalAs(UnmanagedType.U4)]
+            public int DWTimeout;
         }
 
         #endregion
+
+        private void tabPageCloseBtn_Click(object sender, EventArgs e)
+        {
+            var tabPage = tabControl.SelectedTab;
+            tabControl.TabPages.Remove(tabPage);
+            var browser = ((WebBrowser) tabPage.Controls[0]);
+            // Leave the room
+            if (browser.Document != null && browser.Document.Url != null &&
+                browser.Document.Url.AbsoluteUri.Contains("/room/"))
+            {
+                ((MSHTML.HTMLAnchorElement) browser.Document.GetElementById("leave_link").FirstChild.DomElement).click();
+            }
+            SaveOpenRooms();
+        }
+
+        private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            if (e.Url.AbsoluteUri.Contains("/room/"))
+            {
+                // Open in a tab instead
+                e.Cancel = true;
+                AddTabForRoom(e.Url);
+                SaveOpenRooms();
+            }
+        }
+
+        private void filesTranscriptsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddTabForNonRoom(account.GetCampfireRoomUri("/files+transcripts"));
+        }
+
+        private void membersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddTabForNonRoom(account.GetCampfireRoomUri("/account/people"));
+        }
+
+        private void settingsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            AddTabForNonRoom(account.GetCampfireRoomUri("/account/settings"));
+        }
+
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            tabPageCloseBtn.Enabled = (tabControl.SelectedIndex != 0);
+
+        }
     }
 
     public class Message

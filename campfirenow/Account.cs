@@ -29,9 +29,9 @@ namespace Flare
             get { return new Uri(CampfireUri, "/forgot_password"); }
         }
 
-        public Uri CampfireDefaultRoomUri
+        public Uri GetCampfireRoomUri(string roomName)
         {
-            get { return new Uri(CampfireUri, User.DefaultRoomName ?? "/"); }
+            return new Uri(CampfireUri, roomName ?? "/");
         }
 
         public static Account FromRegistry()

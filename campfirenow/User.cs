@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -45,7 +46,7 @@ namespace Flare
         public Boolean LoginAsGuest { get; set; }
         public Boolean ShowMessageNotifications { get; set; }
         public Boolean NotifyOnlyWhenNicknameIsFound { get; set; }
-        public String DefaultRoomName { get; set; }
+        public List<String> RoomNames { get; set; }
         public UploadDetails LastUploadDetails { get; set; }
 
         /// <summary>
@@ -70,7 +71,10 @@ namespace Flare
                 user.NotifyWindowDelay = 1500;
             }
             user.ShowMessageNotifications = (key.GetValue("showMsgNotify", "1").ToString() == "1");
-            user.DefaultRoomName = key.GetValue("defaultroom", "notset").ToString();
+            user.RoomNames = new List<string>();
+            string[] rooms = key.GetValue("roomnames", "notset").ToString().Split(',');
+            foreach (string room in rooms)
+                user.RoomNames.Add(room);
             user.NotifyOnlyWhenNicknameIsFound = key.GetValue("nicknotifications", "0").ToString() == "1";
 
             key.Close();
@@ -86,7 +90,7 @@ namespace Flare
             key.SetValue("password", Password);
             key.SetValue("nickname", Nickname);
             key.SetValue("notifydelay", NotifyWindowDelay.ToString());
-            key.SetValue("defaultroom", DefaultRoomName ?? string.Empty);
+            key.SetValue("roomnames", string.Join(",", RoomNames.ToArray()));
             key.SetValue("nicknotifications", NotifyOnlyWhenNicknameIsFound ? "1" : "0");
             key.Close();
         }
