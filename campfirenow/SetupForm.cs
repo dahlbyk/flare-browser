@@ -1,11 +1,13 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Flare
 {
     public partial class SetupForm : Form
     {
-        private Account _account;
+        private Account account;
+        private bool nicknameHasBeenManuallySet;
 
         public SetupForm()
         {
@@ -25,26 +27,24 @@ namespace Flare
             Int32 notifyWindowDelay;
             if (!Int32.TryParse(notificationWindowDelayTextBox.Text, out notifyWindowDelay))
             {
-                MessageBox.Show(
-                    String.Format(
-                        "The value you've entered for how long the notification window show display for ({0}), is invalid.\n\nPlease enter a whole number.",
-                        notificationWindowDelayTextBox.Text), "Unable to save new notification window settings",
+                MessageBox.Show("The value you've entered for how long the notification window should display for is invalid.\n\nPlease enter a whole number.", 
+                    "Unable to save new notification window settings",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            _account.Name = accountName.Text;
-            _account.UseSsl = useSSL.Checked;
+            account.Name = accountName.Text;
+            account.UseSsl = useSSL.Checked;
 
-            if (_account.User == null)
-                _account.User = new User();
-            _account.User.Username = usernameBox.Text;
-            _account.User.Password = passwordBox.Text;
-            _account.User.Nickname = nicknameBox.Text;
-            _account.User.NotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
-            _account.User.NotifyWindowDelay = notifyWindowDelay;
+            if (account.User == null)
+                account.User = new User();
+            account.User.Username = usernameBox.Text;
+            account.User.Password = passwordBox.Text;
+            account.User.Nickname = nicknameBox.Text;
+            account.User.NotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
+            account.User.NotifyWindowDelay = notifyWindowDelay;
 
-            _account.Save();
+            account.Save();
 
             NewAccountName = accountName.Text;
             NewUsername = usernameBox.Text;
@@ -63,17 +63,17 @@ namespace Flare
 
         private void SetupForm_Load(object sender, EventArgs e)
         {
-            _account = Account.FromRegistry();
+            account = Account.FromRegistry();
 
-            if (_account != null)
+            if (account != null)
             {
-                accountName.Text = _account.Name;
-                usernameBox.Text = _account.User.Username;
-                passwordBox.Text = _account.User.Password;
-                nicknameBox.Text = _account.User.Nickname;
-                notificationWindowDelayTextBox.Text = _account.User.NotifyWindowDelay.ToString();
-                nickNotifications.Checked = _account.User.NotifyOnlyWhenNicknameIsFound;
-                useSSL.Checked = _account.UseSsl;
+                accountName.Text = account.Name;
+                usernameBox.Text = account.User.Username;
+                passwordBox.Text = account.User.Password;
+                nicknameBox.Text = account.User.Nickname;
+                notificationWindowDelayTextBox.Text = account.User.NotifyWindowDelay.ToString();
+                nickNotifications.Checked = account.User.NotifyOnlyWhenNicknameIsFound;
+                useSSL.Checked = account.UseSsl;
 
                 NewAccountName = accountName.Text;
                 NewUsername = usernameBox.Text;
@@ -81,6 +81,22 @@ namespace Flare
                 NewNickname = nicknameBox.Text;
                 NewNotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
             }
+            else
+                account = new Account();
+        }
+
+        private void usernameBox_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(nicknameBox.Text) || !nicknameHasBeenManuallySet)
+            {
+                nicknameBox.Text = Regex.Replace(usernameBox.Text, @"(\@.*)", "");
+                nicknameHasBeenManuallySet = false;
+            }
+        }
+
+        private void nicknameBox_TextChanged(object sender, EventArgs e)
+        {
+            nicknameHasBeenManuallySet = true;
         }
     }
 }

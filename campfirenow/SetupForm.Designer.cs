@@ -45,21 +45,21 @@ namespace Flare
             this.accountName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.optionsTab = new System.Windows.Forms.TabPage();
+            this.notificationWindowGroupBox = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.notificationWindowDelayTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.nicknameGroupBox = new System.Windows.Forms.GroupBox();
             this.nickNotifications = new System.Windows.Forms.CheckBox();
             this.nicknameBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.notificationWindowGroupBox = new System.Windows.Forms.GroupBox();
-            this.notificationWindowDelayTextBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.accountTab.SuspendLayout();
             this.userDetailsGroupBox.SuspendLayout();
             this.accountDetailsGroupBox.SuspendLayout();
             this.optionsTab.SuspendLayout();
-            this.nicknameGroupBox.SuspendLayout();
             this.notificationWindowGroupBox.SuspendLayout();
+            this.nicknameGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // okBtn
@@ -147,6 +147,7 @@ namespace Flare
             this.usernameBox.Name = "usernameBox";
             this.usernameBox.Size = new System.Drawing.Size(191, 20);
             this.usernameBox.TabIndex = 13;
+            this.usernameBox.TextChanged += new System.EventHandler(this.usernameBox_TextChanged);
             // 
             // label3
             // 
@@ -232,6 +233,49 @@ namespace Flare
             this.optionsTab.Text = "Notifications";
             this.optionsTab.UseVisualStyleBackColor = true;
             // 
+            // notificationWindowGroupBox
+            // 
+            this.notificationWindowGroupBox.Controls.Add(this.label5);
+            this.notificationWindowGroupBox.Controls.Add(this.notificationWindowDelayTextBox);
+            this.notificationWindowGroupBox.Controls.Add(this.label1);
+            this.notificationWindowGroupBox.Location = new System.Drawing.Point(7, 105);
+            this.notificationWindowGroupBox.Name = "notificationWindowGroupBox";
+            this.notificationWindowGroupBox.Size = new System.Drawing.Size(328, 71);
+            this.notificationWindowGroupBox.TabIndex = 1;
+            this.notificationWindowGroupBox.TabStop = false;
+            this.notificationWindowGroupBox.Text = "Notification window";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(166, 29);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(66, 17);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "milliseconds";
+            this.label5.UseCompatibleTextRendering = true;
+            // 
+            // notificationWindowDelayTextBox
+            // 
+            this.notificationWindowDelayTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.notificationWindowDelayTextBox.Location = new System.Drawing.Point(86, 26);
+            this.notificationWindowDelayTextBox.Name = "notificationWindowDelayTextBox";
+            this.notificationWindowDelayTextBox.Size = new System.Drawing.Size(74, 20);
+            this.notificationWindowDelayTextBox.TabIndex = 12;
+            this.notificationWindowDelayTextBox.Text = "1500";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(7, 29);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(61, 17);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Display for:";
+            this.label1.UseCompatibleTextRendering = true;
+            // 
             // nicknameGroupBox
             // 
             this.nicknameGroupBox.Controls.Add(this.nickNotifications);
@@ -246,13 +290,11 @@ namespace Flare
             // 
             // nickNotifications
             // 
-            this.nickNotifications.Checked = true;
-            this.nickNotifications.CheckState = System.Windows.Forms.CheckState.Checked;
             this.nickNotifications.Location = new System.Drawing.Point(86, 52);
             this.nickNotifications.Name = "nickNotifications";
             this.nickNotifications.Size = new System.Drawing.Size(189, 33);
             this.nickNotifications.TabIndex = 13;
-            this.nickNotifications.Text = "Alert me ONLY when someone uses my Nickname";
+            this.nickNotifications.Text = "Only alert me when someone uses my nickname";
             this.nickNotifications.UseVisualStyleBackColor = true;
             // 
             // nicknameBox
@@ -262,6 +304,7 @@ namespace Flare
             this.nicknameBox.Name = "nicknameBox";
             this.nicknameBox.Size = new System.Drawing.Size(189, 20);
             this.nicknameBox.TabIndex = 12;
+            this.nicknameBox.TextChanged += new System.EventHandler(this.nicknameBox_TextChanged);
             // 
             // label6
             // 
@@ -273,48 +316,6 @@ namespace Flare
             this.label6.TabIndex = 11;
             this.label6.Text = "Nickname:";
             this.label6.UseCompatibleTextRendering = true;
-            // 
-            // notificationWindowGroupBox
-            // 
-            this.notificationWindowGroupBox.Controls.Add(this.label5);
-            this.notificationWindowGroupBox.Controls.Add(this.notificationWindowDelayTextBox);
-            this.notificationWindowGroupBox.Controls.Add(this.label1);
-            this.notificationWindowGroupBox.Location = new System.Drawing.Point(7, 105);
-            this.notificationWindowGroupBox.Name = "notificationWindowGroupBox";
-            this.notificationWindowGroupBox.Size = new System.Drawing.Size(328, 71);
-            this.notificationWindowGroupBox.TabIndex = 1;
-            this.notificationWindowGroupBox.TabStop = false;
-            this.notificationWindowGroupBox.Text = "Notification window";
-            // 
-            // notificationWindowDelayTextBox
-            // 
-            this.notificationWindowDelayTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.notificationWindowDelayTextBox.Location = new System.Drawing.Point(86, 26);
-            this.notificationWindowDelayTextBox.Name = "notificationWindowDelayTextBox";
-            this.notificationWindowDelayTextBox.Size = new System.Drawing.Size(74, 20);
-            this.notificationWindowDelayTextBox.TabIndex = 12;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(7, 29);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 17);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "Display for:";
-            this.label1.UseCompatibleTextRendering = true;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(166, 29);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(66, 17);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "milliseconds";
-            this.label5.UseCompatibleTextRendering = true;
             // 
             // SetupForm
             // 
@@ -343,10 +344,10 @@ namespace Flare
             this.accountDetailsGroupBox.ResumeLayout(false);
             this.accountDetailsGroupBox.PerformLayout();
             this.optionsTab.ResumeLayout(false);
-            this.nicknameGroupBox.ResumeLayout(false);
-            this.nicknameGroupBox.PerformLayout();
             this.notificationWindowGroupBox.ResumeLayout(false);
             this.notificationWindowGroupBox.PerformLayout();
+            this.nicknameGroupBox.ResumeLayout(false);
+            this.nicknameGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }

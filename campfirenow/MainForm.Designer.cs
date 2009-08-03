@@ -30,7 +30,6 @@ namespace Flare
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,6 +38,10 @@ namespace Flare
             this.changeSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lobbyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.filesTranscriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.membersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.roomsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.onlineSupportForumsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,26 +57,19 @@ namespace Flare
             this.uploadPanel = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.uploadLabel = new System.Windows.Forms.Label();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.lobbyTabPage = new System.Windows.Forms.TabPage();
+            this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.tabPageCloseBtn = new System.Windows.Forms.Button();
             this.autoUpdater = new Conversive.AutoUpdater.AutoUpdater();
             this.menuStrip1.SuspendLayout();
             this.notifyContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadingCover)).BeginInit();
             this.uploadPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.tabControl.SuspendLayout();
+            this.lobbyTabPage.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // webBrowser
-            // 
-            this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser.IsWebBrowserContextMenuEnabled = false;
-            this.webBrowser.Location = new System.Drawing.Point(0, 24);
-            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser.Name = "webBrowser";
-            this.webBrowser.ScriptErrorsSuppressed = true;
-            this.webBrowser.Size = new System.Drawing.Size(984, 640);
-            this.webBrowser.TabIndex = 0;
-            this.webBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser_NewWindow);
-            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             // 
             // timer
             // 
@@ -85,6 +81,7 @@ namespace Flare
             this.menuStrip1.AllowDrop = true;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
+            this.lobbyToolStripMenuItem,
             this.roomsToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -140,11 +137,43 @@ namespace Flare
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // lobbyToolStripMenuItem
+            // 
+            this.lobbyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.filesTranscriptsToolStripMenuItem,
+            this.membersToolStripMenuItem,
+            this.settingsToolStripMenuItem1});
+            this.lobbyToolStripMenuItem.Name = "lobbyToolStripMenuItem";
+            this.lobbyToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.lobbyToolStripMenuItem.Text = "&Lobby";
+            // 
+            // filesTranscriptsToolStripMenuItem
+            // 
+            this.filesTranscriptsToolStripMenuItem.Name = "filesTranscriptsToolStripMenuItem";
+            this.filesTranscriptsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.filesTranscriptsToolStripMenuItem.Text = "Files && Transcripts";
+            this.filesTranscriptsToolStripMenuItem.Click += new System.EventHandler(this.filesTranscriptsToolStripMenuItem_Click);
+            // 
+            // membersToolStripMenuItem
+            // 
+            this.membersToolStripMenuItem.Name = "membersToolStripMenuItem";
+            this.membersToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.membersToolStripMenuItem.Text = "Members";
+            this.membersToolStripMenuItem.Click += new System.EventHandler(this.membersToolStripMenuItem_Click);
+            // 
+            // settingsToolStripMenuItem1
+            // 
+            this.settingsToolStripMenuItem1.Name = "settingsToolStripMenuItem1";
+            this.settingsToolStripMenuItem1.Size = new System.Drawing.Size(171, 22);
+            this.settingsToolStripMenuItem1.Text = "Settings";
+            this.settingsToolStripMenuItem1.Click += new System.EventHandler(this.settingsToolStripMenuItem1_Click);
+            // 
             // roomsToolStripMenuItem
             // 
             this.roomsToolStripMenuItem.Name = "roomsToolStripMenuItem";
             this.roomsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.roomsToolStripMenuItem.Text = "&Rooms";
+            this.roomsToolStripMenuItem.Visible = false;
             // 
             // aboutToolStripMenuItem
             // 
@@ -262,6 +291,55 @@ namespace Flare
             this.uploadLabel.Text = "To upload a file, drop it here.";
             this.uploadLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // tabControl
+            // 
+            this.tabControl.Controls.Add(this.lobbyTabPage);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(0, 24);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(10);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.Padding = new System.Drawing.Point(5, 5);
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(984, 640);
+            this.tabControl.TabIndex = 5;
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
+            // 
+            // lobbyTabPage
+            // 
+            this.lobbyTabPage.Controls.Add(this.webBrowser);
+            this.lobbyTabPage.Location = new System.Drawing.Point(4, 26);
+            this.lobbyTabPage.Name = "lobbyTabPage";
+            this.lobbyTabPage.Size = new System.Drawing.Size(976, 610);
+            this.lobbyTabPage.TabIndex = 0;
+            this.lobbyTabPage.Text = " Lobby ";
+            this.lobbyTabPage.UseVisualStyleBackColor = true;
+            // 
+            // webBrowser
+            // 
+            this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser.IsWebBrowserContextMenuEnabled = false;
+            this.webBrowser.Location = new System.Drawing.Point(0, 0);
+            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser.Name = "webBrowser";
+            this.webBrowser.ScriptErrorsSuppressed = true;
+            this.webBrowser.Size = new System.Drawing.Size(976, 610);
+            this.webBrowser.TabIndex = 1;
+            this.webBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
+            this.webBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.WebBrowserNewWindow);
+            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
+            // 
+            // tabPageCloseBtn
+            // 
+            this.tabPageCloseBtn.Enabled = false;
+            this.tabPageCloseBtn.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabPageCloseBtn.Location = new System.Drawing.Point(962, 26);
+            this.tabPageCloseBtn.Name = "tabPageCloseBtn";
+            this.tabPageCloseBtn.Size = new System.Drawing.Size(21, 20);
+            this.tabPageCloseBtn.TabIndex = 6;
+            this.tabPageCloseBtn.Text = "X";
+            this.tabPageCloseBtn.UseVisualStyleBackColor = true;
+            this.tabPageCloseBtn.Click += new System.EventHandler(this.tabPageCloseBtn_Click);
+            // 
             // autoUpdater
             // 
             this.autoUpdater.AutoDownload = false;
@@ -280,10 +358,12 @@ namespace Flare
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 664);
-            this.Controls.Add(this.uploadPanel);
             this.Controls.Add(this.loadingCover);
-            this.Controls.Add(this.webBrowser);
+            this.Controls.Add(this.tabPageCloseBtn);
+            this.Controls.Add(this.tabControl);
+            this.Controls.Add(this.uploadPanel);
             this.Controls.Add(this.menuStrip1);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
@@ -302,6 +382,8 @@ namespace Flare
             ((System.ComponentModel.ISupportInitialize)(this.loadingCover)).EndInit();
             this.uploadPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.tabControl.ResumeLayout(false);
+            this.lobbyTabPage.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -309,7 +391,6 @@ namespace Flare
 
         #endregion
 
-        private System.Windows.Forms.WebBrowser webBrowser;
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
@@ -334,6 +415,14 @@ namespace Flare
         private System.Windows.Forms.Panel uploadPanel;
         private System.Windows.Forms.Label uploadLabel;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage lobbyTabPage;
+        private System.Windows.Forms.WebBrowser webBrowser;
+        private System.Windows.Forms.Button tabPageCloseBtn;
+        private System.Windows.Forms.ToolStripMenuItem lobbyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem filesTranscriptsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem membersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem1;
     }
 }
 
