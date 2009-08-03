@@ -328,63 +328,76 @@ namespace Flare
 
         private void UpdateTitle(bool checkForNewMessages, WebBrowser browser)
         {
-            if (checkForNewMessages)
-                CheckForMessages(browser);
+            try
+            {
+                if (checkForNewMessages)
+                    CheckForMessages(browser);
 
-            int newMessagesTotal = (int) (browser.Parent.Tag ?? 0);
-            int oldNewMsgTotal = newMessagesTotal;
+                int newMessagesTotal = (int) (browser.Parent.Tag ?? 0);
+                int oldNewMsgTotal = newMessagesTotal;
 
-            if (browser.DocumentTitle.ToLower() == "chat rooms")
-            {
-                browser.Parent.Text = " Lobby ";
-                return;
-            }
-            else if (browser.Url.AbsoluteUri.Contains("/files+transcripts") || browser.Url.AbsoluteUri.Contains("/account/"))
-            {
-                browser.Parent.Text = string.Format(" {0} ", browser.DocumentTitle.Replace("Campfire: ", ""));
-                return;
-            }
-            else
-            {
-                roomTitle = browser.DocumentTitle.Replace("Campfire: ", "");
-                if (roomTitle[0] == '(')
+                if (browser.DocumentTitle.ToLower() == "chat rooms")
                 {
-                    try
+                    browser.Parent.Text = " Lobby ";
+                    return;
+                }
+                else if (browser.Url.AbsoluteUri.Contains("/files+transcripts") ||
+                         browser.Url.AbsoluteUri.Contains("/account/"))
+                {
+                    browser.Parent.Text = string.Format(" {0} ", browser.DocumentTitle.Replace("Campfire: ", ""));
+                    return;
+                }
+                else
+                {
+                    roomTitle = browser.DocumentTitle.Replace("Campfire: ", "");
+                    if (roomTitle[0] == '(')
                     {
-                        if (roomTitle.IndexOf("(") > -1 && roomTitle.IndexOf(")") > -1)
+                        try
                         {
-                            roomTitle = roomTitle.Substring(roomTitle.IndexOf(")") + 1);
+                            if (roomTitle.IndexOf("(") > -1 && roomTitle.IndexOf(")") > -1)
+                            {
+                                roomTitle = roomTitle.Substring(roomTitle.IndexOf(")") + 1);
+                            }
+                        }
+                        catch
+                        {
                         }
                     }
-                    catch
-                    {
-                    }
+                }
+
+                roomTitle = roomTitle.Trim();
+
+                if (newMessagesTotal > 0)
+                {
+                    roomTitle = " (" + newMessagesTotal + ") " + FirstLetterToUpper(roomTitle) +
+                                (roomTitle.Trim().EndsWith("room") ? " " : " room ");
+                }
+                else
+                {
+                    roomTitle = string.Format(" {0} {1}", FirstLetterToUpper(roomTitle),
+                                              roomTitle.Trim().EndsWith("room") ? string.Empty : "room ");
+                }
+
+                if (browser.Parent.Text != roomTitle)
+                    browser.Parent.Text = roomTitle;
+
+                if (newMessagesTotal > oldNewMsgTotal && Focused == false && webBrowser.Focused == false)
+                {
+                    var f = new FLASHWINFO
+                                {
+                                    CbSize = Marshal.SizeOf(typeof (FLASHWINFO)),
+                                    Hwnd = Handle,
+                                    DWFlags = FlashwAll,
+                                    UCount = 2,
+                                    DWTimeout = 0
+                                };
+
+                    FlashWindowEX(ref f);
                 }
             }
-
-            roomTitle = roomTitle.Trim();
-
-            if (newMessagesTotal > 0)
+            catch
             {
-                browser.Parent.Text = " (" + newMessagesTotal + ") " + FirstLetterToUpper(roomTitle) + (roomTitle.Trim().EndsWith("room") ? " " : " room ");
-            }
-            else
-            {
-                browser.Parent.Text = string.Format(" {0} {1}", FirstLetterToUpper(roomTitle), roomTitle.Trim().EndsWith("room") ? string.Empty : "room ");
-            }
-
-            if (newMessagesTotal > oldNewMsgTotal && Focused == false && webBrowser.Focused == false)
-            {
-                var f = new FLASHWINFO
-                            {
-                                CbSize = Marshal.SizeOf(typeof(FLASHWINFO)),
-                                Hwnd = Handle,
-                                DWFlags = FlashwAll,
-                                UCount = 2,
-                                DWTimeout = 0
-                            };
-
-                FlashWindowEX(ref f);
+                // Ignore updatetitle errors
             }
         }
 
