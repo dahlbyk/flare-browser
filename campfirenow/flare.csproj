@@ -178,6 +178,7 @@
     <None Include="Resources\newMsg.ico" />
     <None Include="Resources\noNewMsgs.ICO" />
     <Content Include="Flare48.ico" />
+    <None Include="Resources\notifybg2.jpg" />
     <Content Include="Resources\updates.xml" />
     <Content Include="waiting.htm" />
     <Content Include="indicator2.gif" />

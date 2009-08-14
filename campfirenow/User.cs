@@ -90,6 +90,8 @@ namespace Flare
             key.SetValue("password", Password);
             key.SetValue("nickname", Nickname);
             key.SetValue("notifydelay", NotifyWindowDelay.ToString());
+            if (RoomNames == null)
+                RoomNames = new List<string>();
             key.SetValue("roomnames", string.Join(",", RoomNames.ToArray()));
             key.SetValue("nicknotifications", NotifyOnlyWhenNicknameIsFound ? "1" : "0");
             key.Close();

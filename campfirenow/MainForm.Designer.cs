@@ -59,7 +59,7 @@ namespace Flare
             this.uploadLabel = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.lobbyTabPage = new System.Windows.Forms.TabPage();
-            this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.lobbyWebBrowser = new System.Windows.Forms.WebBrowser();
             this.tabPageCloseBtn = new System.Windows.Forms.Button();
             this.autoUpdater = new Conversive.AutoUpdater.AutoUpdater();
             this.menuStrip1.SuspendLayout();
@@ -82,8 +82,8 @@ namespace Flare
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
             this.lobbyToolStripMenuItem,
-            this.roomsToolStripMenuItem,
-            this.aboutToolStripMenuItem});
+            this.aboutToolStripMenuItem,
+            this.roomsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(984, 24);
@@ -306,7 +306,7 @@ namespace Flare
             // 
             // lobbyTabPage
             // 
-            this.lobbyTabPage.Controls.Add(this.webBrowser);
+            this.lobbyTabPage.Controls.Add(this.lobbyWebBrowser);
             this.lobbyTabPage.Location = new System.Drawing.Point(4, 26);
             this.lobbyTabPage.Name = "lobbyTabPage";
             this.lobbyTabPage.Size = new System.Drawing.Size(976, 610);
@@ -314,19 +314,19 @@ namespace Flare
             this.lobbyTabPage.Text = " Lobby ";
             this.lobbyTabPage.UseVisualStyleBackColor = true;
             // 
-            // webBrowser
+            // lobbyWebBrowser
             // 
-            this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser.IsWebBrowserContextMenuEnabled = false;
-            this.webBrowser.Location = new System.Drawing.Point(0, 0);
-            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser.Name = "webBrowser";
-            this.webBrowser.ScriptErrorsSuppressed = true;
-            this.webBrowser.Size = new System.Drawing.Size(976, 610);
-            this.webBrowser.TabIndex = 1;
-            this.webBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
-            this.webBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.WebBrowserNewWindow);
-            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
+            this.lobbyWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lobbyWebBrowser.IsWebBrowserContextMenuEnabled = false;
+            this.lobbyWebBrowser.Location = new System.Drawing.Point(0, 0);
+            this.lobbyWebBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.lobbyWebBrowser.Name = "lobbyWebBrowser";
+            this.lobbyWebBrowser.ScriptErrorsSuppressed = true;
+            this.lobbyWebBrowser.Size = new System.Drawing.Size(976, 610);
+            this.lobbyWebBrowser.TabIndex = 1;
+            this.lobbyWebBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
+            this.lobbyWebBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.WebBrowserNewWindow);
+            this.lobbyWebBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             // 
             // tabPageCloseBtn
             // 
@@ -417,7 +417,7 @@ namespace Flare
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage lobbyTabPage;
-        private System.Windows.Forms.WebBrowser webBrowser;
+        private System.Windows.Forms.WebBrowser lobbyWebBrowser;
         private System.Windows.Forms.Button tabPageCloseBtn;
         private System.Windows.Forms.ToolStripMenuItem lobbyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem filesTranscriptsToolStripMenuItem;

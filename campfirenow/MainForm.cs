@@ -80,7 +80,7 @@ namespace Flare
                     Text = string.Format("{0} - Flare", account.Name);
 
                     // Start opening the user's Campfire account
-                    webBrowser.Navigate(account.CampfireUri);
+                    lobbyWebBrowser.Navigate(account.CampfireUri);
 
                     // Check for any Flare updates
                     autoUpdater.TryUpdate();
@@ -123,6 +123,22 @@ namespace Flare
                             loadingCover.Visible = false;
                             browser.Navigate("file:///" + Application.StartupPath.Replace("\\", "/") + "/404.htm");
                             return;
+                        }
+                        else if (browser.Document.Url.AbsolutePath == "/")
+                        {
+                            // We're in the lobby, was this supposed to be a room tab?
+                            if (browser != lobbyWebBrowser)  // If the current browser is not the lobby web browser, and is one of the room browsers
+                            {
+                                var doc = (MSHTML.IHTMLDocument2) browser.Document.DomDocument;
+                                if (!string.IsNullOrEmpty(doc.referrer))
+                                {
+                                    if (account.User.RoomNames.Contains(new Uri(doc.referrer).AbsolutePath))
+                                    {
+                                        // We've been logged out of the room, restart flare automatically
+                                        RestartFlare();
+                                    }
+                                }
+                            }
                         }
                 if (
                     browser.Url.AbsoluteUri.Contains(
@@ -192,6 +208,7 @@ namespace Flare
                     loadingCover.Visible = false;
                     UpdateTitle(false, browser);
                     UpdateRoomList();
+                    SaveOpenRooms();
                 }
 
                 timer.Enabled = true;
@@ -200,6 +217,12 @@ namespace Flare
             {
                 FlareException.ShowFriendly(err);
             }
+        }
+
+        private static void RestartFlare()
+        {
+            Process.Start("flare.exe");
+            Process.GetCurrentProcess().Kill();
         }
 
         private void AddTabForNonRoom(Uri nonRoomUri)
@@ -256,7 +279,7 @@ namespace Flare
                 roomsToolStripMenuItem.DropDownItems.Clear();
 
                 foreach (
-                    MSHTML.HTMLAnchorElement link in ((MSHTML.IHTMLDocument2)webBrowser.Document.DomDocument).anchors)
+                    MSHTML.HTMLAnchorElement link in ((MSHTML.IHTMLDocument2)lobbyWebBrowser.Document.DomDocument).anchors)
                 {
                     if (link.id.Contains("room_tab"))
                     {
@@ -317,7 +340,7 @@ namespace Flare
         private void PreparePageHtml(WebBrowser browser)
         {
             // Make sure the Campfire header (tab bar) is hidden
-            if (webBrowser.Document != null)
+            if (lobbyWebBrowser.Document != null)
             {
                 if (browser.Document.GetElementById("header") != null)
                     browser.Document.GetElementById("header").Style = "display: none;";
@@ -381,7 +404,7 @@ namespace Flare
                 if (browser.Parent.Text != roomTitle)
                     browser.Parent.Text = roomTitle;
 
-                if (newMessagesTotal > oldNewMsgTotal && Focused == false && webBrowser.Focused == false)
+                if (newMessagesTotal > oldNewMsgTotal && Focused == false && lobbyWebBrowser.Focused == false)
                 {
                     var f = new FLASHWINFO
                                 {
@@ -479,9 +502,9 @@ namespace Flare
                                         // Show the notification
                                         if (showMessageNotificationToolStripMenuItem.Checked)
                                         {
-                                            var nf = new NotifyForm(Text, lastMessage.Name, lastMessage.TextMessage,
+                                            var notifyForm = new NotifyForm(browser.Parent.Text, lastMessage.Name, lastMessage.TextMessage.Replace("View paste \r\n", string.Empty),
                                                                     this);
-                                            nf.Show();
+                                            notifyForm.ShowInactiveTopmost();
                                         }
 
                                         // Increase the unread message count for this tab
@@ -564,7 +587,6 @@ namespace Flare
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Run closing routine:
-            SaveOpenRooms();
             Application.Exit();
         }
 
@@ -612,8 +634,6 @@ namespace Flare
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Run closing routine:
-            SaveOpenRooms();
             Application.Exit();
         }
 
@@ -693,13 +713,11 @@ namespace Flare
         {
             waitingTimer.Enabled = false;
             isFirstLoad = true;
-            webBrowser.Navigate(account.CampfireLoginUri);
+            lobbyWebBrowser.Navigate(account.CampfireLoginUri);
         }
 
         private void CloseBtn_Click(object sender, EventArgs e)
         {
-            // Run closing routine:
-            SaveOpenRooms();
             Application.Exit();
         }
 
@@ -723,7 +741,7 @@ namespace Flare
         {
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
             account.User.UploadFileToCurrentRoom(account.CampfireUri + "/upload.cgi/room/36735/uploads/new", files[0],
-                                                  webBrowser.Document.Cookie, uploadLabel);
+                                                  lobbyWebBrowser.Document.Cookie, uploadLabel);
         }
 
         private void MainForm_DragEnter(object sender, DragEventArgs e)
@@ -767,6 +785,7 @@ namespace Flare
         {
             var tabPage = tabControl.SelectedTab;
             tabControl.TabPages.Remove(tabPage);
+            SaveOpenRooms();
             var browser = ((WebBrowser) tabPage.Controls[0]);
             // Leave the room
             if (browser.Document != null && browser.Document.Url != null &&
@@ -774,7 +793,6 @@ namespace Flare
             {
                 ((MSHTML.HTMLAnchorElement) browser.Document.GetElementById("leave_link").FirstChild.DomElement).click();
             }
-            SaveOpenRooms();
         }
 
         private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)

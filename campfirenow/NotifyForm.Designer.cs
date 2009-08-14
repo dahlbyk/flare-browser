@@ -38,7 +38,7 @@ namespace Flare
             // 
             // TitleLabel
             // 
-            this.TitleLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
+            this.TitleLabel.BackColor = System.Drawing.Color.Transparent;
             this.TitleLabel.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TitleLabel.ForeColor = System.Drawing.Color.White;
             this.TitleLabel.Location = new System.Drawing.Point(2, 2);
@@ -51,6 +51,7 @@ namespace Flare
             // 
             // PersonLabel
             // 
+            this.PersonLabel.BackColor = System.Drawing.Color.Transparent;
             this.PersonLabel.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PersonLabel.ForeColor = System.Drawing.Color.White;
             this.PersonLabel.Location = new System.Drawing.Point(5, 28);
@@ -67,6 +68,7 @@ namespace Flare
             // 
             // MessageLabel
             // 
+            this.MessageLabel.BackColor = System.Drawing.Color.Transparent;
             this.MessageLabel.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MessageLabel.ForeColor = System.Drawing.Color.White;
             this.MessageLabel.Location = new System.Drawing.Point(5, 45);
@@ -82,6 +84,7 @@ namespace Flare
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
+            this.BackgroundImage = global::Flare.Properties.Resources.notifybg2;
             this.ClientSize = new System.Drawing.Size(366, 101);
             this.Controls.Add(this.MessageLabel);
             this.Controls.Add(this.PersonLabel);
@@ -91,13 +94,12 @@ namespace Flare
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "NotifyForm";
-            this.Opacity = 0.4;
+            this.Opacity = 0.5;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "NotifyForm";
-            this.TopMost = true;
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyForm_MouseClick);
             this.Load += new System.EventHandler(this.NotifyForm_Load);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyForm_MouseClick);
             this.ResumeLayout(false);
 
         }
