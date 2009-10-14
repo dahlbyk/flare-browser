@@ -42,11 +42,11 @@ namespace Flare
             this.filesTranscriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.membersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.roomsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.onlineSupportForumsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.roomsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.OpenBtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -168,13 +168,6 @@ namespace Flare
             this.settingsToolStripMenuItem1.Text = "Settings";
             this.settingsToolStripMenuItem1.Click += new System.EventHandler(this.settingsToolStripMenuItem1_Click);
             // 
-            // roomsToolStripMenuItem
-            // 
-            this.roomsToolStripMenuItem.Name = "roomsToolStripMenuItem";
-            this.roomsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.roomsToolStripMenuItem.Text = "&Rooms";
-            this.roomsToolStripMenuItem.Visible = false;
-            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -205,6 +198,13 @@ namespace Flare
             this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(206, 22);
             this.aboutToolStripMenuItem1.Text = "&About...";
             this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.aboutToolStripMenuItem1_Click);
+            // 
+            // roomsToolStripMenuItem
+            // 
+            this.roomsToolStripMenuItem.Name = "roomsToolStripMenuItem";
+            this.roomsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.roomsToolStripMenuItem.Text = "&Rooms";
+            this.roomsToolStripMenuItem.Visible = false;
             // 
             // notifyIcon
             // 
@@ -371,6 +371,7 @@ namespace Flare
             this.Text = "Starting...";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.DragLeave += new System.EventHandler(this.MainForm_DragLeave);
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);

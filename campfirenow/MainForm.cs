@@ -179,7 +179,7 @@ namespace Flare
                                 value = account.User.Username;
                             ((MSHTML.HTMLInputElement)(browser.Document.GetElementById("password").DomElement)).value =
                                 account.User.Password;
-                            ((MSHTML.HTMLInputElement)(browser.Document.GetElementsByTagName("input")[3].DomElement)).
+                            ((MSHTML.HTMLInputElement)(browser.Document.GetElementsByTagName("input")[4].DomElement)).
                                 click();
                         }
                     }
@@ -211,6 +211,7 @@ namespace Flare
                     SaveOpenRooms();
                 }
 
+                timer.Interval = 10000;
                 timer.Enabled = true;
             }
             catch (Exception err)
@@ -426,34 +427,35 @@ namespace Flare
 
         private void CheckForMessages(WebBrowser browser)
         {
+            Message lastMessage = null;
             try
             {
-                Message lastMessage = null;
                 if (browser.Tag != null)
                     lastMessage = (Message)browser.Tag;
 
                 // Don't check for messages if we're in the lobby:
-                if (browser.Document != null && browser.Document.Url != null && browser.Document.Body != null &&
+                if (browser.Document != null && !browser.IsBusy && browser.Document.Url != null && browser.Document.Body != null &&
                     browser.Document.Url.AbsoluteUri.Contains("/room/"))
                 {
                     // Don't do this if the form is focused.
-                    if (!Focused && !browser.Focused)
+                    if (!Focused || !browser.Focused)
                     {
                         if (lastMessage == null || lastMessage.ElementId.Length == 0)
+                        {
                             try
                             {
                                 foreach (HtmlElement table in browser.Document.Body.All)
                                     if (table.TagName.ToLower().Contains("table"))
                                         foreach (HtmlElement ele in table.All)
-                                            if (((MSHTML.IHTMLElement)ele.DomElement).className != null &&
+                                            if (((MSHTML.IHTMLElement) ele.DomElement).className != null &&
                                                 ele.TagName.ToLower().Contains("tr") &&
-                                                (((MSHTML.IHTMLElement)ele.DomElement).className.Contains(
+                                                (((MSHTML.IHTMLElement) ele.DomElement).className.Contains(
                                                      "text_message") ||
-                                                 ((MSHTML.IHTMLElement)ele.DomElement).className.Contains(
+                                                 ((MSHTML.IHTMLElement) ele.DomElement).className.Contains(
                                                      "enter_message") ||
-                                                 ((MSHTML.IHTMLElement)ele.DomElement).className.Contains(
+                                                 ((MSHTML.IHTMLElement) ele.DomElement).className.Contains(
                                                      "upload_message") ||
-                                                 ((MSHTML.IHTMLElement)ele.DomElement).className.Contains(
+                                                 ((MSHTML.IHTMLElement) ele.DomElement).className.Contains(
                                                      "paste_message")))
                                                 lastMessage = new Message(ele.InnerText, ele.InnerText, ele.Id);
                             }
@@ -461,6 +463,7 @@ namespace Flare
                             {
                                 // ignore any errors while the document is loading here
                             }
+                        }
                         else
                         {
                             // Find the last message's new element (it will change each time the html does:
@@ -550,12 +553,18 @@ namespace Flare
                         }
                     }
                 }
-                browser.Tag = lastMessage;
             }
-            catch
+            catch (Exception e)
             {
-                // do nothing
+                // TODO: stop try..catching such a huge block *and* using a catch-all :( 
+                // Break this down and catch specific errors
             }
+            finally
+            {
+                if (lastMessage != null)
+                    browser.Tag = lastMessage;
+            }
+
 
             // Update the notify icon:
             var resources = new ResourceManager(typeof(Resources));
@@ -573,6 +582,7 @@ namespace Flare
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            timer.Stop();
             foreach (TabPage tabPage in tabControl.TabPages)
             {
                 var browser = (WebBrowser)tabPage.Controls[0];
@@ -582,6 +592,8 @@ namespace Flare
                     UpdateTitle(true, browser);
                 }
             }
+            timer.Interval = 1000;
+            timer.Start();
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -824,7 +836,14 @@ namespace Flare
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             tabPageCloseBtn.Enabled = (tabControl.SelectedIndex != 0);
+            tabControl.SelectedTab.Tag = 0;     // Reset our unread messages count
+            UpdateTitle(true, (WebBrowser)tabControl.SelectedTab.Controls[0]);
+        }
 
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            tabControl.SelectedTab.Tag = 0;     // Reset our unread messages count
+            UpdateTitle(true, (WebBrowser)tabControl.SelectedTab.Controls[0]);
         }
     }
 
