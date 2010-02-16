@@ -31,6 +31,8 @@ namespace Flare
         public String Username { get; set; }
         public String Password { get; set; }
         public Int32 NotifyWindowDelay { get; set; }
+        public bool UseOpenId { get; set; }
+        public string OpenIdUrl { get; set; }
 
         public String Nickname
         {
@@ -62,6 +64,7 @@ namespace Flare
             user.Username = key.GetValue("username", string.Empty).ToString();
             user.Nickname = key.GetValue("nickname", string.Empty).ToString();
             user.Password = key.GetValue("password", string.Empty).ToString();
+            user.OpenIdUrl = key.GetValue("openIdUrl", string.Empty).ToString();
             try
             {
                 user.NotifyWindowDelay = Int32.Parse(key.GetValue("notifydelay", "1500").ToString());
@@ -71,6 +74,7 @@ namespace Flare
                 user.NotifyWindowDelay = 1500;
             }
             user.ShowMessageNotifications = (key.GetValue("showMsgNotify", "1").ToString() == "1");
+            user.UseOpenId = (key.GetValue("useOpenId", "1").ToString() == "1");
             user.RoomNames = new List<string>();
             string[] rooms = key.GetValue("roomnames", "notset").ToString().Split(',');
             foreach (string room in rooms)
@@ -87,6 +91,8 @@ namespace Flare
             RegistryKey key = Registry.CurrentUser.CreateSubKey("Software\\Flare");
             key.SetValue("loginAsGuest", LoginAsGuest ? "1" : "0");
             key.SetValue("username", Username);
+            key.SetValue("useOpenId", UseOpenId ? "1" : "0");
+            key.SetValue("openidurl", OpenIdUrl);
             key.SetValue("password", Password);
             key.SetValue("nickname", Nickname);
             key.SetValue("notifydelay", NotifyWindowDelay.ToString());

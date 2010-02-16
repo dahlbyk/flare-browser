@@ -38,8 +38,17 @@ namespace Flare
 
             if (account.User == null)
                 account.User = new User();
-            account.User.Username = usernameBox.Text;
-            account.User.Password = passwordBox.Text;
+            if (openIdCheckBox.Checked)
+            {
+                account.User.UseOpenId = true;
+                account.User.OpenIdUrl = usernameBox.Text;
+            }
+            else
+            {
+                account.User.UseOpenId = false;
+                account.User.Username = usernameBox.Text;
+                account.User.Password = passwordBox.Text;
+            }
             account.User.Nickname = nicknameBox.Text;
             account.User.NotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
             account.User.NotifyWindowDelay = notifyWindowDelay;
@@ -68,8 +77,16 @@ namespace Flare
             if (account != null)
             {
                 accountName.Text = account.Name;
-                usernameBox.Text = account.User.Username;
-                passwordBox.Text = account.User.Password;
+                if (account.User.UseOpenId)
+                {
+                    openIdCheckBox.Checked = true;
+                    usernameBox.Text = account.User.OpenIdUrl;
+                }
+                else
+                {
+                    usernameBox.Text = account.User.Username;
+                    passwordBox.Text = account.User.Password;
+                }
                 nicknameBox.Text = account.User.Nickname;
                 notificationWindowDelayTextBox.Text = account.User.NotifyWindowDelay.ToString();
                 nickNotifications.Checked = account.User.NotifyOnlyWhenNicknameIsFound;
@@ -97,6 +114,22 @@ namespace Flare
         private void nicknameBox_TextChanged(object sender, EventArgs e)
         {
             nicknameHasBeenManuallySet = true;
+        }
+
+        private void openIdCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (openIdCheckBox.Checked)
+            {
+                passwordBox.Enabled = false;
+                passwordLabel.Enabled = false;
+                usernameLabel.Text = "OpenID:";
+            }
+            else
+            {
+                passwordBox.Enabled = true;
+                passwordLabel.Enabled = true;
+                usernameLabel.Text = "Username:";
+            }
         }
     }
 }

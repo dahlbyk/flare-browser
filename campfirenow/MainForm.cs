@@ -7,6 +7,7 @@ using System.Net;
 using System.Resources;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using Flare.Properties;
 using Microsoft.Win32;
@@ -164,7 +165,9 @@ namespace Flare
                                 {
                                     DialogResult result =
                                         MessageBox.Show(
-                                            string.Format("{0}\n\nWould you like to try to recover your password?", browser.Document.GetElementById("errorMessage").InnerText), "Invalid Login",
+                                            string.Format("{0}\n\nWould you like to try to recover your password?",
+                                                          browser.Document.GetElementById("errorMessage").InnerText),
+                                            "Invalid Login",
                                             MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                                     if (result == DialogResult.Yes)
                                     {
@@ -175,12 +178,22 @@ namespace Flare
                                 }
 
                             // Fill in login info for the user
-                            ((MSHTML.HTMLInputElement)(browser.Document.GetElementById("email_address").DomElement)).
-                                value = account.User.Username;
-                            ((MSHTML.HTMLInputElement)(browser.Document.GetElementById("password").DomElement)).value =
-                                account.User.Password;
-                            ((MSHTML.HTMLInputElement)(browser.Document.GetElementsByTagName("input")[4].DomElement)).
-                                click();
+                            if (account.User.UseOpenId)
+                            {
+                                browser.Navigate(string.Format("javascript:Login.loginWithOpenId(); $('openid_identifier').value='{0}'; $('openid_identifier').form.submit(); void(0);", account.User.OpenIdUrl));
+                                Thread.Sleep(3000);
+                                loadingCover.Visible = false;
+                            }
+                            else
+                            {
+                                ((MSHTML.HTMLInputElement)(browser.Document.GetElementById("username").DomElement)).
+                                    value = account.User.Username;
+                                ((MSHTML.HTMLInputElement)(browser.Document.GetElementById("password").DomElement)).
+                                    value =
+                                    account.User.Password;
+                                ((MSHTML.HTMLInputElement)(browser.Document.GetElementById("username").DomElement)).
+                                    form.submit();
+                            }
                         }
                     }
                     else
@@ -345,6 +358,8 @@ namespace Flare
             {
                 if (browser.Document.GetElementById("header") != null)
                     browser.Document.GetElementById("header").Style = "display: none;";
+                if (browser.Document.GetElementById("open_bar") != null)
+                    browser.Document.GetElementById("open_bar").Style = "display: none;";
                 if (browser.Document.GetElementById("sidebar") != null)
                     browser.Document.GetElementById("sidebar").Style = "top: 5px;";
             }

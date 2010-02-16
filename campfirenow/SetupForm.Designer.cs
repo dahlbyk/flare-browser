@@ -35,9 +35,9 @@ namespace Flare
             this.accountTab = new System.Windows.Forms.TabPage();
             this.userDetailsGroupBox = new System.Windows.Forms.GroupBox();
             this.passwordBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.passwordLabel = new System.Windows.Forms.Label();
             this.usernameBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.usernameLabel = new System.Windows.Forms.Label();
             this.accountDetailsGroupBox = new System.Windows.Forms.GroupBox();
             this.sslSupportLabel = new System.Windows.Forms.Label();
             this.accountNameLabel = new System.Windows.Forms.Label();
@@ -53,6 +53,8 @@ namespace Flare
             this.nickNotifications = new System.Windows.Forms.CheckBox();
             this.nicknameBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.openIdCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.accountTab.SuspendLayout();
             this.userDetailsGroupBox.SuspendLayout();
@@ -65,7 +67,7 @@ namespace Flare
             // okBtn
             // 
             this.okBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.okBtn.Location = new System.Drawing.Point(197, 220);
+            this.okBtn.Location = new System.Drawing.Point(197, 244);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(75, 23);
             this.okBtn.TabIndex = 3;
@@ -77,7 +79,7 @@ namespace Flare
             // 
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cancelBtn.Location = new System.Drawing.Point(278, 220);
+            this.cancelBtn.Location = new System.Drawing.Point(278, 244);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
             this.cancelBtn.TabIndex = 4;
@@ -92,7 +94,7 @@ namespace Flare
             this.tabControl.Location = new System.Drawing.Point(4, 6);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(349, 208);
+            this.tabControl.Size = new System.Drawing.Size(349, 232);
             this.tabControl.TabIndex = 11;
             // 
             // accountTab
@@ -102,20 +104,22 @@ namespace Flare
             this.accountTab.Location = new System.Drawing.Point(4, 22);
             this.accountTab.Name = "accountTab";
             this.accountTab.Padding = new System.Windows.Forms.Padding(3);
-            this.accountTab.Size = new System.Drawing.Size(341, 182);
+            this.accountTab.Size = new System.Drawing.Size(341, 206);
             this.accountTab.TabIndex = 0;
             this.accountTab.Text = "Account";
             this.accountTab.UseVisualStyleBackColor = true;
             // 
             // userDetailsGroupBox
             // 
+            this.userDetailsGroupBox.Controls.Add(this.label7);
+            this.userDetailsGroupBox.Controls.Add(this.openIdCheckBox);
             this.userDetailsGroupBox.Controls.Add(this.passwordBox);
-            this.userDetailsGroupBox.Controls.Add(this.label4);
+            this.userDetailsGroupBox.Controls.Add(this.passwordLabel);
             this.userDetailsGroupBox.Controls.Add(this.usernameBox);
-            this.userDetailsGroupBox.Controls.Add(this.label3);
+            this.userDetailsGroupBox.Controls.Add(this.usernameLabel);
             this.userDetailsGroupBox.Location = new System.Drawing.Point(7, 95);
             this.userDetailsGroupBox.Name = "userDetailsGroupBox";
-            this.userDetailsGroupBox.Size = new System.Drawing.Size(328, 81);
+            this.userDetailsGroupBox.Size = new System.Drawing.Size(328, 105);
             this.userDetailsGroupBox.TabIndex = 15;
             this.userDetailsGroupBox.TabStop = false;
             this.userDetailsGroupBox.Text = "Your details";
@@ -123,42 +127,42 @@ namespace Flare
             // passwordBox
             // 
             this.passwordBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.passwordBox.Location = new System.Drawing.Point(93, 45);
+            this.passwordBox.Location = new System.Drawing.Point(93, 71);
             this.passwordBox.Name = "passwordBox";
             this.passwordBox.Size = new System.Drawing.Size(130, 20);
             this.passwordBox.TabIndex = 14;
             this.passwordBox.UseSystemPasswordChar = true;
             // 
-            // label4
+            // passwordLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(10, 48);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(57, 17);
-            this.label4.TabIndex = 16;
-            this.label4.Text = "Password:";
-            this.label4.UseCompatibleTextRendering = true;
+            this.passwordLabel.AutoSize = true;
+            this.passwordLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.passwordLabel.Location = new System.Drawing.Point(10, 74);
+            this.passwordLabel.Name = "passwordLabel";
+            this.passwordLabel.Size = new System.Drawing.Size(57, 17);
+            this.passwordLabel.TabIndex = 16;
+            this.passwordLabel.Text = "Password:";
+            this.passwordLabel.UseCompatibleTextRendering = true;
             // 
             // usernameBox
             // 
             this.usernameBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.usernameBox.Location = new System.Drawing.Point(93, 19);
+            this.usernameBox.Location = new System.Drawing.Point(93, 45);
             this.usernameBox.Name = "usernameBox";
             this.usernameBox.Size = new System.Drawing.Size(191, 20);
             this.usernameBox.TabIndex = 13;
             this.usernameBox.TextChanged += new System.EventHandler(this.usernameBox_TextChanged);
             // 
-            // label3
+            // usernameLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(10, 22);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(36, 17);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "Email:";
-            this.label3.UseCompatibleTextRendering = true;
+            this.usernameLabel.AutoSize = true;
+            this.usernameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.usernameLabel.Location = new System.Drawing.Point(10, 48);
+            this.usernameLabel.Name = "usernameLabel";
+            this.usernameLabel.Size = new System.Drawing.Size(60, 17);
+            this.usernameLabel.TabIndex = 15;
+            this.usernameLabel.Text = "Username:";
+            this.usernameLabel.UseCompatibleTextRendering = true;
             // 
             // accountDetailsGroupBox
             // 
@@ -228,7 +232,7 @@ namespace Flare
             this.optionsTab.Location = new System.Drawing.Point(4, 22);
             this.optionsTab.Name = "optionsTab";
             this.optionsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.optionsTab.Size = new System.Drawing.Size(341, 182);
+            this.optionsTab.Size = new System.Drawing.Size(341, 206);
             this.optionsTab.TabIndex = 1;
             this.optionsTab.Text = "Notifications";
             this.optionsTab.UseVisualStyleBackColor = true;
@@ -240,7 +244,7 @@ namespace Flare
             this.notificationWindowGroupBox.Controls.Add(this.label1);
             this.notificationWindowGroupBox.Location = new System.Drawing.Point(7, 105);
             this.notificationWindowGroupBox.Name = "notificationWindowGroupBox";
-            this.notificationWindowGroupBox.Size = new System.Drawing.Size(328, 71);
+            this.notificationWindowGroupBox.Size = new System.Drawing.Size(328, 84);
             this.notificationWindowGroupBox.TabIndex = 1;
             this.notificationWindowGroupBox.TabStop = false;
             this.notificationWindowGroupBox.Text = "Notification window";
@@ -317,13 +321,32 @@ namespace Flare
             this.label6.Text = "Nickname:";
             this.label6.UseCompatibleTextRendering = true;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 21);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(47, 13);
+            this.label7.TabIndex = 21;
+            this.label7.Text = "OpenID:";
+            // 
+            // openIdCheckBox
+            // 
+            this.openIdCheckBox.Location = new System.Drawing.Point(93, 18);
+            this.openIdCheckBox.Name = "openIdCheckBox";
+            this.openIdCheckBox.Size = new System.Drawing.Size(174, 21);
+            this.openIdCheckBox.TabIndex = 20;
+            this.openIdCheckBox.Text = "This account uses OpenID";
+            this.openIdCheckBox.UseVisualStyleBackColor = true;
+            this.openIdCheckBox.CheckedChanged += new System.EventHandler(this.openIdCheckBox_CheckedChanged);
+            // 
             // SetupForm
             // 
             this.AcceptButton = this.okBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelBtn;
-            this.ClientSize = new System.Drawing.Size(358, 249);
+            this.ClientSize = new System.Drawing.Size(358, 274);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.okBtn);
@@ -367,9 +390,9 @@ namespace Flare
         private System.Windows.Forms.Label accountNameLabel;
         private System.Windows.Forms.GroupBox userDetailsGroupBox;
         private System.Windows.Forms.TextBox passwordBox;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.TextBox usernameBox;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label usernameLabel;
         private System.Windows.Forms.GroupBox nicknameGroupBox;
         private System.Windows.Forms.CheckBox nickNotifications;
         private System.Windows.Forms.TextBox nicknameBox;
@@ -378,5 +401,7 @@ namespace Flare
         private System.Windows.Forms.TextBox notificationWindowDelayTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox openIdCheckBox;
     }
 }
