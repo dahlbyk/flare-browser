@@ -155,7 +155,11 @@ namespace Flare
                 if (isFirstLoad)
                 {
                     //Are we on the login page?
-                    if (browser.Url.AbsoluteUri.Contains(".campfirenow.com/login"))
+                    if (!browser.Url.AbsoluteUri.Contains(".campfirenow.com"))
+                    {
+                        // We've left the campfire site. We may be trying to login via an external openid login page.
+                    }
+                    else if (browser.Url.AbsoluteUri.Contains(".campfirenow.com/login"))
                     {
                         // make sure there's no error messages:
                         if (browser.Document != null)
