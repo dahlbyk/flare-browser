@@ -92,6 +92,8 @@ namespace Flare
             key.SetValue("loginAsGuest", LoginAsGuest ? "1" : "0");
             key.SetValue("username", Username);
             key.SetValue("useOpenId", UseOpenId ? "1" : "0");
+            if (OpenIdUrl == null)
+                OpenIdUrl = string.Empty;
             key.SetValue("openidurl", OpenIdUrl);
             key.SetValue("password", Password);
             key.SetValue("nickname", Nickname);
