@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace Flare
 {
@@ -62,6 +64,8 @@ namespace Flare
             NewNotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
             NewNotifyWindowDelay = notifyWindowDelay;
 
+            SetStartupSituation(startUpCheckbox.Checked);
+
             Close();
         }
 
@@ -91,6 +95,9 @@ namespace Flare
                 notificationWindowDelayTextBox.Text = account.User.NotifyWindowDelay.ToString();
                 nickNotifications.Checked = account.User.NotifyOnlyWhenNicknameIsFound;
                 useSSL.Checked = account.UseSsl;
+                minimiseAtStartupCheckBox.Checked = account.User.MinimiseDuringStartup;
+                startUpCheckbox.Checked = GetStartupSituation();
+                dontQuitCheckBox.Checked = account.User.MinimiseInsteadOfQuitting;
 
                 NewAccountName = accountName.Text;
                 NewUsername = usernameBox.Text;
@@ -100,6 +107,40 @@ namespace Flare
             }
             else
                 account = new Account();
+        }
+
+        private static bool GetStartupSituation()
+        {
+            // If the user has an entry in the startup directory
+            var runKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (!string.IsNullOrEmpty(runKey.GetValue("Flare", string.Empty).ToString())) return true;
+
+            // Or the user has an entry in the startup registry entry
+            var startupShortcut = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"Microsoft\Windows\Start Menu\Programs\Startup\Flare.lnk");
+            if (File.Exists(startupShortcut)) return true;
+
+            startupShortcut = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Flare.lnk");
+            if (File.Exists(startupShortcut)) return true;
+
+            return false;
+        }
+
+        private static void SetStartupSituation(bool startup)
+        {
+            var runKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (startup)
+                runKey.SetValue("Flare", Application.ExecutablePath);
+            else if (runKey.GetValue("Flare", null) != null)
+                runKey.DeleteValue("Flare");
+
+            // Delete the older method of starting up if it's there
+            var startupShortcut = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Flare.lnk");
+            if (File.Exists(startupShortcut))
+                File.Delete(startupShortcut);
+
+            startupShortcut = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Flare.lnk");
+            if (File.Exists(startupShortcut))
+                File.Delete(startupShortcut);
         }
 
         private void usernameBox_TextChanged(object sender, EventArgs e)

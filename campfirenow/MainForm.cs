@@ -43,7 +43,7 @@ namespace Flare
         public String ProgressLabelText { get; set; }
 
         [DllImport("user32.dll")]
-        public static extern bool FlashWindowEX([MarshalAs(UnmanagedType.Struct)] ref FLASHWINFO pfwi);
+        public static extern bool FlashWindowEx([MarshalAs(UnmanagedType.Struct)] ref FLASHWINFO pfwi);
 
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -82,6 +82,9 @@ namespace Flare
 
                     // Start opening the user's Campfire account
                     lobbyWebBrowser.Navigate(account.CampfireUri);
+
+                    if (account.User.MinimiseDuringStartup)
+                        Minimise();
 
                     // Check for any Flare updates
                     autoUpdater.TryUpdate();
@@ -369,6 +372,8 @@ namespace Flare
             }
         }
 
+        private int oldNewMsgTotal = 0;
+
         private void UpdateTitle(bool checkForNewMessages, WebBrowser browser)
         {
             try
@@ -377,8 +382,7 @@ namespace Flare
                     CheckForMessages(browser);
 
                 int newMessagesTotal = (int) (browser.Parent.Tag ?? 0);
-                int oldNewMsgTotal = newMessagesTotal;
-
+                
                 if (browser.DocumentTitle.ToLower() == "chat rooms")
                 {
                     browser.Parent.Text = " Lobby ";
@@ -426,16 +430,18 @@ namespace Flare
 
                 if (newMessagesTotal > oldNewMsgTotal && Focused == false && lobbyWebBrowser.Focused == false)
                 {
+                    oldNewMsgTotal = newMessagesTotal;
+
                     var f = new FLASHWINFO
                                 {
                                     CbSize = Marshal.SizeOf(typeof (FLASHWINFO)),
                                     Hwnd = Handle,
-                                    DWFlags = FlashwAll,
+                                    DWFlags = FlashwTimernofg,
                                     UCount = 2,
                                     DWTimeout = 0
                                 };
 
-                    FlashWindowEX(ref f);
+                    FlashWindowEx(ref f);
                 }
             }
             catch
@@ -671,12 +677,15 @@ namespace Flare
         private void MainForm_Resize(object sender, EventArgs e)
         {
             //if the form has been resised to minimize the hide the form
-            if (WindowState == FormWindowState.Minimized)
-            {
-                Hide();
-                notifyIcon.Visible = true;
-                notifyIcon.Text = Text;
-            }
+            if (WindowState == FormWindowState.Minimized && (!Environment.OSVersion.VersionString.StartsWith("6.1") && !Environment.OSVersion.VersionString.StartsWith("7.")))
+                Minimise();
+        }
+
+        private void Minimise()
+        {
+            Hide();
+            notifyIcon.Visible = true;
+            notifyIcon.Text = Text;
         }
 
         public void ShowFormHideIcon()
@@ -863,6 +872,15 @@ namespace Flare
         {
             tabControl.SelectedTab.Tag = 0;     // Reset our unread messages count
             UpdateTitle(true, (WebBrowser)tabControl.SelectedTab.Controls[0]);
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (account.User.MinimiseInsteadOfQuitting)
+            {
+                Minimise();
+                e.Cancel = true;
+            }
         }
     }
 

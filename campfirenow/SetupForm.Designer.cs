@@ -34,6 +34,8 @@ namespace Flare
             this.tabControl = new System.Windows.Forms.TabControl();
             this.accountTab = new System.Windows.Forms.TabPage();
             this.userDetailsGroupBox = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.openIdCheckBox = new System.Windows.Forms.CheckBox();
             this.passwordBox = new System.Windows.Forms.TextBox();
             this.passwordLabel = new System.Windows.Forms.Label();
             this.usernameBox = new System.Windows.Forms.TextBox();
@@ -53,8 +55,11 @@ namespace Flare
             this.nickNotifications = new System.Windows.Forms.CheckBox();
             this.nicknameBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.openIdCheckBox = new System.Windows.Forms.CheckBox();
+            this.startUpTabPage = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.startUpCheckbox = new System.Windows.Forms.CheckBox();
+            this.minimiseAtStartupCheckBox = new System.Windows.Forms.CheckBox();
+            this.dontQuitCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.accountTab.SuspendLayout();
             this.userDetailsGroupBox.SuspendLayout();
@@ -62,6 +67,8 @@ namespace Flare
             this.optionsTab.SuspendLayout();
             this.notificationWindowGroupBox.SuspendLayout();
             this.nicknameGroupBox.SuspendLayout();
+            this.startUpTabPage.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // okBtn
@@ -91,6 +98,7 @@ namespace Flare
             // 
             this.tabControl.Controls.Add(this.accountTab);
             this.tabControl.Controls.Add(this.optionsTab);
+            this.tabControl.Controls.Add(this.startUpTabPage);
             this.tabControl.Location = new System.Drawing.Point(4, 6);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -123,6 +131,25 @@ namespace Flare
             this.userDetailsGroupBox.TabIndex = 15;
             this.userDetailsGroupBox.TabStop = false;
             this.userDetailsGroupBox.Text = "Your details";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 21);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(47, 13);
+            this.label7.TabIndex = 21;
+            this.label7.Text = "OpenID:";
+            // 
+            // openIdCheckBox
+            // 
+            this.openIdCheckBox.Location = new System.Drawing.Point(93, 18);
+            this.openIdCheckBox.Name = "openIdCheckBox";
+            this.openIdCheckBox.Size = new System.Drawing.Size(174, 21);
+            this.openIdCheckBox.TabIndex = 20;
+            this.openIdCheckBox.Text = "This account uses OpenID";
+            this.openIdCheckBox.UseVisualStyleBackColor = true;
+            this.openIdCheckBox.CheckedChanged += new System.EventHandler(this.openIdCheckBox_CheckedChanged);
             // 
             // passwordBox
             // 
@@ -321,24 +348,55 @@ namespace Flare
             this.label6.Text = "Nickname:";
             this.label6.UseCompatibleTextRendering = true;
             // 
-            // label7
+            // startUpTabPage
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 21);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(47, 13);
-            this.label7.TabIndex = 21;
-            this.label7.Text = "OpenID:";
+            this.startUpTabPage.Controls.Add(this.groupBox1);
+            this.startUpTabPage.Location = new System.Drawing.Point(4, 22);
+            this.startUpTabPage.Name = "startUpTabPage";
+            this.startUpTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.startUpTabPage.Size = new System.Drawing.Size(341, 206);
+            this.startUpTabPage.TabIndex = 2;
+            this.startUpTabPage.Text = "Starting && closing Flare";
+            this.startUpTabPage.UseVisualStyleBackColor = true;
             // 
-            // openIdCheckBox
+            // groupBox1
             // 
-            this.openIdCheckBox.Location = new System.Drawing.Point(93, 18);
-            this.openIdCheckBox.Name = "openIdCheckBox";
-            this.openIdCheckBox.Size = new System.Drawing.Size(174, 21);
-            this.openIdCheckBox.TabIndex = 20;
-            this.openIdCheckBox.Text = "This account uses OpenID";
-            this.openIdCheckBox.UseVisualStyleBackColor = true;
-            this.openIdCheckBox.CheckedChanged += new System.EventHandler(this.openIdCheckBox_CheckedChanged);
+            this.groupBox1.Controls.Add(this.dontQuitCheckBox);
+            this.groupBox1.Controls.Add(this.minimiseAtStartupCheckBox);
+            this.groupBox1.Controls.Add(this.startUpCheckbox);
+            this.groupBox1.Location = new System.Drawing.Point(6, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(328, 118);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Starting && closing Flare";
+            // 
+            // startUpCheckbox
+            // 
+            this.startUpCheckbox.Location = new System.Drawing.Point(6, 19);
+            this.startUpCheckbox.Name = "startUpCheckbox";
+            this.startUpCheckbox.Size = new System.Drawing.Size(316, 33);
+            this.startUpCheckbox.TabIndex = 14;
+            this.startUpCheckbox.Text = "Always start Flare when I login to my computer";
+            this.startUpCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // minimiseAtStartupCheckBox
+            // 
+            this.minimiseAtStartupCheckBox.Location = new System.Drawing.Point(6, 47);
+            this.minimiseAtStartupCheckBox.Name = "minimiseAtStartupCheckBox";
+            this.minimiseAtStartupCheckBox.Size = new System.Drawing.Size(316, 33);
+            this.minimiseAtStartupCheckBox.TabIndex = 15;
+            this.minimiseAtStartupCheckBox.Text = "Minimise Flare to a tray icon during startup";
+            this.minimiseAtStartupCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // dontQuitCheckBox
+            // 
+            this.dontQuitCheckBox.Location = new System.Drawing.Point(6, 75);
+            this.dontQuitCheckBox.Name = "dontQuitCheckBox";
+            this.dontQuitCheckBox.Size = new System.Drawing.Size(316, 33);
+            this.dontQuitCheckBox.TabIndex = 16;
+            this.dontQuitCheckBox.Text = "Minimise Flare when I close the window (instead of quitting)";
+            this.dontQuitCheckBox.UseVisualStyleBackColor = true;
             // 
             // SetupForm
             // 
@@ -371,6 +429,8 @@ namespace Flare
             this.notificationWindowGroupBox.PerformLayout();
             this.nicknameGroupBox.ResumeLayout(false);
             this.nicknameGroupBox.PerformLayout();
+            this.startUpTabPage.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -403,5 +463,10 @@ namespace Flare
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox openIdCheckBox;
+        private System.Windows.Forms.TabPage startUpTabPage;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox dontQuitCheckBox;
+        private System.Windows.Forms.CheckBox minimiseAtStartupCheckBox;
+        private System.Windows.Forms.CheckBox startUpCheckbox;
     }
 }

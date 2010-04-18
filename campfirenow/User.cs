@@ -33,6 +33,8 @@ namespace Flare
         public Int32 NotifyWindowDelay { get; set; }
         public bool UseOpenId { get; set; }
         public string OpenIdUrl { get; set; }
+        public bool MinimiseDuringStartup { get; set; }
+        public bool MinimiseInsteadOfQuitting { get; set; }
 
         public String Nickname
         {
@@ -65,6 +67,8 @@ namespace Flare
             user.Nickname = key.GetValue("nickname", string.Empty).ToString();
             user.Password = key.GetValue("password", string.Empty).ToString();
             user.OpenIdUrl = key.GetValue("openIdUrl", string.Empty).ToString();
+            user.MinimiseDuringStartup = (key.GetValue("min_startup", "0").ToString() == "1");
+            user.MinimiseInsteadOfQuitting = (key.GetValue("min_quit", "0").ToString() == "1");
             try
             {
                 user.NotifyWindowDelay = Int32.Parse(key.GetValue("notifydelay", "1500").ToString());
@@ -97,6 +101,8 @@ namespace Flare
             key.SetValue("openidurl", OpenIdUrl);
             key.SetValue("password", Password);
             key.SetValue("nickname", Nickname);
+            key.SetValue("min_startup", MinimiseDuringStartup);
+            key.SetValue("min_quit", MinimiseInsteadOfQuitting);
             key.SetValue("notifydelay", NotifyWindowDelay.ToString());
             if (RoomNames == null)
                 RoomNames = new List<string>();
