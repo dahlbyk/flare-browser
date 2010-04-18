@@ -28,6 +28,8 @@ namespace Flare
         private Boolean isInStartUpMode;
         private String roomTitle = String.Empty;
 
+        private bool forcedShutdown;
+
         public MainForm(string[] args)
         {
             InitializeComponent();
@@ -47,6 +49,17 @@ namespace Flare
 
 
         private void MainForm_Load(object sender, EventArgs e)
+        {
+            Startup();
+
+            if (account.User.MinimiseDuringStartup)
+                WindowState = FormWindowState.Minimized;
+
+            // Check for any Flare updates
+            autoUpdater.TryUpdate();
+        }
+
+        private void Startup()
         {
             try
             {
@@ -83,11 +96,7 @@ namespace Flare
                     // Start opening the user's Campfire account
                     lobbyWebBrowser.Navigate(account.CampfireUri);
 
-                    if (account.User.MinimiseDuringStartup)
-                        Minimise();
 
-                    // Check for any Flare updates
-                    autoUpdater.TryUpdate();
                 }
             }
             catch (Exception err)
@@ -658,26 +667,28 @@ namespace Flare
                 setupForm.NewPassword != account.User.Password ||
                 setupForm.NewNickname != account.User.Nickname ||
                 setupForm.NewNotifyOnlyWhenNicknameIsFound != account.User.NotifyOnlyWhenNicknameIsFound ||
-                setupForm.NewNotifyWindowDelay != account.User.NotifyWindowDelay)
+                setupForm.NewNotifyWindowDelay != account.User.NotifyWindowDelay ||
+                setupForm.MinimiseInsteadOfQuitting != account.User.MinimiseInsteadOfQuitting)
             {
                 for (int i = 1; i < tabControl.TabPages.Count; i++)
                 {
                     tabControl.TabPages.RemoveAt(i);
                     i--;
                 }
-                MainForm_Load(sender, e);
+                Startup();
             }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            forcedShutdown = true;
             Application.Exit();
         }
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            //if the form has been resised to minimize the hide the form
-            if (WindowState == FormWindowState.Minimized && (!Environment.OSVersion.VersionString.StartsWith("6.1") && !Environment.OSVersion.VersionString.StartsWith("7.")))
+            // if the form has been resized to minimize the hide the form
+            if (WindowState == FormWindowState.Minimized && Environment.OSVersion.Version.Major < 6)
                 Minimise();
         }
 
@@ -866,35 +877,39 @@ namespace Flare
             tabPageCloseBtn.Enabled = (tabControl.SelectedIndex != 0);
             tabControl.SelectedTab.Tag = 0;     // Reset our unread messages count
             UpdateTitle(true, (WebBrowser)tabControl.SelectedTab.Controls[0]);
+            FocusInputBox();
+        }
+
+        private void FocusInputBox()
+        {
+            var browser = ((WebBrowser) tabControl.SelectedTab.Controls[0]);
+            if (!isFirstLoad && browser.Document != null && !browser.IsBusy && browser.Document.Url.AbsoluteUri.Contains("/room/"))
+                browser.Navigate("javascript:try{$('input').focus();void(0);}catch(e){}");
         }
 
         private void MainForm_Activated(object sender, EventArgs e)
         {
             tabControl.SelectedTab.Tag = 0;     // Reset our unread messages count
             UpdateTitle(true, (WebBrowser)tabControl.SelectedTab.Controls[0]);
+            tabControl.SelectedTab.Controls[0].Focus();
+            FocusInputBox();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (account.User.MinimiseInsteadOfQuitting)
+            if (!forcedShutdown && account.User.MinimiseInsteadOfQuitting)
             {
-                Minimise();
+                if (Environment.OSVersion.Version.Major < 6)    // if we're not on Vista or above:
+                    Minimise();
+                else
+                    WindowState = FormWindowState.Minimized;
                 e.Cancel = true;
             }
         }
-    }
 
-    public class Message
-    {
-        public Message(string name, string message, string elementId)
+        private void makeADonationToFlareToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Name = name;
-            TextMessage = message;
-            ElementId = elementId;
+            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ADLAU6DWJQVRY");
         }
-
-        public String Name { get; set; }
-        public String TextMessage { get; set; }
-        public String ElementId { get; set; }
     }
 }

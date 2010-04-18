@@ -61,6 +61,8 @@ namespace Flare
             this.lobbyTabPage = new System.Windows.Forms.TabPage();
             this.lobbyWebBrowser = new System.Windows.Forms.WebBrowser();
             this.tabPageCloseBtn = new System.Windows.Forms.Button();
+            this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.makeADonationToFlareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdater = new Conversive.AutoUpdater.AutoUpdater();
             this.menuStrip1.SuspendLayout();
             this.notifyContextMenu.SuspendLayout();
@@ -83,7 +85,8 @@ namespace Flare
             this.settingsToolStripMenuItem,
             this.lobbyToolStripMenuItem,
             this.aboutToolStripMenuItem,
-            this.roomsToolStripMenuItem});
+            this.roomsToolStripMenuItem,
+            this.donateToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(984, 24);
@@ -340,6 +343,21 @@ namespace Flare
             this.tabPageCloseBtn.UseVisualStyleBackColor = true;
             this.tabPageCloseBtn.Click += new System.EventHandler(this.tabPageCloseBtn_Click);
             // 
+            // donateToolStripMenuItem
+            // 
+            this.donateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.makeADonationToFlareToolStripMenuItem});
+            this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
+            this.donateToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.donateToolStripMenuItem.Text = "Donate";
+            // 
+            // makeADonationToFlareToolStripMenuItem
+            // 
+            this.makeADonationToFlareToolStripMenuItem.Name = "makeADonationToFlareToolStripMenuItem";
+            this.makeADonationToFlareToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.makeADonationToFlareToolStripMenuItem.Text = "Make a donation to Flare";
+            this.makeADonationToFlareToolStripMenuItem.Click += new System.EventHandler(this.makeADonationToFlareToolStripMenuItem_Click);
+            // 
             // autoUpdater
             // 
             this.autoUpdater.AutoDownload = false;
@@ -425,6 +443,8 @@ namespace Flare
         private System.Windows.Forms.ToolStripMenuItem filesTranscriptsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem membersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem makeADonationToFlareToolStripMenuItem;
     }
 }
 

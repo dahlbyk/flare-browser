@@ -20,8 +20,9 @@ namespace Flare
         public String NewPassword { get; set; }
         public String NewAccountName { get; set; }
         public String NewNickname { get; set; }
-        public Boolean NewNotifyOnlyWhenNicknameIsFound { get; set; }
+        public bool NewNotifyOnlyWhenNicknameIsFound { get; set; }
         public Int32 NewNotifyWindowDelay { get; set; }
+        public bool MinimiseInsteadOfQuitting { get; set; }
 
         private void okBtn_Click(object sender, EventArgs e)
         {
@@ -51,6 +52,8 @@ namespace Flare
                 account.User.Username = usernameBox.Text;
                 account.User.Password = passwordBox.Text;
             }
+            account.User.MinimiseDuringStartup = minimiseAtStartupCheckBox.Checked;
+            account.User.MinimiseInsteadOfQuitting = dontQuitCheckBox.Checked;
             account.User.Nickname = nicknameBox.Text;
             account.User.NotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
             account.User.NotifyWindowDelay = notifyWindowDelay;
@@ -63,6 +66,7 @@ namespace Flare
             NewNickname = nicknameBox.Text;
             NewNotifyOnlyWhenNicknameIsFound = nickNotifications.Checked;
             NewNotifyWindowDelay = notifyWindowDelay;
+            MinimiseInsteadOfQuitting = account.User.MinimiseInsteadOfQuitting;
 
             SetStartupSituation(startUpCheckbox.Checked);
 
@@ -138,7 +142,7 @@ namespace Flare
             if (File.Exists(startupShortcut))
                 File.Delete(startupShortcut);
 
-            startupShortcut = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Flare.lnk");
+            startupShortcut = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"Microsoft\Windows\Start Menu\Programs\Startup\Flare.lnk");
             if (File.Exists(startupShortcut))
                 File.Delete(startupShortcut);
         }

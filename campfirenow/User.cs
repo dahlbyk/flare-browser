@@ -65,10 +65,10 @@ namespace Flare
             user.LoginAsGuest = (key.GetValue("loginAsGuest", "0").ToString() == "1");
             user.Username = key.GetValue("username", string.Empty).ToString();
             user.Nickname = key.GetValue("nickname", string.Empty).ToString();
-            user.Password = key.GetValue("password", string.Empty).ToString();
+            user.Password = DecryptPassword(key);
             user.OpenIdUrl = key.GetValue("openIdUrl", string.Empty).ToString();
-            user.MinimiseDuringStartup = (key.GetValue("min_startup", "0").ToString() == "1");
-            user.MinimiseInsteadOfQuitting = (key.GetValue("min_quit", "0").ToString() == "1");
+            user.MinimiseDuringStartup = (key.GetValue("minstartup", "0").ToString() == "1");
+            user.MinimiseInsteadOfQuitting = (key.GetValue("minquit", "0").ToString() == "1");
             try
             {
                 user.NotifyWindowDelay = Int32.Parse(key.GetValue("notifydelay", "1500").ToString());
@@ -90,6 +90,29 @@ namespace Flare
             return user;
         }
 
+        private static string DecryptPassword(RegistryKey key)
+        {
+            var salt = key.GetValue("usersalt", string.Empty).ToString();
+            if (string.IsNullOrEmpty(salt))
+            {
+                // The user is storing their password without encryption, probably from an older version of Flare
+                // Encrypt the password for them and save it back
+                EncryptAndSavePassword(key, key.GetValue("password", string.Empty).ToString());
+                salt = key.GetValue("usersalt", string.Empty).ToString();
+            }
+            var password = (byte[]) key.GetValue("password", new byte[0]);
+            return PasswordProtector.Unprotect(password, salt);
+        }
+
+        private static void EncryptAndSavePassword(RegistryKey key, string password)
+        {
+            var saltGuid = Guid.NewGuid().ToString();
+            key.SetValue("usersalt", saltGuid);
+            var encryptedPassword = PasswordProtector.Protect(password, saltGuid);
+            key.DeleteValue("password", false);
+            key.SetValue("password", encryptedPassword, RegistryValueKind.Binary);
+        }
+
         public void Save()
         {
             RegistryKey key = Registry.CurrentUser.CreateSubKey("Software\\Flare");
@@ -99,10 +122,10 @@ namespace Flare
             if (OpenIdUrl == null)
                 OpenIdUrl = string.Empty;
             key.SetValue("openidurl", OpenIdUrl);
-            key.SetValue("password", Password);
+            EncryptAndSavePassword(key, Password);
             key.SetValue("nickname", Nickname);
-            key.SetValue("min_startup", MinimiseDuringStartup);
-            key.SetValue("min_quit", MinimiseInsteadOfQuitting);
+            key.SetValue("minstartup", MinimiseDuringStartup ? "1" : "0");
+            key.SetValue("minquit", MinimiseInsteadOfQuitting ? "1" : "0");
             key.SetValue("notifydelay", NotifyWindowDelay.ToString());
             if (RoomNames == null)
                 RoomNames = new List<string>();

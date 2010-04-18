@@ -73,6 +73,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -89,12 +90,14 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Message.cs" />
     <Compile Include="NotifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="NotifyForm.Designer.cs">
       <DependentUpon>NotifyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PasswordProtector.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AutoUpdater.resx">
