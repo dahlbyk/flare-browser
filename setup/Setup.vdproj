@@ -493,17 +493,6 @@
                 {
                 }
             }
-            "{1525181F-901A-416C-8A58-119130FE478E}:_5DDD09E2AED04109B2254C6D46386855"
-            {
-            "Name" = "8:#1928"
-            "AlwaysCreate" = "11:FALSE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Property" = "8:StartupFolder"
-                "Folders"
-                {
-                }
-            }
             "{1525181F-901A-416C-8A58-119130FE478E}:_5EE96832A2C345248FE0B21FAEE69E1C"
             {
             "Name" = "8:#1916"
@@ -673,20 +662,6 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_40D3C8F386F54082A7B792CAD88012DB"
-            {
-            "Name" = "8:Flare"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_4B02F3BC9B884B5CB828559468DEF67A"
-            "Folder" = "8:_5DDD09E2AED04109B2254C6D46386855"
-            "WorkingFolder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Icon" = "8:"
-            "Feature" = "8:"
-            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_A72D479F78E64C4986679B8E76B3A82D"
             {
             "Name" = "8:Flare"

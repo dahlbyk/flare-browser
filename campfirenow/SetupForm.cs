@@ -30,7 +30,7 @@ namespace Flare
             Int32 notifyWindowDelay;
             if (!Int32.TryParse(notificationWindowDelayTextBox.Text, out notifyWindowDelay))
             {
-                MessageBox.Show("The value you've entered for how long the notification window should display for is invalid.\n\nPlease enter a whole number.", 
+                MessageBox.Show("The value you've entered for how long the notification window should display for isn't a whole number.\n\nPlease enter a whole number.", 
                     "Unable to save new notification window settings",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

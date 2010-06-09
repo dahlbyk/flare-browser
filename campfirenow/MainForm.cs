@@ -95,8 +95,6 @@ namespace Flare
 
                     // Start opening the user's Campfire account
                     lobbyWebBrowser.Navigate(account.CampfireUri);
-
-
                 }
             }
             catch (Exception err)
@@ -397,8 +395,8 @@ namespace Flare
                     browser.Parent.Text = " Lobby ";
                     return;
                 }
-                else if (browser.Url.AbsoluteUri.Contains("/files+transcripts") ||
-                         browser.Url.AbsoluteUri.Contains("/account/"))
+                else if (browser.Url != null && (browser.Url.AbsoluteUri.Contains("/files+transcripts") ||
+                         browser.Url.AbsoluteUri.Contains("/account/")))
                 {
                     browser.Parent.Text = string.Format(" {0} ", browser.DocumentTitle.Replace("Campfire: ", ""));
                     return;
@@ -406,7 +404,7 @@ namespace Flare
                 else
                 {
                     roomTitle = browser.DocumentTitle.Replace("Campfire: ", "");
-                    if (roomTitle[0] == '(')
+                    if (roomTitle != string.Empty && roomTitle[0] == '(')
                     {
                         try
                         {
@@ -437,24 +435,10 @@ namespace Flare
                 if (browser.Parent.Text != roomTitle)
                     browser.Parent.Text = roomTitle;
 
-                if (newMessagesTotal > oldNewMsgTotal && Focused == false && lobbyWebBrowser.Focused == false)
-                {
-                    oldNewMsgTotal = newMessagesTotal;
-
-                    var f = new FLASHWINFO
-                                {
-                                    CbSize = Marshal.SizeOf(typeof (FLASHWINFO)),
-                                    Hwnd = Handle,
-                                    DWFlags = FlashwTimernofg,
-                                    UCount = 2,
-                                    DWTimeout = 0
-                                };
-
-                    FlashWindowEx(ref f);
-                }
             }
-            catch
+            catch (Exception exception)
             {
+                Debug.WriteLine(exception);
                 // Ignore updatetitle errors
             }
         }
@@ -592,6 +576,7 @@ namespace Flare
             {
                 // TODO: stop try..catching such a huge block *and* using a catch-all :( 
                 // Break this down and catch specific errors
+                Debug.WriteLine(e);
             }
             finally
             {
@@ -600,35 +585,74 @@ namespace Flare
             }
 
 
-            // Update the notify icon:
-            var resources = new ResourceManager(typeof(Resources));
-            int newMessagesTotal = (int)(browser.Parent.Tag ?? 0);
-            if (newMessagesTotal == 0)
-                notifyIcon.Icon = ((Icon)(resources.GetObject("noNewMsgs")));
-            else
-                notifyIcon.Icon = ((Icon)(resources.GetObject("newMsg")));
+            Debug.WriteLine("new messages total: " + (browser.Parent.Tag ?? 0));
         }
 
         private static string FirstLetterToUpper(string inStr)
         {
+            if (string.IsNullOrEmpty(inStr))
+                return inStr;
             return inStr[0].ToString().ToUpper() + inStr.ToLower().Substring(1);
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
             timer.Stop();
-            foreach (TabPage tabPage in tabControl.TabPages)
+            try
             {
-                var browser = (WebBrowser)tabPage.Controls[0];
-                if (browser.Document != null && browser.Document.Url != null &&
-                    browser.Document.Url.AbsoluteUri.Contains("/room/"))
+                var anyNewMessages = false;
+                foreach (TabPage tabPage in tabControl.TabPages)
                 {
-                    UpdateTitle(true, browser);
+                    var browser = (WebBrowser) tabPage.Controls[0];
+                    if (browser.Document != null && browser.Document.Url != null && browser.Document.Url.AbsoluteUri.Contains("/room/"))
+                    {
+                        UpdateTitle(true, browser);
+                        if ((int)(browser.Parent.Tag ?? 0) > 0)
+                            anyNewMessages = true;
+                    }
+                }
+
+                // If we have any new messages unread, set the correct notify icon and highlight
+                // Update the notify icon:
+                var resources = new ResourceManager(typeof(Resources));
+                if (anyNewMessages && !Focused && !lobbyWebBrowser.Focused)
+                {
+                    // Update notify icon
+                    notifyIcon.Icon = ((Icon)(resources.GetObject("newMsg")));
+
+                    // Update toolbar icon to flash (if it's not already highlighted)
+                    if (!iconIsHighlighted)
+                    {
+                        var f = new FLASHWINFO
+                                    {
+                                        CbSize = Marshal.SizeOf(typeof (FLASHWINFO)),
+                                        Hwnd = Handle,
+                                        DWFlags = FlashwTimernofg,
+                                        UCount = 2,
+                                        DWTimeout = 0
+                                    };
+                        FlashWindowEx(ref f);
+                        iconIsHighlighted = true;
+                    }
+                }
+                else
+                {
+                    iconIsHighlighted = false;
+                    notifyIcon.Icon = ((Icon) (resources.GetObject("noNewMsgs")));
                 }
             }
-            timer.Interval = 1000;
-            timer.Start();
+            catch
+            {
+                
+            }
+            finally
+            {
+                timer.Interval = 1000;
+                timer.Start();
+            }
         }
+
+        private static bool iconIsHighlighted = false;
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {

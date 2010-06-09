@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Matt Brindley")]
 [assembly: AssemblyProduct("Flare")]
-[assembly: AssemblyCopyright("Copyright © Matt Brindley 2006-2008")]
+[assembly: AssemblyCopyright("Copyright © Matt Brindley 2006-2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -38,4 +38,4 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 
-[assembly: AssemblyVersion("1.5.*")]
+[assembly: AssemblyVersion("1.6.*")]
