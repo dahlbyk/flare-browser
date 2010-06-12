@@ -372,6 +372,8 @@ namespace Flare
             {
                 if (browser.Document.GetElementById("header") != null)
                     browser.Document.GetElementById("header").Style = "display: none;";
+                if (browser.Document.GetElementById("launchbar") != null)
+                    browser.Document.GetElementById("launchbar").Style = "display: none;";
                 if (browser.Document.GetElementById("open_bar") != null)
                     browser.Document.GetElementById("open_bar").Style = "display: none;";
                 if (browser.Document.GetElementById("sidebar") != null)
@@ -458,7 +460,7 @@ namespace Flare
                     // Don't do this if the form is focused.
                     if (!Focused || !browser.Focused)
                     {
-                        if (lastMessage == null || lastMessage.ElementId.Length == 0)
+                        if (lastMessage == null || string.IsNullOrEmpty(lastMessage.ElementId))
                         {
                             try
                             {
@@ -492,6 +494,10 @@ namespace Flare
                                 return;
 
                             HtmlElement nextElement = lastElement.NextSibling;
+                            // skip time stamp messages, they may get removed later
+                            while (nextElement != null && ((MSHTML.IHTMLElement)nextElement.DomElement).className == "time")
+                                nextElement = nextElement.NextSibling;
+                            
                             while (nextElement != null)
                             {
                                 string name = "";
@@ -499,7 +505,7 @@ namespace Flare
 
                                 foreach (HtmlElement td in nextElement.All)
                                 {
-                                    if (td.DomElement == null || ((MSHTML.IHTMLElement)td.DomElement).className == null)
+                                    if (td.DomElement == null || ((MSHTML.IHTMLElement)td.DomElement).className == null || ((MSHTML.IHTMLElement)td.DomElement).className == "time")
                                         continue;
                                     else if (((MSHTML.IHTMLElement)td.DomElement).className.Contains("person"))
                                         name = td.InnerText;
