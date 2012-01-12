@@ -145,8 +145,7 @@ namespace Flare
                                 {
                                     if (account.User.RoomNames.Contains(new Uri(doc.referrer).AbsolutePath))
                                     {
-                                        // We've been logged out of the room, restart flare automatically
-                                        RestartFlare();
+                                       tabPageCloseBtn_Click(this, new EventArgs());
                                     }
                                 }
                             }
@@ -245,12 +244,6 @@ namespace Flare
             {
                 FlareException.ShowFriendly(err);
             }
-        }
-
-        private static void RestartFlare()
-        {
-            Process.Start("flare.exe");
-            Process.GetCurrentProcess().Kill();
         }
 
         private void AddTabForNonRoom(Uri nonRoomUri)
