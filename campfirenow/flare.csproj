@@ -15,7 +15,7 @@
     <GenerateManifests>false</GenerateManifests>
     <SignManifests>false</SignManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <ApplicationIcon>Flare48.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Flare48.ico</ApplicationIcon>
     <TargetZone>LocalIntranet</TargetZone>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -63,13 +63,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoUpdater, Version=0.0.9.0, Culture=neutral">
+    <Reference Include="AutoUpdater, Version=0.0.10.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AutoUpdater.dll</HintPath>
+      <HintPath>AutoUpdaterResources\AutoUpdater.dll</HintPath>
     </Reference>
     <Reference Include="CSharpZipLib, Version=0.5.0.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\CSharpZipLib.dll</HintPath>
+      <HintPath>AutoUpdaterResources\CSharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -80,32 +79,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account.cs" />
-    <Compile Include="AutoUpdateConfig.cs" />
-    <Compile Include="AutoUpdater.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="FlareException.cs" />
+    <Compile Include="CampfireModels\Account.cs" />
+    <Compile Include="Exceptions\FlareException.cs" />
+    <Compile Include="Interop\InteropUtility.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Message.cs" />
+    <Compile Include="CampfireModels\Message.cs" />
     <Compile Include="NotifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="NotifyForm.Designer.cs">
       <DependentUpon>NotifyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PasswordProtector.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AutoUpdater.resx">
-      <DependentUpon>AutoUpdater.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -143,7 +134,7 @@
     <Compile Include="SetupForm.Designer.cs">
       <DependentUpon>SetupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="User.cs" />
+    <Compile Include="CampfireModels\User.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -165,28 +156,19 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="MSHTML">
-      <Guid>{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}</Guid>
-      <VersionMajor>4</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="AutoUpdateStarter.exe" />
-    <Content Include="404.htm" />
+    <None Include="AutoUpdaterResources\AutoUpdateStarter.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <BaseApplicationManifest Include="Properties\app.manifest" />
-    <None Include="AutoUpdateStarter.config" />
+    <None Include="AutoUpdaterResources\AutoUpdateStarter.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\indicator2.gif" />
     <None Include="Resources\newMsg.ico" />
     <None Include="Resources\noNewMsgs.ICO" />
-    <Content Include="Flare48.ico" />
+    <Content Include="Resources\Flare48.ico" />
     <None Include="Resources\notifybg2.jpg" />
-    <Content Include="Resources\updates.xml" />
-    <Content Include="waiting.htm" />
-    <Content Include="indicator2.gif" />
+    <None Include="Resources\updates.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

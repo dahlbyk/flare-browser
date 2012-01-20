@@ -28,12 +28,12 @@ namespace Flare
                     }
                     else
                     {
-                        Process current = Process.GetCurrentProcess();
-                        foreach (Process process in Process.GetProcessesByName(current.ProcessName))
+                        Process newInstanceOfFlare = Process.GetCurrentProcess();
+                        foreach (Process firstInstanceOfFlare in Process.GetProcessesByName(newInstanceOfFlare.ProcessName))
                         {
-                            if (process.Id != current.Id)
+                            if (firstInstanceOfFlare.Id != newInstanceOfFlare.Id)
                             {
-                                SetForegroundWindow(process.MainWindowHandle);
+                                SetForegroundWindow(firstInstanceOfFlare.MainWindowHandle);
                                 break;
                             }
                         }

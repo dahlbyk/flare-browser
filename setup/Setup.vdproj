@@ -15,110 +15,74 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_1903C7B0BF624D0F943CB1B7349472CE"
+        "MsmKey" = "8:_1BEEC96CD364C51AC9EEB22F6536636C"
+        "OwnerKey" = "8:_450D91F13DC046069D90C494C63DC330"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1DAD2EA367064639A7169979BBFCD886"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_37961389080DC603F03C6683F1002F56"
-        "OwnerKey" = "8:_548CCC99993642E78B7E0E2977C3B615"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4B02F3BC9B884B5CB828559468DEF67A"
+        "MsmKey" = "8:_37F4BEBF08F0445AA57AFB2C563382F7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_548CCC99993642E78B7E0E2977C3B615"
+        "MsmKey" = "8:_450D91F13DC046069D90C494C63DC330"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_60855DFB10B8462085D7A0AFC44E37F1"
+        "MsmKey" = "8:_D8B2289DE39EBD5ABF6E6987E7CA438B"
+        "OwnerKey" = "8:_1BEEC96CD364C51AC9EEB22F6536636C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D8B2289DE39EBD5ABF6E6987E7CA438B"
+        "OwnerKey" = "8:_450D91F13DC046069D90C494C63DC330"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DEFE4F44ADF14E5B92CA405811A19C01"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6D425089EA283629BE6A6E4C9DDD5FF4"
-        "OwnerKey" = "8:_E37F7E6F5622EFDCD4B37ED9BD4D4672"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6D425089EA283629BE6A6E4C9DDD5FF4"
-        "OwnerKey" = "8:_548CCC99993642E78B7E0E2977C3B615"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_87EEDBB08F1E4A5BB02F3B66E4ECBB58"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8DA1102A63D241AB8E02FC46811FA68F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A4663563305B5963C745A5575EFC300B"
-        "OwnerKey" = "8:_37961389080DC603F03C6683F1002F56"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B6B7B5767EC94C4ABF705704F48147F5"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E37F7E6F5622EFDCD4B37ED9BD4D4672"
-        "OwnerKey" = "8:_548CCC99993642E78B7E0E2977C3B615"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F00CD97D09DA47219D90AD592E217B37"
+        "MsmKey" = "8:_EB79A92B2411496CB826E1978B369DBE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4B02F3BC9B884B5CB828559468DEF67A"
+        "OwnerKey" = "8:_450D91F13DC046069D90C494C63DC330"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_548CCC99993642E78B7E0E2977C3B615"
+        "OwnerKey" = "8:_37F4BEBF08F0445AA57AFB2C563382F7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_37961389080DC603F03C6683F1002F56"
+        "OwnerKey" = "8:_1BEEC96CD364C51AC9EEB22F6536636C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E37F7E6F5622EFDCD4B37ED9BD4D4672"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6D425089EA283629BE6A6E4C9DDD5FF4"
+        "OwnerKey" = "8:_D8B2289DE39EBD5ABF6E6987E7CA438B"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -203,7 +167,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "Version" = "8:2.0.50727"
+                "FrameworkVersion" = "8:2.0.50727  "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=9832"
                 }
@@ -211,227 +175,14 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1903C7B0BF624D0F943CB1B7349472CE"
-            {
-            "SourcePath" = "8:..\\campfirenow\\indicator2.gif"
-            "TargetName" = "8:indicator2.gif"
-            "Tag" = "8:"
-            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_37961389080DC603F03C6683F1002F56"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1BEEC96CD364C51AC9EEB22F6536636C"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Interop.MSHTML, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:AutoUpdater, Version=0.0.10.0, Culture=neutral"
                 "ScatterAssemblies"
                 {
-                    "_37961389080DC603F03C6683F1002F56"
-                    {
-                    "Name" = "8:Interop.MSHTML.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Interop.MSHTML.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4B02F3BC9B884B5CB828559468DEF67A"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AutoUpdateStarter, Version=0.0.10.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_4B02F3BC9B884B5CB828559468DEF67A"
-                    {
-                    "Name" = "8:AutoUpdateStarter.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\campfirenow\\AutoUpdateStarter.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_60855DFB10B8462085D7A0AFC44E37F1"
-            {
-            "SourcePath" = "8:..\\campfirenow\\404.htm"
-            "TargetName" = "8:404.htm"
-            "Tag" = "8:"
-            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6D425089EA283629BE6A6E4C9DDD5FF4"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CSharpZipLib, Version=0.5.0.0, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_6D425089EA283629BE6A6E4C9DDD5FF4"
-                    {
-                    "Name" = "8:CSharpZipLib.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:CSharpZipLib.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_87EEDBB08F1E4A5BB02F3B66E4ECBB58"
-            {
-            "SourcePath" = "8:..\\campfirenow\\waiting.htm"
-            "TargetName" = "8:waiting.htm"
-            "Tag" = "8:"
-            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8DA1102A63D241AB8E02FC46811FA68F"
-            {
-            "SourcePath" = "8:..\\Flare48.ico"
-            "TargetName" = "8:Flare48.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A4663563305B5963C745A5575EFC300B"
-            {
-            "SourcePath" = "8:mshtml.tlb"
-            "TargetName" = "8:mshtml.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B6B7B5767EC94C4ABF705704F48147F5"
-            {
-            "SourcePath" = "8:..\\bannerbitmap.jpg"
-            "TargetName" = "8:bannerbitmap.jpg"
-            "Tag" = "8:"
-            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E37F7E6F5622EFDCD4B37ED9BD4D4672"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AutoUpdater, Version=0.0.9.0, Culture=neutral"
-                "ScatterAssemblies"
-                {
-                    "_E37F7E6F5622EFDCD4B37ED9BD4D4672"
+                    "_1BEEC96CD364C51AC9EEB22F6536636C"
                     {
                     "Name" = "8:AutoUpdater.dll"
                     "Attributes" = "3:512"
@@ -455,10 +206,112 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F00CD97D09DA47219D90AD592E217B37"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1DAD2EA367064639A7169979BBFCD886"
             {
-            "SourcePath" = "8:..\\campfirenow\\AutoUpdateStarter.config"
+            "SourcePath" = "8:..\\campfirenow\\AutoUpdaterResources\\AutoUpdateStarter.config"
             "TargetName" = "8:AutoUpdateStarter.config"
+            "Tag" = "8:"
+            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_37F4BEBF08F0445AA57AFB2C563382F7"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:AutoUpdateStarter, Version=0.0.10.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_37F4BEBF08F0445AA57AFB2C563382F7"
+                    {
+                    "Name" = "8:AutoUpdateStarter.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\campfirenow\\AutoUpdaterResources\\AutoUpdateStarter.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D8B2289DE39EBD5ABF6E6987E7CA438B"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:CSharpZipLib, Version=0.5.0.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                    "_D8B2289DE39EBD5ABF6E6987E7CA438B"
+                    {
+                    "Name" = "8:CSharpZipLib.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:CSharpZipLib.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DEFE4F44ADF14E5B92CA405811A19C01"
+            {
+            "SourcePath" = "8:..\\campfirenow\\Resources\\Flare48.ico"
+            "TargetName" = "8:Flare48.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EB79A92B2411496CB826E1978B369DBE"
+            {
+            "SourcePath" = "8:bannerForSetup.jpg"
+            "TargetName" = "8:bannerForSetup.jpg"
             "Tag" = "8:"
             "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
             "Condition" = "8:"
@@ -543,8 +396,9 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Flare"
         "ProductCode" = "8:{EC6D4C49-B8C4-45C2-BF47-AA513322E2F1}"
-        "PackageCode" = "8:{E522FCA9-D549-441D-85DE-55AA345F5960}"
+        "PackageCode" = "8:{91D2A892-144C-424F-93AF-C1E33672D57A}"
         "UpgradeCode" = "8:{B8F51DF0-3BB8-4D0E-953D-701896AC8040}"
+        "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
@@ -559,7 +413,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Site-Specific Browser for 37signals' (http://37signals.com/) Campfire online chat application (http://campfirenow.com/)"
         "ARPURLINFOABOUT" = "8:http://mattbrindley.com/"
-        "ARPPRODUCTICON" = "8:_8DA1102A63D241AB8E02FC46811FA68F"
+        "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -662,18 +516,18 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_A72D479F78E64C4986679B8E76B3A82D"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_ECFAD8F46C2B4128BDAA947F3A50851A"
             {
             "Name" = "8:Flare"
             "Arguments" = "8:"
-            "Description" = "8:A site-specific browser for 37signals' Campfire chat application"
+            "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_4B02F3BC9B884B5CB828559468DEF67A"
+            "Target" = "8:_450D91F13DC046069D90C494C63DC330"
             "Folder" = "8:_02494CBC15FB46B0AF82C9BD4B385D1C"
             "WorkingFolder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
-            "Icon" = "8:_8DA1102A63D241AB8E02FC46811FA68F"
+            "Icon" = "8:_DEFE4F44ADF14E5B92CA405811A19C01"
             "Feature" = "8:"
             }
         }
@@ -728,7 +582,7 @@
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
                             "Setting" = "3:2"
-                            "Value" = "8:_B6B7B5767EC94C4ABF705704F48147F5"
+                            "Value" = "8:_EB79A92B2411496CB826E1978B369DBE"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -760,7 +614,7 @@
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
                             "Setting" = "3:2"
-                            "Value" = "8:_B6B7B5767EC94C4ABF705704F48147F5"
+                            "Value" = "8:_EB79A92B2411496CB826E1978B369DBE"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "ShowProgress"
@@ -811,7 +665,7 @@
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
                             "Setting" = "3:2"
-                            "Value" = "8:_B6B7B5767EC94C4ABF705704F48147F5"
+                            "Value" = "8:_EB79A92B2411496CB826E1978B369DBE"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "UpdateText"
@@ -856,7 +710,7 @@
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
                             "Setting" = "3:2"
-                            "Value" = "8:_B6B7B5767EC94C4ABF705704F48147F5"
+                            "Value" = "8:_EB79A92B2411496CB826E1978B369DBE"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "ShowProgress"
@@ -882,9 +736,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_548CCC99993642E78B7E0E2977C3B615"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_450D91F13DC046069D90C494C63DC330"
             {
-            "SourcePath" = "8:..\\campfirenow\\obj\\Debug\\flare.exe"
+            "SourcePath" = "8:..\\campfirenow\\obj\\Release\\flare.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_04F035482F194A0DAB05EDBEC94B6CD0"
@@ -902,7 +756,7 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:Debug|Any CPU"
+            "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{06BE0DFD-6BCF-4BE2-8C45-1293D271C18D}"
             "ShowKeyOutput" = "11:TRUE"

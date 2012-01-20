@@ -6,12 +6,14 @@ namespace Flare
 {
     public partial class NotifyForm : Form
     {
+       /*
+        * TODO
+        * When double clicked
+        * 
+        */
+
         private readonly MainForm mainForm;
         private Boolean opening = true;
-
-        private const int WsEXNoactivate = 0x08000000;
-        private const int WsEXToolwindow = 0x00000080;
-                
 
         public NotifyForm(string title, string person, string message, MainForm mainForm)
         {
@@ -85,7 +87,7 @@ namespace Flare
 
         private void NotifyForm_MouseClick(object sender, MouseEventArgs e)
         {
-            mainForm.ShowFormHideIcon();
+            mainForm.ShowWindow();
             Close();
         }
     }
